@@ -23,6 +23,10 @@ export interface Game {
   status: DevelopmentStatus
   featured: boolean
   tagline: string
+  /** Optional search-title override (otherwise the game name is used). */
+  seoTitle?: string
+  /** Optional meta description (1–2 plain sentences, factual only). */
+  seoDescription?: string
   /** null → placeholder panel */
   concept: string | null
   /** null → placeholder panel */
@@ -43,6 +47,9 @@ export const GAMES: Game[] = [
     status: 'in-development',
     featured: true,
     tagline: 'Game currently in development.',
+    seoTitle: 'No Respawn in War — Game in Development',
+    seoDescription:
+      'No Respawn in War is a game currently in development at Madwolf Studios. Concept, gameplay, platforms, screenshots and release details will be published here as they are announced.',
     concept: null,
     gameplay: null,
     info: [

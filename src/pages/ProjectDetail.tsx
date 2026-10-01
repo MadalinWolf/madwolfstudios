@@ -81,8 +81,29 @@ export function ProjectDetail({ project }: { project: Project }) {
           </div>
         </Section>
 
+        {/* QUICK ANSWERS — plain Q&A for search engines and AI answer engines.
+            Answers come from src/data/projects.ts and must stay factual. */}
+        {project.faq && project.faq.length > 0 && (
+          <Section id="faq" eyebrow="// 02" title="Quick Answers">
+            <dl className="max-w-3xl space-y-4">
+              {project.faq.map((item) => (
+                <div key={item.question} className="card p-5">
+                  <dt className="text-sm font-bold text-neon-lemon">{item.question}</dt>
+                  <dd className="mt-2 text-sm leading-relaxed text-text-secondary">
+                    {item.answer ?? (
+                      <span className="placeholder-box inline-block px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-text-muted">
+                        [ ANSWER — TO BE PROVIDED ]
+                      </span>
+                    )}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Section>
+        )}
+
         {/* FEATURES */}
-        <Section id="features" eyebrow="// 02" title="Features">
+        <Section id="features" eyebrow="// 03" title="Features">
           {/* Legend */}
           <div className="mb-6 flex flex-wrap items-center gap-4 text-[10px] font-bold uppercase tracking-[0.16em] text-text-muted">
             <span>Legend:</span>
@@ -109,7 +130,7 @@ export function ProjectDetail({ project }: { project: Project }) {
         </Section>
 
         {/* SCREENSHOTS */}
-        <Section id="screenshots" eyebrow="// 03" title="Screenshots">
+        <Section id="screenshots" eyebrow="// 04" title="Screenshots">
           {project.screenshots.length > 0 ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {project.screenshots.map((slot, i) => (
@@ -124,7 +145,7 @@ export function ProjectDetail({ project }: { project: Project }) {
         </Section>
 
         {/* DEVELOPMENT STATUS */}
-        <Section id="status" eyebrow="// 04" title="Development Status">
+        <Section id="status" eyebrow="// 05" title="Development Status">
           <div className="card p-6">
             <div className="flex flex-wrap items-center gap-4">
               <StatusBadge status={project.status} />
@@ -148,7 +169,7 @@ export function ProjectDetail({ project }: { project: Project }) {
         </Section>
 
         {/* TECHNOLOGY */}
-        <Section id="technology" eyebrow="// 05" title="Technology">
+        <Section id="technology" eyebrow="// 06" title="Technology">
           <ul className="flex flex-wrap gap-3">
             {project.technology.map((tech) => (
               <li
@@ -162,7 +183,7 @@ export function ProjectDetail({ project }: { project: Project }) {
         </Section>
 
         {/* ROADMAP */}
-        <Section id="roadmap" eyebrow="// 06" title="Roadmap">
+        <Section id="roadmap" eyebrow="// 07" title="Roadmap">
           {project.roadmap.length > 0 ? (
             <div className="grid gap-6 sm:grid-cols-2">
               {project.roadmap.map((block) => (
@@ -194,7 +215,7 @@ export function ProjectDetail({ project }: { project: Project }) {
         </Section>
 
         {/* DEVELOPMENT UPDATES */}
-        <Section id="updates" eyebrow="// 07" title="Development Updates">
+        <Section id="updates" eyebrow="// 08" title="Development Updates">
           {entries.length > 0 ? (
             <div className="space-y-6">
               {entries.map((entry) => (

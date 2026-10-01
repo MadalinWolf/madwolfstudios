@@ -53,7 +53,7 @@ export function Home() {
           </div>
 
           {/* Studio status console */}
-          <div className="card p-6 rise-in" style={{ animationDelay: '0.1s' }}>
+          <div className="card p-6 rise-in rise-in-delay">
             <div className="mb-4 flex items-center justify-between border-b border-line pb-3">
               <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-neon-lemon">
                 STUDIO STATUS

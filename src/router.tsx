@@ -12,12 +12,14 @@ import {
 /* =========================================================
    Minimal client-side router (no dependencies).
    Clean URLs: /, /projects, /projects/stusys, /games, ...
-   Dev server and `vite preview` serve index.html for all
-   paths automatically; see public/_redirects for hosting.
+   In production every route is a real prerendered HTML file
+   (scripts/prerender.mjs); unknown paths get a real 404 page.
+   Trailing-slash and /index.html variants are normalized.
    ========================================================= */
 
 function readPath(): string {
-  const raw = window.location.pathname.replace(/\/+$/, '')
+  if (typeof window === 'undefined') return '/'
+  const raw = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/+$/, '')
   return raw === '' ? '/' : raw
 }
 
@@ -28,8 +30,15 @@ interface RouterValue {
 
 const RouterContext = createContext<RouterValue | null>(null)
 
-export function RouterProvider({ children }: { children: ReactNode }) {
-  const [path, setPath] = useState(readPath)
+export function RouterProvider({
+  children,
+  initialPath,
+}: {
+  children: ReactNode
+  /** Build-time prerendered path — the browser default is window.location. */
+  initialPath?: string
+}) {
+  const [path, setPath] = useState(() => initialPath ?? readPath())
 
   useEffect(() => {
     const onPopState = () => setPath(readPath())

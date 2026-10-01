@@ -69,7 +69,7 @@ export function Footer() {
 
       <div className="border-t border-line">
         <div className="mx-auto flex max-w-site flex-col items-start justify-between gap-2 px-5 py-5 text-[10px] font-bold uppercase tracking-[0.16em] text-text-muted sm:flex-row sm:items-center">
-          <span>
+          <span suppressHydrationWarning>
             © {year} {SITE.name}
           </span>
           <span className="text-text-muted">{SITE.domain.replace('https://', '')}</span>

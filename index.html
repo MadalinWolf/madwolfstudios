@@ -3,23 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Madwolf Studios — independent developer building apps, games and software from idea to reality. Projects: Stusys and No Respawn in War." />
     <meta name="theme-color" content="#1A1C1E" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script src="/theme-init.js"></script>
+    <!-- seo-head: replaced per route by scripts/prerender.mjs (see src/seo.ts).
+         The default block below is what the dev server serves. -->
+    <!--seo-head-start-->
     <title>Madwolf Studios — Independent Software &amp; Game Studio</title>
-    <script>
-      // Apply the saved theme before first paint to avoid a flash of the wrong theme.
-      (function () {
-        try {
-          var t = localStorage.getItem('madwolf-theme')
-          document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'night')
-        } catch (e) {
-          document.documentElement.setAttribute('data-theme', 'night')
-        }
-      })()
-    </script>
+    <meta name="description" content="Madwolf Studios — independent developer building apps, games and software from idea to reality. Projects: Stusys and No Respawn in War." />
+    <!--seo-head-end-->
   </head>
   <body>
+    <!-- prerendered page content is injected into this root at build time -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

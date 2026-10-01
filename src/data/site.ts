@@ -5,6 +5,8 @@
 
 export const SITE = {
   name: 'MADWOLF STUDIOS',
+  /** Sentence-case form used in <title>/meta tags (all-caps reads poorly in search results). */
+  namePlain: 'Madwolf Studios',
   shortName: 'MADWOLF',
   monogram: 'MW',
   domain: 'https://madwolfstudios.com',

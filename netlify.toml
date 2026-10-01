@@ -1,20 +1,40 @@
 # Netlify configuration for the MADWOLF STUDIOS website.
-# Static SPA: no backend, no env vars, no build-time secrets.
+# Static SPA-with-prerender: no backend, no env vars, no build-time secrets.
 #
-# The SPA fallback lives in `public/_redirects` (copied to dist/_redirects),
-# so every unknown path serves index.html and the client router takes over.
+# Routing: scripts/prerender.mjs writes a real HTML file for every route
+# (dist/<route>/index.html) plus a real dist/404.html. Netlify serves 404.html
+# with HTTP 404 for unknown paths automatically — no catch-all rewrite, so no
+# soft-404s. Canonical URLs use a trailing slash (Netlify Pretty URLs default).
 
 [build]
   command = "npm run build"
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20"
+  NODE_VERSION = "22"
 
-# Security/quality headers (the site sets none itself).
+# --- Security headers -------------------------------------------------------
+# Keep scripts/styles first-party only. The theme bootstrap lives in
+# /theme-init.js (not inline) precisely so no 'unsafe-inline' or hashes are
+# needed. If a trailer goes live, its embed host must already be in frame-src
+# (YouTube/Vimeo are pre-listed for that reason).
+# NOTE: if anything ever breaks in the console with a CSP error, this block is
+# the first place to look; removing a single directive is a safe rollback.
 [[headers]]
   for = "/*"
   [headers.values]
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com; form-action 'self'"
+
+# --- Caching ----------------------------------------------------------------
+# Vite content-hashes everything under /assets/ — safe to cache forever.
+# index.html stays on Netlify's default (max-age=0, must-revalidate) so new
+# deploys show up immediately.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

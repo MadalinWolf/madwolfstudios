@@ -26,6 +26,12 @@ export interface RoadmapBlock {
   items: string[]
 }
 
+export interface ProjectFaq {
+  question: string
+  /** null → renders a clearly marked "[ TO BE PROVIDED ]" answer slot. */
+  answer: string | null
+}
+
 export interface Project {
   slug: string
   name: string
@@ -33,8 +39,14 @@ export interface Project {
   status: DevelopmentStatus
   featured: boolean
   tagline: string
+  /** Optional search-title override (otherwise the project name is used). */
+  seoTitle?: string
+  /** Optional meta description (1–2 plain sentences, factual only). */
+  seoDescription?: string
   overview: string[]
   features: ProjectFeature[]
+  /** Q&A block for search/AI answer engines — factual answers only, null = TODO. */
+  faq?: ProjectFaq[]
   screenshots: MediaSlot[]
   technology: string[]
   /** Empty array → renders a "to be provided" placeholder. */
@@ -51,6 +63,9 @@ export const PROJECTS: Project[] = [
     status: 'in-development',
     featured: true,
     tagline: 'Student productivity / Student OS application.',
+    seoTitle: 'Stusys — Local-First Student Productivity App',
+    seoDescription:
+      'Stusys is a local-first student productivity application — a "Student OS" with tasks, subjects, calendar, exams and a focus timer. All data stays in your browser, organized per profile.',
     overview: [
       'Stusys is a student productivity application — a "Student OS" built to hold everything a student juggles in one place: tasks, subjects, topics, exams, calendar events and focused work sessions.',
       'It is local-first: everything runs in the browser and all data is stored locally, organized per profile, so multiple people can use the same installation with completely separate data.',
@@ -70,6 +85,28 @@ export const PROJECTS: Project[] = [
       { name: 'Notes', state: 'planned' },
       { name: 'Tests & quizzes', state: 'planned' },
       { name: 'Resource links', state: 'planned' },
+    ],
+    /* FAQ for search engines / AI answer engines.
+       ANSWERS MUST BE FACTUAL — derived only from the app README and the
+       feature list above. `answer: null` renders a visible "TO BE PROVIDED"
+       slot: fill it in when the information is confirmed. */
+    faq: [
+      {
+        question: 'What is Stusys?',
+        answer:
+          'Stusys is a student productivity application — a "Student OS" built to hold everything a student juggles in one place: tasks, subjects, topics, exams, calendar events and focused work sessions.',
+      },
+      {
+        question: 'Where does Stusys store my data?',
+        answer:
+          'Locally in your browser. Stusys runs fully in the browser with no backend: all data is stored in localStorage and organized per profile, so each profile keeps completely separate data.',
+      },
+      // TODO(madalin): pricing not confirmed — answer only once decided.
+      { question: 'Is Stusys free?', answer: null },
+      // TODO(madalin): account/sign-up story not confirmed — do not infer from "no backend".
+      { question: 'Does Stusys require an account?', answer: null },
+      // TODO(madalin): supported browsers / platforms not confirmed yet.
+      { question: 'Which platforms does Stusys run on?', answer: null },
     ],
     screenshots: [
       { alt: 'Stusys dashboard view — screenshot to be provided', caption: 'DASHBOARD' },

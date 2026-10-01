@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+/* JetBrains Mono is self-hosted via @fontsource-variable/jetbrains-mono
+   (imported in src/main.tsx) — no render-blocking Google Fonts request. */
 
 @tailwind base;
 @tailwind components;
@@ -91,7 +92,7 @@ html {
 }
 
 body {
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  font-family: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
   background-color: rgb(var(--c-app));
   color: rgb(var(--c-text-1));
   margin: 0;
@@ -221,6 +222,9 @@ body {
 }
 
 .rise-in { animation: riseIn 0.4s ease-out both; }
+/* Same delay the hero console card used before, kept in CSS so the page
+   ships no inline style attributes (strict Content-Security-Policy). */
+.rise-in-delay { animation-delay: 0.1s; }
 
 /* ---------- Cards ---------- */
 

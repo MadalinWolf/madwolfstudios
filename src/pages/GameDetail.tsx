@@ -146,11 +146,15 @@ export function GameDetail({ game }: { game: Game }) {
         <Section id="trailer" eyebrow="// 05" title="Trailer">
           {game.trailer?.url ? (
             <div className="card p-3">
+              {/* Only trusted https embed URLs (YouTube/Vimeo) belong in games.ts.
+                  Keep the allow list minimal; frame-src hosts are listed in netlify.toml. */}
               <iframe
                 src={game.trailer.url}
                 title={`${game.name} trailer`}
+                loading="lazy"
                 className="aspect-video w-full border border-line"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="autoplay; encrypted-media; picture-in-picture"
+                referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
               />
             </div>
