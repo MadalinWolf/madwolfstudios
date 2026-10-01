@@ -10,11 +10,11 @@
 
    TEMPLATE ------------------------------------------------
    {
-     id: 'stusys-v0-2-5-calendar',   // unique, url-safe
+     id: 'wolfcani-v0-2-5-calendar',  // unique, url-safe
      date: '2026-01-31',             // YYYY-MM-DD
-     project: 'STUSYS',              // project chip label
-     projectSlug: 'stusys',          // optional: links the chip
-                                      // to /projects/stusys
+     project: 'WOLFCANI',            // project chip label
+     projectSlug: 'wolfcani',        // optional: links the chip
+                                     // to /projects/wolfcani
      version: 'v0.2.5',              // optional
      title: 'Calendar System',
      summary: 'One-line summary of the update.',
@@ -37,7 +37,9 @@
    ========================================================= */
 
 export interface DevLogImage {
-  src: string
+  /** Path to a real image. Omit to render a clearly marked placeholder
+   *  frame (no fake screenshots, ever). */
+  src?: string
   alt: string
   caption?: string
 }
@@ -63,14 +65,14 @@ export interface DevLogEntry {
 /** Published entries, newest first. Add yours here. */
 export const DEV_LOG: DevLogEntry[] = [
   {
-    id: 'stusys-dashboard-calendar-reminders',
+    id: 'wolfcani-dashboard-calendar-reminders',
     date: '2026-10-01',
-    project: 'STUSYS',
-    projectSlug: 'stusys',
+    project: 'WOLFCANI',
+    projectSlug: 'wolfcani',
     version: 'v2.1',
     title: 'Dashboard, calendar navigation and advance reminders',
     summary:
-      'Stusys gained a dashboard overview, a calendar that reaches beyond the current month and reminders that fire ahead of an event.',
+      'WOLFCANI gained a dashboard overview, a calendar that reaches beyond the current month and reminders that fire ahead of an event.',
     details: [
       'Calendar navigation now steps month by month or year by year, with direct jumps to any month and a one-click return to today',
       'Events can repeat every number of days, weeks or months and carry an optional start time',
@@ -82,8 +84,7 @@ export const DEV_LOG: DevLogEntry[] = [
     ],
     images: [
       {
-        src: '/screenshots/stusys-dashboard.png',
-        alt: 'Stusys student productivity dashboard',
+        alt: 'WOLFCANI dashboard — screenshot to be provided',
         caption: 'DASHBOARD',
       },
     ],
@@ -101,8 +102,8 @@ export const DEV_LOG: DevLogEntry[] = [
       'Unknown URLs now return a real 404 instead of a placeholder page',
       'The typeface loads from our own domain — one less third-party request on every page',
       'Production configuration strengthened: security headers and long-lived caching for static assets',
-      'Project pages gained a quick-answers section with factual summaries (starting with Stusys)',
-      'Launched this development log — future Stusys and No Respawn in War updates land here',
+      'Project pages gained a quick-answers section with factual summaries (starting with WOLFCANI)',
+      'Launched this development log — future WOLFCANI and No Respawn in War updates land here',
     ],
   },
   // …next real update goes here (sorted by date automatically).

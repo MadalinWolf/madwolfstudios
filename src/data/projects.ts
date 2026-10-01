@@ -14,7 +14,7 @@ export interface ProjectFeature {
 }
 
 export interface MediaSlot {
-  /** Path to a real screenshot (e.g. '/screenshots/stusys-dashboard.png').
+  /** Path to a real screenshot (e.g. '/screenshots/wolfcani-dashboard.png').
    *  Leave undefined to render a clearly marked placeholder frame. */
   src?: string
   alt: string
@@ -57,17 +57,17 @@ export interface Project {
 
 export const PROJECTS: Project[] = [
   {
-    slug: 'stusys',
-    name: 'Stusys',
+    slug: 'wolfcani',
+    name: 'WOLFCANI',
     kind: 'software',
     status: 'in-development',
     featured: true,
-    tagline: 'Student productivity / Student OS application.',
-    seoTitle: 'Stusys — Local-First Student Productivity App',
+    tagline: 'OnFocus Workspace — everything you need, in one place.',
+    seoTitle: 'WOLFCANI — OnFocus Workspace',
     seoDescription:
-      'Stusys is a local-first student productivity application — a "Student OS" with tasks, subjects, calendar, exams and a focus timer. All data stays in your browser, organized per profile.',
+      'WOLFCANI is an OnFocus Workspace — an all-in-one study workspace for students with tasks, subjects, calendar, exams and a focus timer. All data stays in your browser, organized per profile.',
     overview: [
-      'Stusys is a student productivity application — a "Student OS" built to hold everything a student juggles in one place: tasks, subjects, topics, exams, calendar events and focused work sessions.',
+      'WOLFCANI is an all-in-one study workspace designed to help students stay focused: tasks, subjects, topics, exams, calendar events and focused work sessions live together in one place, instead of scattered across different applications.',
       'It is local-first: everything runs in the browser and all data is stored locally, organized per profile, so multiple people can use the same installation with completely separate data.',
       'The aim is a personalized student workspace, not just a todo list.',
     ],
@@ -76,8 +76,10 @@ export const PROJECTS: Project[] = [
       { name: 'Task management', state: 'implemented', note: 'Priorities, due dates, categories, tags, subtasks and completion tracking' },
       { name: 'Subjects with topics & progress', state: 'implemented' },
       { name: 'Calendar with events', state: 'implemented', note: 'Month view with study, exam, deadline and reminder events' },
+      { name: 'Advance reminders', state: 'implemented', note: 'Lead time per event, with in-app toasts and optional browser notifications' },
       { name: 'Exams with countdowns', state: 'implemented' },
       { name: 'Focus / Pomodoro timer', state: 'implemented', note: 'Pomodoro-style focus/break timer with session history' },
+      { name: 'Clock widget', state: 'implemented', note: 'Digital and analog modes with accent, glow and size settings' },
       { name: 'Study statistics', state: 'implemented' },
       { name: 'Dashboard overview', state: 'implemented', note: "Today's tasks, overdue items, focus time and upcoming work" },
       { name: 'Night / light themes', state: 'implemented', note: 'Both follow the same three-color brand palette' },
@@ -92,30 +94,26 @@ export const PROJECTS: Project[] = [
        slot: fill it in when the information is confirmed. */
     faq: [
       {
-        question: 'What is Stusys?',
+        question: 'What is WOLFCANI?',
         answer:
-          'Stusys is a student productivity application — a "Student OS" built to hold everything a student juggles in one place: tasks, subjects, topics, exams, calendar events and focused work sessions.',
+          'WOLFCANI is an OnFocus Workspace — an all-in-one study workspace built to hold everything a student juggles in one place: tasks, subjects, topics, exams, calendar events and focused work sessions.',
       },
       {
-        question: 'Where does Stusys store my data?',
+        question: 'Where does WOLFCANI store my data?',
         answer:
-          'Locally in your browser. Stusys runs fully in the browser with no backend: all data is stored in localStorage and organized per profile, so each profile keeps completely separate data.',
+          'Locally in your browser. WOLFCANI runs fully in the browser with no backend: all data is stored in localStorage and organized per profile, so each profile keeps completely separate data.',
       },
       // TODO(madalin): pricing not confirmed — answer only once decided.
-      { question: 'Is Stusys free?', answer: null },
+      { question: 'Is WOLFCANI free?', answer: null },
       // TODO(madalin): account/sign-up story not confirmed — do not infer from "no backend".
-      { question: 'Does Stusys require an account?', answer: null },
+      { question: 'Does WOLFCANI require an account?', answer: null },
       // TODO(madalin): supported browsers / platforms not confirmed yet.
-      { question: 'Which platforms does Stusys run on?', answer: null },
+      { question: 'Which platforms does WOLFCANI run on?', answer: null },
     ],
     screenshots: [
-      {
-        src: '/screenshots/stusys-dashboard.png',
-        alt: 'Stusys student productivity dashboard',
-        caption: 'DASHBOARD',
-      },
-      { alt: 'Stusys calendar view — screenshot to be provided', caption: 'CALENDAR' },
-      { alt: 'Stusys focus timer view — screenshot to be provided', caption: 'FOCUS TIMER' },
+      { alt: 'WOLFCANI dashboard — screenshot to be provided', caption: 'DASHBOARD' },
+      { alt: 'WOLFCANI calendar view — screenshot to be provided', caption: 'CALENDAR' },
+      { alt: 'WOLFCANI focus timer view — screenshot to be provided', caption: 'FOCUS TIMER' },
     ],
     technology: [
       'React 18',
@@ -126,7 +124,7 @@ export const PROJECTS: Project[] = [
       'localStorage (local-first, no backend)',
     ],
     roadmap: [],
-    links: ['stusysDemo', 'stusysSource'],
+    links: ['wolfcaniDemo', 'wolfcaniSource'],
   },
 ]
 

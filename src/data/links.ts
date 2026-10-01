@@ -30,9 +30,9 @@ export const LINKS = {
   x: { label: 'X / TWITTER', url: null }, // ← SOON
   youtube: { label: 'YOUTUBE', url: null }, // ← SOON
 
-  // Project-specific destinations (Stusys)
-  stusysDemo: { label: 'LIVE DEMO', url: null }, // ← SOON
-  stusysSource: { label: 'SOURCE CODE', url: null }, // ← SOON
+  // Project-specific destinations (WOLFCANI)
+  wolfcaniDemo: { label: 'LIVE DEMO', url: null }, // ← SOON
+  wolfcaniSource: { label: 'SOURCE CODE', url: null }, // ← SOON
 } satisfies Record<string, ExternalLink>
 
 export type LinkId = keyof typeof LINKS

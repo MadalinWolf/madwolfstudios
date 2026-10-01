@@ -32,12 +32,12 @@ full content without running JavaScript.
 | -------------------- | ------------------------------------------- |
 | `/`                  | Home (hero, selected projects, about, dev log, contact) |
 | `/projects`          | Projects index                              |
-| `/projects/stusys`   | Stusys project page                         |
+| `/projects/wolfcani` | WOLFCANI project page                       |
 | `/games`             | Games index                                 |
 | `/games/no-respawn-in-war` | No Respawn in War game page          |
 | `/about`             | About the founder / studio                  |
 | `/dev-log`           | Development journal                         |
-| `/contact`           | Contact                                      |
+| `/contact`           | Contact                                     |
 | anything else        | 404                                          |
 
 ## Where to edit what
@@ -48,7 +48,7 @@ Everything editable lives in **`src/data/`** — you should never need to touch 
 | --------------------------------------- | --------------------------------- |
 | **Replace Steam / Discord / itch.io / email links** | `src/data/links.ts` ← **the one link config.** Set `url` and the link goes live everywhere at once; keep `null` and it renders as “LABEL — SOON”. |
 | **Add a Dev Log entry**                 | `src/data/devLog.ts` — copy the template in the file header into the `DEV_LOG` array. Sorted by date automatically; home page, `/dev-log` and project/game pages all update by themselves. While the array is empty, `/dev-log` is automatically `noindex` (and excluded from the sitemap). |
-| **Add / edit a project (e.g. Stusys)**  | `src/data/projects.ts`            |
+| **Add / edit a project (e.g. WOLFCANI)** | `src/data/projects.ts`            |
 | **Add / edit a game**                   | `src/data/games.ts`               |
 | **Change titles, meta descriptions, social tags** | `src/seo.ts` — the single source for per-route `<title>`/description/canonical/OG tags. Detail pages read the optional `seoTitle` / `seoDescription` fields on their data entry. |
 | **Add the social preview image**        | Drop a 1200×630 PNG in `public/` and set `OG_IMAGE` in `src/seo.ts` (currently a documented `null` TODO). |
@@ -69,10 +69,10 @@ steam: { label: 'STEAM', url: 'https://steamprofiles.com/your-page' },
 ```ts
 // src/data/devLog.ts — inside the DEV_LOG array
 {
-  id: 'stusys-calendar',
+  id: 'wolfcani-calendar',
   date: '2026-02-10',
-  project: 'STUSYS',
-  projectSlug: 'stusys',
+  project: 'WOLFCANI',
+  projectSlug: 'wolfcani',
   version: 'v0.2.5',
   title: 'Calendar System',
   summary: 'One-line summary of the update.',
@@ -80,7 +80,7 @@ steam: { label: 'STEAM', url: 'https://steamprofiles.com/your-page' },
 },
 ```
 
-**A screenshot:** drop the file into `public/` (e.g. `public/screenshots/stusys-dashboard.png`) and set `src` on the matching media slot in `src/data/projects.ts` / `games.ts`. Without a `src`, a clearly marked placeholder frame is rendered — no fake screenshots.
+**A screenshot:** drop the file into `public/` (e.g. `public/screenshots/wolfcani-dashboard.png`) and set `src` on the matching media slot in `src/data/projects.ts` / `games.ts`. Without a `src`, a clearly marked placeholder frame is rendered — no fake screenshots.
 
 ## Design system
 
@@ -104,6 +104,8 @@ catch-all rewrite, so unknown URLs return a genuine **HTTP 404** (served from
 - security headers: CSP (first-party only), HSTS, `X-Frame-Options: DENY`,
   `nosniff`, `Referrer-Policy`, `Permissions-Policy`
 - long-lived caching for content-hashed `/assets/*`
+- a 301 redirect from the old `/projects/stusys` URL to `/projects/wolfcani`
+  (product renamed to WOLFCANI)
 - canonical URLs use a trailing slash (`/projects/`) because Netlify's Pretty
   URLs (on by default) redirects `/projects` → `/projects/` — see `src/seo.ts`
 

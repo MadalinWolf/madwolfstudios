@@ -23,7 +23,7 @@ export function DevLog() {
           </div>
         ) : (
           <PlaceholderBox label="DEV LOG — NO ENTRIES YET">
-            No development updates published yet. The first entry — real progress on Stusys or No
+            No development updates published yet. The first entry — real progress on WOLFCANI or No
             Respawn in War — will appear here.
           </PlaceholderBox>
         )}

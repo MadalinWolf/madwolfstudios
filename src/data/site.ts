@@ -12,7 +12,7 @@ export const SITE = {
   domain: 'https://madwolfstudios.com',
   tagline: 'Independent developer building apps, games and software from idea to reality.',
   description:
-    'Madwolf Studios is an independent software and game studio. Current projects: Stusys (student productivity / Student OS) and No Respawn in War.',
+    'Madwolf Studios is an independent software and game studio. Current projects: WOLFCANI (OnFocus Workspace) and No Respawn in War.',
   founder: {
     name: 'Madalin Dinu',
     role: 'FOUNDER / DEVELOPER',

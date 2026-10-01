@@ -6,7 +6,7 @@
  *
  *   dist/index.html                    → /
  *   dist/projects/index.html           → /projects
- *   dist/projects/stusys/index.html    → /projects/stusys
+ *   dist/projects/wolfcani/index.html  → /projects/wolfcani
  *   ...
  *   dist/404.html                      → unknown paths (Netlify serves it with HTTP 404)
  *   dist/sitemap.xml                   → indexable routes only

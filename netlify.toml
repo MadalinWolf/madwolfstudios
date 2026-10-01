@@ -38,3 +38,17 @@
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# --- Redirects --------------------------------------------------------------
+# Product rename: the project page moved from /projects/stusys to
+# /projects/wolfcani (WOLFCANI — OnFocus Workspace). Permanent redirects so
+# existing links, sitemap history and search results keep working.
+[[redirects]]
+  from = "/projects/stusys"
+  to = "/projects/wolfcani"
+  status = 301
+
+[[redirects]]
+  from = "/projects/stusys/"
+  to = "/projects/wolfcani/"
+  status = 301

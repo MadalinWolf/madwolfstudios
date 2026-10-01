@@ -128,8 +128,8 @@ export function Home() {
                 building apps, games and software from idea to reality.
               </p>
               <p>
-                The studio is currently focused on <strong className="text-text-primary">Stusys</strong>,
-                a student productivity / Student OS application, and{' '}
+                The studio is currently focused on <strong className="text-text-primary">WOLFCANI</strong>,
+                an OnFocus Workspace for students, and{' '}
                 <strong className="text-text-primary">No Respawn in War</strong>, a game in early
                 development.
               </p>

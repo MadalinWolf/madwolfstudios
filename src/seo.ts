@@ -67,7 +67,7 @@ const SECTION_META: RouteMeta[] = [
     path: '/projects',
     title: `Projects — ${NAME}`,
     description:
-      'Projects from Madwolf Studios: Stusys, a student productivity application, and No Respawn in War, a game — both currently in development.',
+      'Projects from Madwolf Studios: WOLFCANI, an OnFocus Workspace for students, and No Respawn in War, a game — both currently in development.',
     robots: 'index',
   },
   {
@@ -88,7 +88,7 @@ const SECTION_META: RouteMeta[] = [
     path: '/dev-log',
     title: `Dev Log — ${NAME}`,
     description:
-      "Development journal from Madwolf Studios — what changed, what was learned and what's next on Stusys and No Respawn in War.",
+      "Development journal from Madwolf Studios — what changed, what was learned and what's next on WOLFCANI and No Respawn in War.",
     // No entries published yet → keep the empty page out of search results.
     // Flips back to 'index' automatically on the next build after the first
     // entry is added to src/data/devLog.ts.

@@ -57,16 +57,27 @@ export function DevLogEntryCard({ entry, compact = false }: { entry: DevLogEntry
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           {entry.images.map((img, i) => (
             <figure key={i} className="border border-line p-2">
-              <Zoomable src={img.src} alt={img.alt} caption={img.caption}>
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  width={800}
-                  height={450}
-                  loading="lazy"
-                  className="h-auto w-full object-contain"
-                />
-              </Zoomable>
+              {img.src ? (
+                <Zoomable src={img.src} alt={img.alt} caption={img.caption}>
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    width={800}
+                    height={450}
+                    loading="lazy"
+                    className="h-auto w-full object-contain"
+                  />
+                </Zoomable>
+              ) : (
+                <div className="placeholder-box flex aspect-video flex-col items-center justify-center gap-2 p-6 text-center">
+                  <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-neon-lemon">
+                    [ AWAITING SCREENSHOT ]
+                  </span>
+                  <span className="text-[10px] uppercase tracking-[0.16em] text-text-muted">
+                    No image provided yet
+                  </span>
+                </div>
+              )}
               {img.caption && (
                 <figcaption className="mt-2 text-[10px] uppercase tracking-[0.16em] text-text-muted">
                   {img.caption}

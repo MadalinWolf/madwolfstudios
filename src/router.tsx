@@ -11,7 +11,7 @@ import {
 
 /* =========================================================
    Minimal client-side router (no dependencies).
-   Clean URLs: /, /projects, /projects/stusys, /games, ...
+   Clean URLs: /, /projects, /projects/wolfcani, /games, ...
    In production every route is a real prerendered HTML file
    (scripts/prerender.mjs); unknown paths get a real 404 page.
    Trailing-slash and /index.html variants are normalized.

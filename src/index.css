@@ -68,7 +68,7 @@
 }
 
 /* Every border without an explicit color is a dark-grey separator.
-   Ring defaults are forced into the STUSYS/MADWOLF palette as well. */
+   Ring defaults are forced into the WOLFCANI/MADWOLF palette as well. */
 *,
 *::before,
 *::after {
