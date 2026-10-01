@@ -109,7 +109,11 @@ export const PROJECTS: Project[] = [
       { question: 'Which platforms does Stusys run on?', answer: null },
     ],
     screenshots: [
-      { alt: 'Stusys dashboard view — screenshot to be provided', caption: 'DASHBOARD' },
+      {
+        src: '/screenshots/stusys-dashboard.png',
+        alt: 'Stusys student productivity dashboard',
+        caption: 'DASHBOARD',
+      },
       { alt: 'Stusys calendar view — screenshot to be provided', caption: 'CALENDAR' },
       { alt: 'Stusys focus timer view — screenshot to be provided', caption: 'FOCUS TIMER' },
     ],

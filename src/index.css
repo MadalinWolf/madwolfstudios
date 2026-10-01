@@ -405,6 +405,14 @@ body {
   color: rgb(var(--c-text-3));
 }
 
+/* ---------- Screenshot lightbox (click-to-enlarge) ---------- */
+
+/* Scroll is locked while the overlay is open; the class is toggled from
+   src/components/Lightbox.tsx so no inline styles are shipped (CSP). */
+body.lightbox-open {
+  overflow: hidden;
+}
+
 /* ---------- Light-mode readability rules ----------
    Neon TEXT is unreadable on light greys, so neon text becomes
    dark grey while neon borders / fills / dots keep the color meaning. */

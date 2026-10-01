@@ -1,5 +1,6 @@
 import type { DevLogEntry } from '../data/devLog'
 import { Link } from '../router'
+import { Zoomable } from './Lightbox'
 import { ToneBadge } from './StatusBadge'
 
 /*
@@ -56,14 +57,16 @@ export function DevLogEntryCard({ entry, compact = false }: { entry: DevLogEntry
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           {entry.images.map((img, i) => (
             <figure key={i} className="border border-line p-2">
-              <img
-                src={img.src}
-                alt={img.alt}
-                width={800}
-                height={450}
-                loading="lazy"
-                className="h-auto w-full object-cover"
-              />
+              <Zoomable src={img.src} alt={img.alt} caption={img.caption}>
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  width={800}
+                  height={450}
+                  loading="lazy"
+                  className="h-auto w-full object-contain"
+                />
+              </Zoomable>
               {img.caption && (
                 <figcaption className="mt-2 text-[10px] uppercase tracking-[0.16em] text-text-muted">
                   {img.caption}

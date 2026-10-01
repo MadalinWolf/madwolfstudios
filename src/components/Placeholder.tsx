@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { MediaSlot } from '../data/projects'
+import { Zoomable } from './Lightbox'
 
 /* Clearly marked placeholder panel for missing content. */
 export function PlaceholderBox({
@@ -28,12 +29,14 @@ export function MediaSlotFrame({ slot, aspect = 'aspect-video' }: { slot: MediaS
   return (
     <figure className="card p-3">
       {slot.src ? (
-        <img
-          src={slot.src}
-          alt={slot.alt}
-          loading="lazy"
-          className={`w-full ${aspect} object-cover border border-line`}
-        />
+        <Zoomable src={slot.src} alt={slot.alt} caption={slot.caption}>
+          <img
+            src={slot.src}
+            alt={slot.alt}
+            loading="lazy"
+            className={`w-full ${aspect} object-contain border border-line`}
+          />
+        </Zoomable>
       ) : (
         <div
           className={`placeholder-box flex w-full ${aspect} flex-col items-center justify-center gap-2 p-6 text-center`}

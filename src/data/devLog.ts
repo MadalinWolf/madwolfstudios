@@ -63,6 +63,32 @@ export interface DevLogEntry {
 /** Published entries, newest first. Add yours here. */
 export const DEV_LOG: DevLogEntry[] = [
   {
+    id: 'stusys-dashboard-calendar-reminders',
+    date: '2026-10-01',
+    project: 'STUSYS',
+    projectSlug: 'stusys',
+    version: 'v2.1',
+    title: 'Dashboard, calendar navigation and advance reminders',
+    summary:
+      'Stusys gained a dashboard overview, a calendar that reaches beyond the current month and reminders that fire ahead of an event.',
+    details: [
+      'Calendar navigation now steps month by month or year by year, with direct jumps to any month and a one-click return to today',
+      'Events can repeat every number of days, weeks or months and carry an optional start time',
+      'Reminders are set per event — minutes, hours, days or weeks in advance, with the exact fire date and time previewed before saving',
+      'Upcoming events surface as in-app reminder toasts; browser notifications stay behind an explicit permission button',
+      'The Pomodoro timer moved onto the dashboard and keeps running while you switch sections or reload the page',
+      'Added a clock widget with digital and analog modes plus accent, glow and size settings',
+      'The Focus screen was removed from the navigation — its timer and settings now live on the dashboard',
+    ],
+    images: [
+      {
+        src: '/screenshots/stusys-dashboard.png',
+        alt: 'Stusys student productivity dashboard',
+        caption: 'DASHBOARD',
+      },
+    ],
+  },
+  {
     id: 'site-production-readiness',
     date: '2026-10-01',
     project: 'WEBSITE',
