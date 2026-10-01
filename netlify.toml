@@ -1,0 +1,20 @@
+# Netlify configuration for the MADWOLF STUDIOS website.
+# Static SPA: no backend, no env vars, no build-time secrets.
+#
+# The SPA fallback lives in `public/_redirects` (copied to dist/_redirects),
+# so every unknown path serves index.html and the client router takes over.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Security/quality headers (the site sets none itself).
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"

@@ -1,0 +1,4 @@
+# SPA fallback for hosts that support the `_redirects` format
+# (Netlify, Cloudflare Pages). Any unknown path serves index.html,
+# where the client-side router takes over.
+/*    /index.html   200

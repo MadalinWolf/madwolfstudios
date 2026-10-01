@@ -1,0 +1,450 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =========================================================
+   MADWOLF STUDIOS — DESIGN TOKENS
+   Structure = DARK GREY shades (never pure black, never white)
+   Accents   = #CCFF00 (lemon) / #00FF41 (green) / #FF0000 (red)
+   No other colors. No gradients introducing other hues.
+   ---------------------------------------------------------
+   LEMON  → headings, categories, important information
+   GREEN  → active / positive / primary / completed
+   RED    → errors, warnings, destructive, urgent
+   ========================================================= */
+
+:root,
+[data-theme='night'] {
+  /* --- DARK GREY structure --- */
+  --c-app: 26 28 30;        /* #1A1C1E page background       */
+  --c-surface: 32 35 37;    /* #202325 navbar / surfaces     */
+  --c-panel: 38 41 43;      /* #26292B cards / panels        */
+  --c-panel-2: 45 48 50;    /* #2D3032 raised panels / inputs */
+  --c-input: 34 37 39;      /* #222527 inputs                */
+  --c-border: 58 62 64;     /* #3A3E40 borders / separators  */
+  --c-hover: 70 74 76;      /* #464A4C hover surfaces        */
+
+  /* --- TEXT: light greys (readable, never white, AA contrast) --- */
+  --c-text-1: 215 218 215;  /* #D7DAD7 primary   */
+  --c-text-2: 180 185 180;  /* #B4B9B4 secondary */
+  --c-text-3: 157 162 157;  /* #9DA29D muted     */
+  --c-text-4: 142 147 142;  /* #8E938E faint     */
+
+  --glow-green: rgba(0, 255, 65, 0.22);
+  --glow-lemon: rgba(204, 255, 0, 0.22);
+  --glow-red: rgba(255, 0, 0, 0.22);
+  --grid-line: rgba(0, 255, 65, 0.05);
+  --scanline: rgba(0, 255, 65, 0.012);
+}
+
+[data-theme='light'] {
+  /* --- LIGHT GREY structure (never white) --- */
+  --c-app: 205 209 205;     /* #CDD1CD */
+  --c-surface: 211 215 211; /* #D3D7D3 */
+  --c-panel: 217 221 217;   /* #D9DDD9 */
+  --c-panel-2: 222 226 222; /* #DEE2DE */
+  --c-input: 196 200 196;   /* #C4C8C4 */
+  --c-border: 156 161 156;  /* #9CA19C */
+  --c-hover: 178 183 178;   /* #B2B7B2 */
+
+  /* --- TEXT: dark greys (never white, never black, AA contrast) --- */
+  --c-text-1: 27 30 27;     /* #1B1E1B */
+  --c-text-2: 51 55 51;     /* #333733 */
+  --c-text-3: 78 82 78;     /* #4E524E */
+  --c-text-4: 90 95 90;     /* #5A5F5A */
+
+  --glow-green: rgba(0, 120, 40, 0.16);
+  --glow-lemon: rgba(120, 145, 0, 0.16);
+  --glow-red: rgba(180, 0, 0, 0.16);
+  --grid-line: rgba(27, 30, 27, 0.07);
+  --scanline: transparent;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Every border without an explicit color is a dark-grey separator.
+   Ring defaults are forced into the STUSYS/MADWOLF palette as well. */
+*,
+*::before,
+*::after {
+  border-color: rgb(var(--c-border));
+  --tw-ring-offset-color: rgb(var(--c-app));
+  --tw-ring-color: rgba(0, 255, 65, 0.35);
+}
+
+/* Placeholder text uses the muted token (never an off-palette grey).
+   Overrides Tailwind preflight's hardcoded grey placeholder. */
+input::placeholder,
+textarea::placeholder,
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  opacity: 1;
+  color: rgb(var(--c-text-3));
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  background-color: rgb(var(--c-app));
+  color: rgb(var(--c-text-1));
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Subtle scanlines — night mode only, kept extremely restrained */
+[data-theme='night'] body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--scanline) 2px,
+    var(--scanline) 4px
+  );
+}
+
+::selection {
+  background: #00ff41;
+  color: #1a1c1e;
+}
+
+[data-theme='light'] ::selection {
+  background: #ccff00;
+  color: #1b1e1b;
+}
+
+/* ---------- Accessibility ---------- */
+
+:focus-visible {
+  outline: 2px solid #00ff41;
+  outline-offset: 2px;
+}
+
+[data-theme='light'] :focus-visible {
+  outline-color: #1b1e1b;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: rgb(var(--c-panel));
+  color: #00ff41;
+  border: 1px solid #00ff41;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
+
+.skip-link:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+}
+
+/* Light mode: solid neon fill + dark text (neon text is unreadable on light greys) */
+[data-theme='light'] .skip-link {
+  background: #00ff41;
+  color: #1b1e1b;
+  border-color: #1b1e1b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Terminal grid background ---------- */
+
+.grid-bg {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* ---------- Glow effects ---------- */
+
+.glow-green { box-shadow: 0 0 6px var(--glow-green), 0 0 16px var(--glow-green); }
+.glow-lemon { box-shadow: 0 0 6px var(--glow-lemon), 0 0 16px var(--glow-lemon); }
+.glow-red   { box-shadow: 0 0 6px var(--glow-red), 0 0 16px var(--glow-red); }
+
+.text-glow-green { text-shadow: 0 0 8px var(--glow-green); }
+.text-glow-lemon { text-shadow: 0 0 8px var(--glow-lemon); }
+.text-glow-red   { text-shadow: 0 0 8px var(--glow-red); }
+
+[data-theme='light'] .text-glow-green,
+[data-theme='light'] .text-glow-lemon,
+[data-theme='light'] .text-glow-red {
+  text-shadow: none;
+}
+
+/* ---------- Blinking cursor ---------- */
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.cursor-blink::after {
+  content: '█';
+  animation: blink 1.1s step-end infinite;
+  color: #00ff41;
+}
+
+/* ---------- Entrance animations ---------- */
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.rise-in { animation: riseIn 0.4s ease-out both; }
+
+/* ---------- Cards ---------- */
+
+.card {
+  background-color: rgb(var(--c-panel));
+  border: 1px solid rgb(var(--c-border));
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.card:hover,
+.card:focus-within {
+  border-color: rgba(0, 255, 65, 0.55);
+  box-shadow: 0 0 10px var(--glow-green);
+  background-color: rgb(var(--c-panel-2));
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1.4rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  border: 1px solid;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.btn-primary {
+  color: #00ff41;
+  border-color: #00ff41;
+  background-color: rgba(0, 255, 65, 0.08);
+}
+
+.btn-primary:hover {
+  background-color: #00ff41;
+  color: #1a1c1e;
+  box-shadow: 0 0 14px var(--glow-green);
+}
+
+.btn-ghost {
+  color: rgb(var(--c-text-2));
+  border-color: rgb(var(--c-border));
+  background-color: transparent;
+}
+
+.btn-ghost:hover {
+  color: #ccff00;
+  border-color: rgba(204, 255, 0, 0.7);
+  background-color: rgb(var(--c-hover));
+}
+
+[data-theme='light'] .btn-primary {
+  color: #1b1e1b;
+  border-color: #1b1e1b;
+  background-color: #00ff41;
+}
+
+[data-theme='light'] .btn-primary:hover {
+  background-color: #1b1e1b;
+  color: #00ff41;
+  box-shadow: none;
+}
+
+[data-theme='light'] .btn-ghost {
+  color: #1b1e1b;
+  border-color: rgb(var(--c-border));
+}
+
+[data-theme='light'] .btn-ghost:hover {
+  color: #1b1e1b;
+  border-color: #1b1e1b;
+  background-color: rgb(var(--c-hover));
+}
+
+/* Disabled / SOON buttons — clearly not clickable */
+.btn-soon {
+  color: rgb(var(--c-text-3));
+  border-color: rgb(var(--c-border));
+  background-color: transparent;
+  border-style: dashed;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ---------- Status badges ---------- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.28rem 0.6rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background-color: currentColor;
+  flex: none;
+}
+
+.badge-green {
+  color: #00ff41;
+  border-color: rgba(0, 255, 65, 0.55);
+  background-color: rgba(0, 255, 65, 0.08);
+}
+
+.badge-lemon {
+  color: #ccff00;
+  border-color: rgba(204, 255, 0, 0.55);
+  background-color: rgba(204, 255, 0, 0.08);
+}
+
+.badge-red {
+  color: #ff0000;
+  border-color: rgba(255, 0, 0, 0.6);
+  background-color: rgba(255, 0, 0, 0.1);
+}
+
+.badge-neutral {
+  color: rgb(var(--c-text-2));
+  border-color: rgb(var(--c-border));
+  background-color: rgb(var(--c-panel-2));
+}
+
+/* Light mode: solid neon fill + dark text keeps tone readable (no neon-on-light text) */
+[data-theme='light'] .badge-green {
+  color: #1b1e1b;
+  background-color: #00ff41;
+  border-color: #1b1e1b;
+}
+
+[data-theme='light'] .badge-lemon {
+  color: #1b1e1b;
+  background-color: #ccff00;
+  border-color: #1b1e1b;
+}
+
+[data-theme='light'] .badge-red {
+  color: #1b1e1b;
+  background-color: #ff0000;
+  border-color: #1b1e1b;
+}
+
+[data-theme='light'] .badge-neutral {
+  color: #1b1e1b;
+  background-color: rgb(var(--c-hover));
+  border-color: rgb(var(--c-border));
+}
+
+/* ---------- Placeholder blocks (screenshots / info to be provided) ---------- */
+
+.placeholder-box {
+  border: 1px dashed rgb(var(--c-border));
+  background-color: rgb(var(--c-surface));
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(120, 126, 120, 0.05) 10px,
+    rgba(120, 126, 120, 0.05) 20px
+  );
+  color: rgb(var(--c-text-3));
+}
+
+/* ---------- Light-mode readability rules ----------
+   Neon TEXT is unreadable on light greys, so neon text becomes
+   dark grey while neon borders / fills / dots keep the color meaning. */
+[data-theme='light'] .text-neon-green,
+[data-theme='light'] .text-neon-lemon,
+[data-theme='light'] .text-neon-red {
+  color: #1b1e1b;
+}
+
+[data-theme='light'] .text-glow-green,
+[data-theme='light'] .glow-green,
+[data-theme='light'] .glow-lemon,
+[data-theme='light'] .glow-red {
+  box-shadow: none;
+}
+
+/* ---------- Links ---------- */
+
+.link {
+  color: #00ff41;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(0, 255, 65, 0.4);
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.link:hover {
+  color: #ccff00;
+  text-decoration-color: rgba(204, 255, 0, 0.7);
+}
+
+[data-theme='light'] .link {
+  color: #1b1e1b;
+  text-decoration-color: rgba(27, 30, 27, 0.5);
+}
+
+[data-theme='light'] .link:hover {
+  color: #1b1e1b;
+  text-decoration-color: #00ff41;
+}
+
+/* ---------- Scrollbar ---------- */
+
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: rgb(var(--c-app)); }
+::-webkit-scrollbar-thumb { background: rgb(var(--c-border)); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgb(var(--c-hover)); }
