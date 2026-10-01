@@ -62,8 +62,24 @@ export interface DevLogEntry {
 
 /** Published entries, newest first. Add yours here. */
 export const DEV_LOG: DevLogEntry[] = [
-  // ← no entries published yet. Paste your first real update here
-  //   (template in the file header above).
+  {
+    id: 'site-production-readiness',
+    date: '2026-10-01',
+    project: 'WEBSITE',
+    title: 'Search, performance & production readiness',
+    summary:
+      'A technical pass across metadata, page delivery, loading behaviour and production configuration.',
+    details: [
+      'Every page now ships its own title, description and social sharing tags',
+      'Pages render to static HTML at build time — crawlers and link previews receive full content without JavaScript, backed by a sitemap and canonical URLs',
+      'Unknown URLs now return a real 404 instead of a placeholder page',
+      'The typeface loads from our own domain — one less third-party request on every page',
+      'Production configuration strengthened: security headers and long-lived caching for static assets',
+      'Project pages gained a quick-answers section with factual summaries (starting with Stusys)',
+      'Launched this development log — future Stusys and No Respawn in War updates land here',
+    ],
+  },
+  // …next real update goes here (sorted by date automatically).
 ]
 
 /** Latest entries first (optionally limited). */
