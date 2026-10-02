@@ -84,7 +84,8 @@ export const DEV_LOG: DevLogEntry[] = [
     ],
     images: [
       {
-        alt: 'WOLFCANI dashboard — screenshot to be provided',
+        src: '/screenshots/wolfcani-dashboard.png',
+        alt: "WOLFCANI dashboard — live clock, focus timer, today's tasks and the month calendar",
         caption: 'DASHBOARD',
       },
     ],

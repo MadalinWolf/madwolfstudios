@@ -29,10 +29,6 @@ export const LINKS = {
   itch: { label: 'ITCH.IO', url: null }, // ← SOON
   x: { label: 'X / TWITTER', url: null }, // ← SOON
   youtube: { label: 'YOUTUBE', url: null }, // ← SOON
-
-  // Project-specific destinations (WOLFCANI)
-  wolfcaniDemo: { label: 'LIVE DEMO', url: null }, // ← SOON
-  wolfcaniSource: { label: 'SOURCE CODE', url: null }, // ← SOON
 } satisfies Record<string, ExternalLink>
 
 export type LinkId = keyof typeof LINKS

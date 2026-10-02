@@ -1,6 +1,22 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
+/** Minimal image shape shared by the lightbox and its galleries. */
+export interface GalleryImage {
+  src?: string
+  alt: string
+  caption?: string
+}
+
+/** PREV/NEXT navigation state — provided by Zoomable when a gallery is set. */
+interface LightboxNav {
+  /** Zero-based index of the image currently shown. */
+  index: number
+  total: number
+  onPrev: () => void
+  onNext: () => void
+}
+
 /*
  * Screenshot lightbox — click-to-enlarge overlay.
  *
@@ -10,6 +26,11 @@ import { createPortal } from 'react-dom'
  * - Rendered through a portal only after a click, so prerendered HTML is
  *   unchanged (no hydration mismatch) and the strict CSP stays happy:
  *   no inline styles, no inline scripts.
+ * - When opened from a gallery (2+ images), a PREV/NEXT control pair and an
+ *   index counter appear in the header: you move between screenshots without
+ *   leaving the lightbox, wrapping around at both ends. Left/Right arrow keys
+ *   do the same on desktop; the controls are regular buttons, so they stay
+ *   usable on touch.
  * - Accessibility: role="dialog" + aria-modal, focus moves into the dialog,
  *   focus is trapped while open, Escape and the close button both work, and
  *   focus returns to the trigger when the lightbox closes.
@@ -18,19 +39,24 @@ export function Lightbox({
   src,
   alt,
   caption,
+  nav,
   onClose,
 }: {
   src: string
   alt: string
   caption?: string
+  /** Gallery navigation — omit for a single image (no PREV/NEXT shown). */
+  nav?: LightboxNav
   onClose: () => void
 }) {
   const dialogRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLElement | null>(null)
   const onCloseRef = useRef(onClose)
+  const navRef = useRef(nav)
 
   useEffect(() => {
     onCloseRef.current = onClose
+    navRef.current = nav
   })
 
   useEffect(() => {
@@ -42,6 +68,15 @@ export function Lightbox({
       if (event.key === 'Escape') {
         event.preventDefault()
         onCloseRef.current()
+        return
+      }
+
+      // Gallery navigation with Left/Right arrow keys (wraps around).
+      const currentNav = navRef.current
+      if (currentNav && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) {
+        event.preventDefault()
+        if (event.key === 'ArrowLeft') currentNav.onPrev()
+        else currentNav.onNext()
         return
       }
 
@@ -91,14 +126,42 @@ export function Lightbox({
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-neon-lemon">
             [ {caption || alt} ]
           </span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="btn btn-ghost"
-            aria-label="Close enlarged screenshot"
-          >
-            [ CLOSE ]
-          </button>
+          <div className="flex flex-wrap items-center gap-2">
+            {nav && (
+              <>
+                <button
+                  type="button"
+                  onClick={nav.onPrev}
+                  className="btn btn-ghost"
+                  aria-label="Previous screenshot"
+                >
+                  [ ← PREV ]
+                </button>
+                <span
+                  aria-hidden="true"
+                  className="min-w-[3.25rem] text-center text-[10px] font-bold tracking-[0.2em] text-text-muted"
+                >
+                  {nav.index + 1} / {nav.total}
+                </span>
+                <button
+                  type="button"
+                  onClick={nav.onNext}
+                  className="btn btn-ghost"
+                  aria-label="Next screenshot"
+                >
+                  [ NEXT → ]
+                </button>
+              </>
+            )}
+            <button
+              type="button"
+              onClick={onClose}
+              className="btn btn-ghost"
+              aria-label="Close enlarged screenshot"
+            >
+              [ CLOSE ]
+            </button>
+          </div>
         </div>
 
         <img
@@ -113,34 +176,69 @@ export function Lightbox({
 }
 
 /*
- * Click-to-enlarge wrapper for a single image.
+ * Click-to-enlarge wrapper for a single image — or for one image of a gallery.
  * Renders the given children (the <img>) inside a keyboard-accessible button
  * and opens the Lightbox on click/Enter/Space.
+ * Pass `gallery` (the full list of sibling screenshots) to get PREV/NEXT
+ * navigation inside the lightbox; the wrapper starts on its own image.
  */
 export function Zoomable({
   src,
   alt,
   caption,
+  gallery,
   children,
 }: {
   src: string
   alt: string
   caption?: string
+  /** Full set of sibling screenshots — enables in-lightbox gallery navigation. */
+  gallery?: GalleryImage[]
   children: ReactNode
 }) {
   const [open, setOpen] = useState(false)
+  const items = (gallery ?? []).filter((item) => item.src)
+  const [index, setIndex] = useState(0)
+
+  // Always open on this thumbnail's own image, even after a previous
+  // in-lightbox navigation left the index somewhere else in the gallery.
+  const openAtOwnImage = () => {
+    const found = items.findIndex((item) => item.src === src)
+    setIndex(found >= 0 ? found : 0)
+    setOpen(true)
+  }
+
+  const safeIndex = index < items.length ? index : 0
+  const current = items[safeIndex]
+  const nav: LightboxNav | undefined =
+    items.length > 1
+      ? {
+          index: safeIndex,
+          total: items.length,
+          onPrev: () => setIndex((i) => (i - 1 + items.length) % items.length),
+          onNext: () => setIndex((i) => (i + 1) % items.length),
+        }
+      : undefined
 
   return (
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={openAtOwnImage}
         aria-label={`View larger: ${alt}`}
         className="block w-full cursor-zoom-in text-left"
       >
         {children}
       </button>
-      {open && <Lightbox src={src} alt={alt} caption={caption} onClose={() => setOpen(false)} />}
+      {open && (
+        <Lightbox
+          src={current?.src ?? src}
+          alt={current?.alt ?? alt}
+          caption={current?.caption ?? caption}
+          nav={nav}
+          onClose={() => setOpen(false)}
+        />
+      )}
     </>
   )
 }

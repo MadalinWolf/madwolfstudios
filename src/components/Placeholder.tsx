@@ -24,12 +24,22 @@ export function PlaceholderBox({
  * Screenshot / artwork frame.
  * - No `src`  → dashed placeholder frame (no fake images, ever).
  * - Has `src` → renders the real image once you drop a file in /public.
+ * - Pass `gallery` (the full list of sibling slots) so the lightbox gets
+ *   PREV/NEXT navigation between the screenshots without closing.
  */
-export function MediaSlotFrame({ slot, aspect = 'aspect-video' }: { slot: MediaSlot; aspect?: string }) {
+export function MediaSlotFrame({
+  slot,
+  aspect = 'aspect-video',
+  gallery,
+}: {
+  slot: MediaSlot
+  aspect?: string
+  gallery?: MediaSlot[]
+}) {
   return (
     <figure className="card p-3">
       {slot.src ? (
-        <Zoomable src={slot.src} alt={slot.alt} caption={slot.caption}>
+        <Zoomable src={slot.src} alt={slot.alt} caption={slot.caption} gallery={gallery}>
           <img
             src={slot.src}
             alt={slot.alt}

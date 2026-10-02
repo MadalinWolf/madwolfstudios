@@ -1,12 +1,10 @@
 import { type ReactNode } from 'react'
 import { ButtonLink } from '../components/Button'
-import { DevLogEntryCard } from '../components/DevLogEntry'
+import { Zoomable } from '../components/Lightbox'
 import { MediaSlotFrame, PlaceholderBox } from '../components/Placeholder'
-import { PlatformLinks } from '../components/PlatformLinks'
 import { Eyebrow } from '../components/SectionHeader'
 import { FeatureStateBadge, StatusBadge } from '../components/StatusBadge'
-import { getEntriesForProject } from '../data/devLog'
-import type { Project } from '../data/projects'
+import type { MediaSlot, Project } from '../data/projects'
 import { FEATURE_STATE_META } from '../data/status'
 import { Link } from '../router'
 
@@ -34,8 +32,34 @@ function Section({
   )
 }
 
+/*
+ * Hero product screenshot — the first real image on the page, shown at
+ * natural aspect ratio directly after the overview. Click opens the lightbox.
+ */
+function HeroShot({ slot }: { slot: MediaSlot }) {
+  if (!slot.src) return null
+  return (
+    <figure className="card p-3 sm:p-4">
+      <Zoomable src={slot.src} alt={slot.alt} caption={slot.caption}>
+        <img src={slot.src} alt={slot.alt} className="w-full h-auto border border-line" />
+      </Zoomable>
+      <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-neon-lemon">
+          [ {slot.caption || 'SCREENSHOT'} ]
+        </span>
+        <span className="text-[10px] uppercase tracking-[0.14em] text-text-muted">
+          Captured from the running application — click to enlarge
+        </span>
+      </figcaption>
+    </figure>
+  )
+}
+
 export function ProjectDetail({ project }: { project: Project }) {
-  const entries = getEntriesForProject(project.slug)
+  /* Sections are numbered in render order so optional sections (FAQ,
+     roadmap, …) never leave a gap in the // 0N eyebrows. */
+  let sectionNo = 0
+  const eyebrow = () => `// 0${(sectionNo += 1)}`
 
   return (
     <div className="mx-auto max-w-site px-5 py-12 sm:py-16">
@@ -65,15 +89,11 @@ export function ProjectDetail({ project }: { project: Project }) {
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
           {project.tagline}
         </p>
-
-        <div className="mt-7">
-          <PlatformLinks ids={project.links} />
-        </div>
       </header>
 
       <div className="mt-12 space-y-12">
         {/* OVERVIEW */}
-        <Section id="overview" eyebrow="// 01" title="Overview">
+        <Section id="overview" eyebrow={eyebrow()} title="Overview">
           <div className="max-w-3xl space-y-4 text-sm leading-relaxed text-text-secondary sm:text-base">
             {project.overview.map((paragraph, i) => (
               <p key={i}>{paragraph}</p>
@@ -81,29 +101,11 @@ export function ProjectDetail({ project }: { project: Project }) {
           </div>
         </Section>
 
-        {/* QUICK ANSWERS — plain Q&A for search engines and AI answer engines.
-            Answers come from src/data/projects.ts and must stay factual. */}
-        {project.faq && project.faq.length > 0 && (
-          <Section id="faq" eyebrow="// 02" title="Quick Answers">
-            <dl className="max-w-3xl space-y-4">
-              {project.faq.map((item) => (
-                <div key={item.question} className="card p-5">
-                  <dt className="text-sm font-bold text-neon-lemon">{item.question}</dt>
-                  <dd className="mt-2 text-sm leading-relaxed text-text-secondary">
-                    {item.answer ?? (
-                      <span className="placeholder-box inline-block px-3 py-1.5 text-xs uppercase tracking-[0.12em] text-text-muted">
-                        [ ANSWER — TO BE PROVIDED ]
-                      </span>
-                    )}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </Section>
-        )}
+        {/* HERO SCREENSHOT — real UI immediately after the introduction */}
+        {project.hero?.src && <HeroShot slot={project.hero} />}
 
-        {/* FEATURES */}
-        <Section id="features" eyebrow="// 03" title="Features">
+        {/* WHAT'S INCLUDED */}
+        <Section id="features" eyebrow={eyebrow()} title="What's Included">
           {/* Legend */}
           <div className="mb-6 flex flex-wrap items-center gap-4 text-[10px] font-bold uppercase tracking-[0.16em] text-text-muted">
             <span>Legend:</span>
@@ -129,9 +131,49 @@ export function ProjectDetail({ project }: { project: Project }) {
           </ul>
         </Section>
 
-        {/* SCREENSHOTS */}
-        <Section id="screenshots" eyebrow="// 04" title="Screenshots">
-          {project.screenshots.length > 0 ? (
+        {/* INSIDE — themed screenshot showcase (falls back to the plain grid) */}
+        <Section id="inside" eyebrow={eyebrow()} title={`Inside ${project.name}`}>
+          {project.showcase && project.showcase.length > 0 ? (
+            <div className="space-y-6">
+              {project.showcase.map((block) => {
+                const single = block.images.length === 1
+                const gridCols =
+                  block.images.length === 3 ? 'sm:grid-cols-2 lg:grid-cols-3' : 'sm:grid-cols-2'
+                return (
+                  <article key={block.label} className="card p-5 sm:p-6">
+                    <div
+                      className={
+                        single ? 'grid items-start gap-6 lg:grid-cols-[0.9fr_1.1fr]' : undefined
+                      }
+                    >
+                      <div>
+                        <Eyebrow>{`// ${block.label}`}</Eyebrow>
+                        <h3 className="mt-2 text-lg font-extrabold uppercase tracking-wide text-neon-lemon sm:text-xl">
+                          {block.title}
+                        </h3>
+                        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-text-secondary">
+                          {block.text}
+                        </p>
+                      </div>
+                      {single && <MediaSlotFrame slot={block.images[0]} aspect="aspect-auto" />}
+                    </div>
+                    {!single && (
+                      <div className={`mt-5 grid gap-4 ${gridCols}`}>
+                        {block.images.map((slot, i) => (
+                          <MediaSlotFrame
+                            key={i}
+                            slot={slot}
+                            aspect="aspect-[3/2]"
+                            gallery={block.images}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </article>
+                )
+              })}
+            </div>
+          ) : project.screenshots.length > 0 ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {project.screenshots.map((slot, i) => (
                 <MediaSlotFrame key={i} slot={slot} />
@@ -144,8 +186,25 @@ export function ProjectDetail({ project }: { project: Project }) {
           )}
         </Section>
 
+        {/* QUICK ANSWERS — plain Q&A for search engines and AI answer engines.
+            Answers come from src/data/projects.ts and must stay factual. */}
+        {project.faq && project.faq.length > 0 && (
+          <Section id="faq" eyebrow={eyebrow()} title="Quick Answers">
+            <dl className="max-w-3xl space-y-4">
+              {project.faq.map((item) => (
+                <div key={item.question} className="card p-5">
+                  <dt className="text-sm font-bold text-neon-lemon">{item.question}</dt>
+                  <dd className="mt-2 text-sm leading-relaxed text-text-secondary">
+                    {item.answer}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Section>
+        )}
+
         {/* DEVELOPMENT STATUS */}
-        <Section id="status" eyebrow="// 05" title="Development Status">
+        <Section id="status" eyebrow={eyebrow()} title="Development Status">
           <div className="card p-6">
             <div className="flex flex-wrap items-center gap-4">
               <StatusBadge status={project.status} />
@@ -154,22 +213,14 @@ export function ProjectDetail({ project }: { project: Project }) {
               </span>
             </div>
             <p className="mt-4 max-w-3xl text-sm leading-relaxed text-text-secondary">
-              {project.name} is currently in development. Progress — what changed, what was
-              learned and what&apos;s next — is published on the dev log.
+              {project.statusNote ??
+                `${project.name} is currently in development. Progress — what changed, what was learned and what's next — is published on the dev log.`}
             </p>
-            <div className="mt-5">
-              <Link
-                to="/dev-log"
-                className="text-[11px] font-bold uppercase tracking-[0.18em] text-neon-green hover:text-neon-lemon"
-              >
-                FOLLOW THE DEV LOG →
-              </Link>
-            </div>
           </div>
         </Section>
 
         {/* TECHNOLOGY */}
-        <Section id="technology" eyebrow="// 06" title="Technology">
+        <Section id="technology" eyebrow={eyebrow()} title="Technology">
           <ul className="flex flex-wrap gap-3">
             {project.technology.map((tech) => (
               <li
@@ -182,9 +233,9 @@ export function ProjectDetail({ project }: { project: Project }) {
           </ul>
         </Section>
 
-        {/* ROADMAP */}
-        <Section id="roadmap" eyebrow="// 07" title="Roadmap">
-          {project.roadmap.length > 0 ? (
+        {/* ROADMAP — only when real milestones exist (no placeholder boxes) */}
+        {project.roadmap.length > 0 && (
+          <Section id="roadmap" eyebrow={eyebrow()} title="Roadmap">
             <div className="grid gap-6 sm:grid-cols-2">
               {project.roadmap.map((block) => (
                 <div key={block.title} className="card p-6">
@@ -207,32 +258,23 @@ export function ProjectDetail({ project }: { project: Project }) {
                 </div>
               ))}
             </div>
-          ) : (
-            <PlaceholderBox label="ROADMAP — TO BE PROVIDED">
-              Planned milestones and future work will be listed here.
-            </PlaceholderBox>
-          )}
-        </Section>
+          </Section>
+        )}
 
-        {/* DEVELOPMENT UPDATES */}
-        <Section id="updates" eyebrow="// 08" title="Development Updates">
-          {entries.length > 0 ? (
-            <div className="space-y-6">
-              {entries.map((entry) => (
-                <DevLogEntryCard key={entry.id} entry={entry} />
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-5">
-              <PlaceholderBox label="NO UPDATES PUBLISHED YET">
-                Development updates for {project.name} will appear here once published on the dev
-                log.
-              </PlaceholderBox>
+        {/* DEVELOPMENT — small connection to the dev log (no duplication) */}
+        <Section id="development" eyebrow={eyebrow()} title="Development">
+          <div className="card max-w-3xl p-6">
+            <p className="text-sm leading-relaxed text-text-secondary">
+              {project.name} is actively developed at Madwolf Studios. Development progress is
+              documented through the Dev Log — new features, improvements, technical decisions and
+              lessons learned.
+            </p>
+            <div className="mt-5">
               <ButtonLink to="/dev-log" variant="ghost">
-                OPEN DEV LOG
+                VIEW DEV LOG →
               </ButtonLink>
             </div>
-          )}
+          </div>
         </Section>
       </div>
     </div>
