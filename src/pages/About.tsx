@@ -143,12 +143,8 @@ export function About() {
       label: 'Formal education',
       items: [
         {
-          label: 'TAFAD',
-          text: 'Physical activity and sports — from the years I spent working in the fitness industry.',
-        },
-        {
-          label: 'DAM',
-          text: 'Desarrollo de Aplicaciones Multiplataforma: my software development studies, in progress.',
+          label: 'Higher National Diploma (HND) in Cross-Platform Application Development',
+          text: 'My formal software development studies — currently in progress.',
         },
       ],
     },
