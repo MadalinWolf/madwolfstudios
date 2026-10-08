@@ -29,6 +29,11 @@ const DIST = path.join(ROOT, 'dist')
 const HEAD_RE = /<!--seo-head-start-->[\s\S]*?<!--seo-head-end-->/
 const ROOT_DIV = '<div id="root"></div>'
 
+// Deployment base path — must match the VITE_BASE value used for `vite build`
+// (see vite.config.ts). '/' on a domain root, '/madwolfstudios/' on the
+// temporary GitHub Pages project URL.
+const BASE = `/${(process.env.VITE_BASE || '/').replace(/^\/+|\/+$/g, '')}/`.replace(/\/\/+$/, '/')
+
 const vite = await createServer({
   root: ROOT,
   server: { middlewareMode: true },
@@ -48,6 +53,15 @@ try {
   if (!template.includes(ROOT_DIV)) {
     throw new Error('prerender root div not found in dist/index.html')
   }
+  // Vite rewrites the entry script with the configured base path — if the two
+  // halves of the build ran with different VITE_BASE values, stop here instead
+  // of publishing a site whose assets do not resolve.
+  if (!template.includes(`src="${BASE}assets/`)) {
+    throw new Error(
+      `base mismatch: dist/index.html has no entry script under "${BASE}assets/" — ` +
+        'VITE_BASE must be identical for "vite build" and this script',
+    )
+  }
 
   // Preload the primary (latin) font file. Its name is only known after the
   // build because Vite content-hashes assets, so the link is injected here.
@@ -57,7 +71,7 @@ try {
     (file) => file.includes('-latin-wght-') && file.endsWith('.woff2') && !file.includes('italic'),
   )
   if (latinFont) {
-    fontPreload = `<link rel="preload" href="/assets/${latinFont}" as="font" type="font/woff2" crossorigin />\n    `
+    fontPreload = `<link rel="preload" href="${BASE}assets/${latinFont}" as="font" type="font/woff2" crossorigin />\n    `
   } else {
     console.warn('prerender: latin font file not found — skipping preload')
   }
@@ -91,6 +105,45 @@ try {
 
   await writeFile(path.join(DIST, 'sitemap.xml'), buildSitemapXml(), 'utf8')
   console.log('prerender: sitemap.xml')
+
+  // --- Legacy redirects ----------------------------------------------------
+  // netlify.toml answers these with HTTP 301; GitHub Pages has no redirect
+  // configuration, so they ship as tiny static pages that bounce the browser
+  // (meta refresh covers crawlers/no-JS, location.replace covers everyone
+  // else). Keep the list in sync with netlify.toml [[redirects]].
+  const { canonicalUrl } = await vite.ssrLoadModule('/src/seo.ts')
+  const REDIRECTS = [{ from: '/projects/stusys', to: '/projects/wolfcani' }]
+
+  for (const { from, to } of REDIRECTS) {
+    const target = `${BASE}${to.replace(/^\/+/, '')}/`
+    const canonical = canonicalUrl(to)
+    const outPath = path.join(DIST, ...from.slice(1).split('/'), 'index.html')
+    const stub = [
+      '<!DOCTYPE html>',
+      '<html lang="en">',
+      '  <head>',
+      '    <meta charset="UTF-8" />',
+      '    <meta name="viewport" content="width=device-width, initial-scale=1.0" />',
+      '    <title>Redirecting…</title>',
+      '    <meta name="robots" content="noindex" />',
+      `    <link rel="canonical" href="${canonical}" />`,
+      `    <meta http-equiv="refresh" content="0; url=${target}" />`,
+      '  </head>',
+      '  <body>',
+      `    <p>This page has moved to <a href="${target}">${canonical}</a>.</p>`,
+      `    <script>location.replace(${JSON.stringify(target)})</script>`,
+      '  </body>',
+      '</html>',
+      '',
+    ].join('\n')
+    await mkdir(path.dirname(outPath), { recursive: true })
+    await writeFile(outPath, stub, 'utf8')
+    console.log(`prerender: ${from} → ${to}`)
+  }
+
+  // Tell GitHub Pages to serve the artifact as plain static files (belt and
+  // braces — Actions deployments are already static, Jekyll never runs).
+  await writeFile(path.join(DIST, '.nojekyll'), '', 'utf8')
 } finally {
   await vite.close()
 }

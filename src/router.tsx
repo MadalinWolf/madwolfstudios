@@ -17,9 +17,30 @@ import {
    Trailing-slash and /index.html variants are normalized.
    ========================================================= */
 
+/**
+ * Deployment base path (always ends with '/'): '/' on a domain root, or
+ * '/madwolfstudios/' on the temporary GitHub Pages project URL while the
+ * migration is verified (see vite.config.ts).
+ */
+const BASE: string = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`
+
+/** Site path → browser URL (base-prefixed). No-op when BASE is '/'. */
+function withBase(path: string): string {
+  return BASE === '/' ? path : `${BASE}${path.replace(/^\/+/, '')}`
+}
+
 function readPath(): string {
   if (typeof window === 'undefined') return '/'
-  const raw = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/+$/, '')
+  let pathname = window.location.pathname
+  // Strip the deployment base path (see vite.config.ts) so route matching
+  // always works on site-relative paths: '/madwolfstudios/projects/' → '/projects'.
+  if (BASE !== '/') {
+    if (pathname === BASE.slice(0, -1)) pathname = '/'
+    else if (pathname.startsWith(BASE)) pathname = `/${pathname.slice(BASE.length)}`
+  }
+  const raw = pathname.replace(/\/index\.html$/, '').replace(/\/+$/, '')
   return raw === '' ? '/' : raw
 }
 
@@ -52,7 +73,7 @@ export function RouterProvider({
     const hash = hashIndex >= 0 ? to.slice(hashIndex + 1) : ''
 
     if (targetPath !== readPath()) {
-      window.history.pushState({}, '', to)
+      window.history.pushState({}, '', withBase(targetPath) + (hash ? `#${hash}` : ''))
       setPath(readPath())
       window.scrollTo({ top: 0 })
       return
@@ -97,7 +118,7 @@ export function Link({ to, onClick, children, ...rest }: LinkProps) {
   }
 
   return (
-    <a href={to} onClick={handleClick} {...rest}>
+    <a href={withBase(to)} onClick={handleClick} {...rest}>
       {children}
     </a>
   )

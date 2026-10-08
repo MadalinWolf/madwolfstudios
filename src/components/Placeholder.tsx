@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { MediaSlot } from '../data/projects'
+import { assetUrl } from '../asset'
 import { Zoomable } from './Lightbox'
 
 /* Clearly marked placeholder panel for missing content. */
@@ -41,7 +42,7 @@ export function MediaSlotFrame({
       {slot.src ? (
         <Zoomable src={slot.src} alt={slot.alt} caption={slot.caption} gallery={gallery}>
           <img
-            src={slot.src}
+            src={assetUrl(slot.src)}
             alt={slot.alt}
             loading="lazy"
             className={`w-full ${aspect} object-contain border border-line`}

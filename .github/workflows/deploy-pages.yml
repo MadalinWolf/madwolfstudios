@@ -1,0 +1,72 @@
+# Builds the static site and deploys it to GitHub Pages.
+#
+# Trigger: push to main (plus manual runs). A failing build never publishes —
+# the deploy job only runs when the build job succeeded (needs: build).
+#
+# VITE_BASE (repository variable, read below):
+#   '/'                → site served from a domain root (madwolfstudios.com).
+#                        This is the default when the variable is unset and is
+#                        the value the production custom domain must use.
+#   '/madwolfstudios/' → temporary project Pages URL
+#                        (https://madalinwolf.github.io/madwolfstudios/), used
+#                        only while the migration is verified before any DNS
+#                        change. Delete the variable to return to '/'.
+# See vite.config.ts and scripts/prerender.mjs for how the base is applied.
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least privilege: read the source, publish Pages, nothing else. No secrets
+# are used — the build needs no tokens (public repo, public dependencies).
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never cancel an in-flight production deployment; queue behind it instead.
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (typecheck + bundle + prerender every route)
+        run: npm run build
+        env:
+          VITE_BASE: ${{ vars.VITE_BASE || '/' }}
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

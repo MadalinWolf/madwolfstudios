@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { assetUrl } from '../asset'
 
 /** Minimal image shape shared by the lightbox and its galleries. */
 export interface GalleryImage {
@@ -165,7 +166,7 @@ export function Lightbox({
         </div>
 
         <img
-          src={src}
+          src={assetUrl(src)}
           alt={alt}
           className="mx-auto block max-h-[75vh] w-auto max-w-full border border-line sm:max-h-[85vh]"
         />

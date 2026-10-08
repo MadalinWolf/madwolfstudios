@@ -1,4 +1,5 @@
 import type { DevLogEntry } from '../data/devLog'
+import { assetUrl } from '../asset'
 import { Link } from '../router'
 import { Zoomable } from './Lightbox'
 import { ToneBadge } from './StatusBadge'
@@ -60,7 +61,7 @@ export function DevLogEntryCard({ entry, compact = false }: { entry: DevLogEntry
               {img.src ? (
                 <Zoomable src={img.src} alt={img.alt} caption={img.caption}>
                   <img
-                    src={img.src}
+                    src={assetUrl(img.src)}
                     alt={img.alt}
                     width={800}
                     height={450}

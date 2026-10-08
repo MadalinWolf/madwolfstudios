@@ -4,6 +4,7 @@ import { Zoomable } from '../components/Lightbox'
 import { MediaSlotFrame, PlaceholderBox } from '../components/Placeholder'
 import { Eyebrow } from '../components/SectionHeader'
 import { FeatureStateBadge, StatusBadge } from '../components/StatusBadge'
+import { assetUrl } from '../asset'
 import type { MediaSlot, Project } from '../data/projects'
 import { FEATURE_STATE_META } from '../data/status'
 import { Link } from '../router'
@@ -41,7 +42,7 @@ function HeroShot({ slot }: { slot: MediaSlot }) {
   return (
     <figure className="card p-3 sm:p-4">
       <Zoomable src={slot.src} alt={slot.alt} caption={slot.caption}>
-        <img src={slot.src} alt={slot.alt} className="w-full h-auto border border-line" />
+        <img src={assetUrl(slot.src)} alt={slot.alt} className="w-full h-auto border border-line" />
       </Zoomable>
       <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-neon-lemon">
