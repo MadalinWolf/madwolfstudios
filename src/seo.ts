@@ -1,6 +1,6 @@
 import { DEV_LOG } from './data/devLog'
 import { GAMES, getGame } from './data/games'
-import { PROJECTS, getProject } from './data/projects'
+import { PROJECTS, getProject, type Project } from './data/projects'
 import { SITE } from './data/site'
 
 /* =========================================================
@@ -178,29 +178,144 @@ function ogTag(property: string, content: string): string {
   return `<meta property="${property}" content="${escapeAttr(content)}" />`
 }
 
-/** Organization + Person structured data for the homepage (verified facts only). */
-function homeJsonLd(): string {
-  const graph = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'Organization',
-        '@id': `${SITE_URL}/#organization`,
-        name: SITE.namePlain,
-        url: `${SITE_URL}/`,
-        logo: `${SITE_URL}/favicon.svg`,
-        founder: { '@id': `${SITE_URL}/#madalin-dinu` },
-      },
-      {
-        '@type': 'Person',
-        '@id': `${SITE_URL}/#madalin-dinu`,
-        name: SITE.founder.name,
-        sameAs: ['https://github.com/MadalinWolf'],
-      },
-    ],
+type Thing = Record<string, unknown>
+
+const ORG_ID = `${SITE_URL}/#organization`
+const PERSON_ID = `${SITE_URL}/#madalin-dinu`
+const SITE_ID = `${SITE_URL}/#website`
+
+/** Studio identity — same node is referenced from every page's graph. */
+function organization(): Thing {
+  return {
+    '@type': 'Organization',
+    '@id': ORG_ID,
+    name: SITE.namePlain,
+    url: `${SITE_URL}/`,
+    logo: `${SITE_URL}/favicon.svg`,
+    founder: { '@id': PERSON_ID },
   }
-  // '<' escaped so the JSON can never terminate the script block early.
-  return `<script type="application/ld+json">${JSON.stringify(graph).replace(/</g, '\\u003c')}</script>`
+}
+
+function person(): Thing {
+  return {
+    '@type': 'Person',
+    '@id': PERSON_ID,
+    name: SITE.founder.name,
+    sameAs: ['https://github.com/MadalinWolf'],
+  }
+}
+
+/** WebSite node for the homepage (no SearchAction — the site has no search). */
+function website(): Thing {
+  return {
+    '@type': 'WebSite',
+    '@id': SITE_ID,
+    name: SITE.namePlain,
+    url: `${SITE_URL}/`,
+    inLanguage: 'en',
+    publisher: { '@id': ORG_ID },
+  }
+}
+
+function breadcrumb(trail: { name: string; url: string }[]): Thing {
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((step, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: step.name,
+      item: step.url,
+    })),
+  }
+}
+
+/**
+ * SoftwareApplication for a project that actually ships downloads, built from
+ * the data in src/data/projects.ts (version, installers, screenshots) so it can
+ * never drift from what the page says. Only emitted when the project has real
+ * release artifacts — no schema for pages that have nothing concrete to describe.
+ */
+function softwareApplication(project: Project): Thing | null {
+  const downloads = project.downloads ?? []
+  if (downloads.length === 0 || !project.releaseVersion) return null
+  const operatingSystem = [...new Set(downloads.map((d) => d.os))].join(', ')
+  const data: Thing = {
+    '@type': 'SoftwareApplication',
+    '@id': `${canonicalUrl(`/projects/${project.slug}`)}#software`,
+    name: project.name,
+    description: project.seoDescription ?? project.tagline,
+    url: canonicalUrl(`/projects/${project.slug}`),
+    inLanguage: 'en',
+    operatingSystem,
+    softwareVersion: project.releaseVersion.replace(/^v/, ''),
+    license: 'https://spdx.org/licenses/MIT.html',
+    isAccessibleForFree: true,
+    downloadUrl: downloads.map((d) => d.url),
+    publisher: { '@id': ORG_ID },
+  }
+  if (project.hero?.src) data.screenshot = `${SITE_URL}${project.hero.src}`
+  if (project.applicationCategory) data.applicationCategory = project.applicationCategory
+  return data
+}
+
+/**
+ * Structured data for a route — plain objects, serialised into
+ * <script type="application/ld+json"> by buildHeadHtml (build time) and by
+ * applyDocumentMeta (after client-side navigation). Every value comes from the
+ * same data files that render the page, so the schema cannot claim anything
+ * the visible page does not.
+ */
+export function structuredData(path: string): Thing[] {
+  const project = path.startsWith('/projects/') ? getProject(path.slice('/projects/'.length)) : null
+  const game = path.startsWith('/games/') ? getGame(path.slice('/games/'.length)) : null
+
+  if (path === '/') {
+    return [{ '@context': 'https://schema.org', '@graph': [organization(), person(), website()] }]
+  }
+
+  if (project) {
+    const graph: Thing[] = [
+      organization(),
+      person(),
+      breadcrumb([
+        { name: 'Home', url: `${SITE_URL}/` },
+        { name: 'Projects', url: canonicalUrl('/projects') },
+        { name: project.name, url: canonicalUrl(path) },
+      ]),
+    ]
+    const software = softwareApplication(project)
+    if (software) graph.push(software)
+    return [{ '@context': 'https://schema.org', '@graph': graph }]
+  }
+
+  if (game) {
+    return [
+      {
+        '@context': 'https://schema.org',
+        '@graph': [
+          organization(),
+          person(),
+          breadcrumb([
+            { name: 'Home', url: `${SITE_URL}/` },
+            { name: 'Games', url: canonicalUrl('/games') },
+            { name: game.name, url: canonicalUrl(path) },
+          ]),
+        ],
+      },
+    ]
+  }
+
+  return []
+}
+
+/** One JSON-LD script tag per graph — '<' escaped so JSON cannot end the tag early. */
+function jsonLdScripts(path: string): string {
+  return structuredData(path)
+    .map(
+      (data) =>
+        `<script type="application/ld+json" data-seo-jsonld>${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`,
+    )
+    .join('\n    ')
 }
 
 /** Full static <head> block for a prerendered page. */
@@ -232,7 +347,11 @@ export function buildHeadHtml(path: string): string {
     tags.push(ogTag('og:image', `${SITE_URL}${OG_IMAGE}`), metaTag('twitter:image', `${SITE_URL}${OG_IMAGE}`))
   }
 
-  if (meta.path === '/') tags.push(homeJsonLd())
+  // JSON-LD for routes that have something concrete to describe (homepage
+  // identity, released software, detail-page breadcrumbs). Routes without
+  // accurate schema get none — never markup that overstates the page.
+  const jsonLd = jsonLdScripts(meta.path)
+  if (jsonLd) tags.push(jsonLd)
 
   return tags.join('\n    ')
 }
@@ -303,4 +422,16 @@ export function applyDocumentMeta(meta: RouteMeta): void {
   upsertMeta('name', 'twitter:card', OG_IMAGE ? 'summary_large_image' : 'summary')
   upsertMeta('name', 'twitter:title', meta.title)
   upsertMeta('name', 'twitter:description', meta.description)
+
+  // JSON-LD follows the current route too, so the live DOM never carries a
+  // previous page's schema after an SPA navigation (crawlers get the
+  // prerendered tags; this keeps client-rendered state truthful).
+  document.head.querySelectorAll('script[type="application/ld+json"]').forEach((el) => el.remove())
+  for (const data of structuredData(meta.path)) {
+    const script = document.createElement('script')
+    script.type = 'application/ld+json'
+    script.setAttribute('data-seo-jsonld', '')
+    script.textContent = JSON.stringify(data).replace(/</g, '\\u003c')
+    document.head.appendChild(script)
+  }
 }

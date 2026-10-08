@@ -58,6 +58,9 @@ export interface Project {
   releaseUrl?: string
   /** Optional GitHub Actions integration link (action repo or Marketplace). */
   actionUrl?: string
+  /** Optional schema.org SoftwareApplication category, emitted as JSON-LD on the
+   *  project page alongside `releaseVersion`/`downloads` (e.g. 'DeveloperApplication'). */
+  applicationCategory?: string
   /** Optional downloadable artifacts, grouped by operating system. */
   downloads?: { os: 'Windows' | 'macOS' | 'Linux'; arch: string; label: string; url: string; note?: string }[]
   overview: string[]
@@ -216,6 +219,7 @@ export const PROJECTS: Project[] = [
     releaseVersion: 'v1.0.1',
     releaseUrl: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.0.1',
     actionUrl: 'https://github.com/MadalinWolf/madscope-action',
+    applicationCategory: 'DeveloperApplication',
     downloads: [
       { os: 'Windows', arch: 'x64', label: 'MSI installer', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.1/MadScope-1.0.1-windows-x64.msi' },
       { os: 'Windows', arch: 'x64', label: 'Setup wizard (EXE)', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.1/MadScope-1.0.1-windows-x64-setup.exe' },
