@@ -207,7 +207,7 @@ export const PROJECTS: Project[] = [
     name: 'MadScope',
     kind: 'software',
     status: 'released',
-    featured: false,
+    featured: true,
     tagline: 'Local-first responsive testing and visual regression for developers.',
     seoTitle: 'MadScope — Responsive Website Testing & Visual Regression',
     seoDescription:
@@ -230,7 +230,7 @@ export const PROJECTS: Project[] = [
       'The same core engine powers three surfaces: a desktop UI, a command-line interface for terminals and CI, and a local render server. Baselines saved today can be re-tested tomorrow — or on every pull request — with pixel-level diffs and a pass/fail exit code.',
     ],
     statusNote:
-      'MadScope v0.1.0 is released as free open-source software (MIT) at github.com/MadalinWolf/MadScope. The core engine, desktop UI, CLI, visual regression and automated tests all work today. Next up: a GitHub Action with artifact upload, authenticated-session support, Firefox/WebKit engines and native Tauri installers.',
+      'MadScope v1.0.1 is released as free open-source software (MIT) at github.com/MadalinWolf/MadScope, with installers for Windows, macOS (ARM64 + Intel) and Linux. The core engine, desktop UI, CLI, visual regression and automated tests all work today. Next up: parallel viewport rendering, Firefox/WebKit engines and notarized macOS builds.',
     features: [
       { name: 'Real Chromium rendering', state: 'implemented', note: 'Playwright + Chromium with a dedicated browser context per viewport (device scale, isMobile, touch)' },
       { name: '8 viewport presets + custom sizes', state: 'implemented', note: 'Mobile Small 320×568 up to Large Desktop 1920×1080, plus any custom width/height' },
@@ -241,12 +241,12 @@ export const PROJECTS: Project[] = [
       { name: 'Visual comparison', state: 'implemented', note: 'Side-by-side, overlay with opacity, before/after slider, deterministic diff image' },
       { name: 'Baselines + regression tests', state: 'implemented', note: 'Save baselines, re-test later or in CI with changed-pixel percentage and exit codes' },
       { name: 'CLI for terminal + CI', state: 'implemented', note: 'madscope screenshot / baseline / test / config — same engine as the desktop app' },
+      { name: 'GitHub Action', state: 'implemented', note: 'Docker action with screenshot/baseline/test modes and JSON outputs; self-tested in CI, Marketplace listing pending' },
+      { name: 'Native installers', state: 'implemented', note: 'v1.0.1: Windows MSI/EXE, macOS ARM64 + Intel DMG, Linux AppImage/DEB built on CI' },
       { name: 'Type-safe configuration', state: 'implemented', note: 'madscope.config.ts with validation and human-readable errors' },
       { name: 'Breakpoint ruler', state: 'implemented', note: 'Common breakpoints shown under every scan' },
-      { name: 'GitHub Action', state: 'planned', note: 'Consumer workflow template ships in the repo; marketplace action after validation' },
       { name: 'Authenticated sessions', state: 'planned', note: 'Storage state / cookies with secret redaction' },
       { name: 'Firefox + WebKit engines', state: 'planned' },
-      { name: 'Native installers', state: 'planned', note: 'Tauri bundles for Windows, macOS and Linux' },
     ],
     faq: [
       {
@@ -285,7 +285,7 @@ export const PROJECTS: Project[] = [
     hero: {
       src: '/screenshots/madscope-overview.png',
       alt: 'MadScope main interface — a responsive scan at mobile, tablet and desktop sizes with health score 100/100',
-      caption: 'MADSCOPE v0.1.0',
+      caption: 'MADSCOPE v1.0.1',
     },
     showcase: [
       {
@@ -339,9 +339,9 @@ export const PROJECTS: Project[] = [
       {
         title: 'Next',
         items: [
-          'GitHub Action with screenshot and diff artifact upload',
-          'Authenticated sessions via storage state and cookies (secrets redacted from logs)',
           'Parallel viewport rendering',
+          'Authenticated sessions via storage state and cookies (secrets redacted from logs)',
+          'GitHub Marketplace listing for the action',
         ],
       },
       {
@@ -349,7 +349,7 @@ export const PROJECTS: Project[] = [
         items: [
           'Firefox and WebKit engines',
           'Device presets, network and CPU throttling',
-          'Native Tauri installers for Windows, macOS and Linux',
+          'Notarized macOS builds',
         ],
       },
     ],

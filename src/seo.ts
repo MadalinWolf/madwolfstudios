@@ -88,7 +88,7 @@ const SECTION_META: RouteMeta[] = [
     path: '/dev-log',
     title: `Dev Log — ${NAME}`,
     description:
-      "Development journal from Madwolf Studios — what changed, what was learned and what's next on WOLFCANI and No Respawn in War.",
+      "Development journal from Madwolf Studios — what changed, what was learned and what's next on MadScope, WOLFCANI and No Respawn in War.",
     // No entries published yet → keep the empty page out of search results.
     // Flips back to 'index' automatically on the next build after the first
     // entry is added to src/data/devLog.ts.

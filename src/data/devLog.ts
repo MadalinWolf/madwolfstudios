@@ -65,6 +65,35 @@ export interface DevLogEntry {
 /** Published entries, newest first. Add yours here. */
 export const DEV_LOG: DevLogEntry[] = [
   {
+    id: 'madscope-v1-0-1-launch',
+    date: '2026-10-08',
+    project: 'MADSCOPE',
+    projectSlug: 'madscope',
+    version: 'v1.0.1',
+    title: 'Public launch with cross-platform builds and CI integration',
+    summary:
+      'MadScope is out as a public MIT-licensed tool: installers for Windows, macOS and Linux, a tested GitHub Action, and downloads on the project page.',
+    details: [
+      'Published the MadScope repository with the full engine: Chromium rendering, screenshots, issue detection, health score and visual regression',
+      'Shipped v1.0.1 desktop installers built on CI — Windows MSI/EXE, macOS ARM64 + Intel DMG, Linux AppImage/DEB — with the engine bundled so nothing extra needs installing',
+      'Verified the packaged Windows build end to end: install, launch, engine startup and a real scan',
+      'Added the madscope-action with screenshot, baseline and test modes plus JSON outputs; its own CI covers capture, passing and intentionally failing runs',
+      'Added real release downloads and an automation section to the MadScope project page, with checksums on every release',
+      'macOS builds are unsigned for now — Gatekeeper needs a right-click Open until signing is set up',
+    ],
+    images: [
+      {
+        src: '/screenshots/madscope-overview.png',
+        alt: 'MadScope main interface — a responsive scan at mobile, tablet and desktop sizes',
+        caption: 'MADSCOPE v1.0.1',
+      },
+    ],
+    links: [
+      { label: 'GITHUB REPO', url: 'https://github.com/MadalinWolf/MadScope' },
+      { label: 'RELEASE v1.0.1', url: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.0.1' },
+    ],
+  },
+  {
     id: 'wolfcani-dashboard-calendar-reminders',
     date: '2026-10-01',
     project: 'WOLFCANI',
