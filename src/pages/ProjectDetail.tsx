@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { ButtonLink } from '../components/Button'
 import { Zoomable } from '../components/Lightbox'
 import { MediaSlotFrame, PlaceholderBox } from '../components/Placeholder'
@@ -55,8 +55,87 @@ function HeroShot({ slot }: { slot: MediaSlot }) {
   )
 }
 
-export function ProjectDetail({ project }: { project: Project }) {
-  /* Sections are numbered in render order so optional sections (FAQ,
+/*
+ * Download — platform-grouped links to the real GitHub Release assets.
+ * The visitor's OS group is highlighted (never hidden: every platform stays
+ * visible under "Other downloads" semantics). UA sniffing is best-effort:
+ * Apple Silicon vs Intel cannot be told apart from the UA, so both macOS
+ * builds are shown highlighted to Mac visitors.
+ */
+function DownloadBlock({ project }: { project: Project }) {
+  const [visitorOs, setVisitorOs] = useState<string | null>(null)
+  useEffect(() => {
+    const ua = navigator.userAgent
+    if (/Windows NT/.test(ua)) setVisitorOs('Windows')
+    else if (/Mac OS X/.test(ua)) setVisitorOs('macOS')
+    else if (/Linux/.test(ua)) setVisitorOs('Linux')
+  }, [])
+
+  const groups = (['Windows', 'macOS', 'Linux'] as const)
+    .map((os) => ({ os, items: (project.downloads ?? []).filter((d) => d.os === os) }))
+    .filter((g) => g.items.length > 0)
+  if (groups.length === 0) return null
+
+  return (
+    <div>
+      {project.releaseVersion && (
+        <p className="mb-6 text-[11px] font-bold uppercase tracking-[0.18em] text-text-muted">
+          Latest release:{' '}
+          <span className="text-neon-lemon">{project.releaseVersion}</span>
+        </p>
+      )}
+      <div className="grid gap-6 md:grid-cols-3">
+        {groups.map((group) => {
+          const mine = visitorOs === group.os
+          return (
+            <div
+              key={group.os}
+              className={`card p-5 ${mine ? 'border-neon-green' : ''}`}
+            >
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-sm font-extrabold uppercase tracking-[0.16em] text-neon-lemon">
+                  {group.os}
+                </h3>
+                {mine && (
+                  <span className="border border-neon-green px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-neon-green">
+                    Your system
+                  </span>
+                )}
+              </div>
+              <ul className="space-y-4">
+                {group.items.map((item) => (
+                  <li key={item.url}>
+                    <ButtonLink to={item.url} external aria-label={`Download MadScope for ${item.os} ${item.arch} — ${item.label}`}>
+                      {item.label} ↓
+                    </ButtonLink>
+                    <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-text-muted">
+                      {item.arch}
+                      {item.note ? ` · ${item.note}` : ''}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        })}
+      </div>
+      {project.releaseUrl && (
+        <p className="mt-5 text-xs text-text-muted">
+          <a
+            href={project.releaseUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold uppercase tracking-[0.14em] text-neon-green hover:text-neon-lemon"
+          >
+            All files + checksums →
+          </a>
+        </p>
+      )}
+    </div>
+  )
+}
+
+export function ProjectDetail({ project }: { project: Project }) {  /* Sections are numbered in render order so optional sections (FAQ,
      roadmap, …) never leave a gap in the // 0N eyebrows. */
   let sectionNo = 0
   const eyebrow = () => `// 0${(sectionNo += 1)}`
@@ -116,6 +195,31 @@ export function ProjectDetail({ project }: { project: Project }) {
 
         {/* HERO SCREENSHOT — real UI immediately after the introduction */}
         {project.hero?.src && <HeroShot slot={project.hero} />}
+
+        {/* DOWNLOAD — real release assets, only when the project ships them */}
+        {project.downloads && project.downloads.length > 0 && (
+          <Section id="download" eyebrow={eyebrow()} title="Download">
+            <DownloadBlock project={project} />
+          </Section>
+        )}
+
+        {/* AUTOMATE — CI integration, only when an action exists */}
+        {project.actionUrl && (
+          <Section id="automate" eyebrow={eyebrow()} title="Automate with GitHub Actions">
+            <div className="card max-w-3xl p-6">
+              <p className="text-sm leading-relaxed text-text-secondary">
+                Run MadScope automatically in your CI pipeline to catch
+                responsive and visual regressions before they reach
+                production.
+              </p>
+              <div className="mt-5">
+                <ButtonLink to={project.actionUrl} external aria-label="Use MadScope with GitHub Actions">
+                  MADSCOPE ACTION ↗
+                </ButtonLink>
+              </div>
+            </div>
+          </Section>
+        )}
 
         {/* WHAT'S INCLUDED */}
         <Section id="features" eyebrow={eyebrow()} title="What's Included">

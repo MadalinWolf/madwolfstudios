@@ -52,6 +52,14 @@ export interface Project {
   seoDescription?: string
   /** Optional external links (e.g. GitHub) rendered as buttons in the header. */
   links?: { label: string; url: string }[]
+  /** Optional latest release tag shown on the page (static, updated per release). */
+  releaseVersion?: string
+  /** Optional URL of the release page (checksums + all files). */
+  releaseUrl?: string
+  /** Optional GitHub Actions integration link (action repo or Marketplace). */
+  actionUrl?: string
+  /** Optional downloadable artifacts, grouped by operating system. */
+  downloads?: { os: 'Windows' | 'macOS' | 'Linux'; arch: string; label: string; url: string; note?: string }[]
   overview: string[]
   /** Optional factual status paragraph — falls back to a generic one. */
   statusNote?: string
@@ -205,6 +213,17 @@ export const PROJECTS: Project[] = [
     seoDescription:
       'MadScope is a local-first responsive website testing and visual regression tool built with Playwright, Chromium, React, TypeScript and Tauri. Free and open source (MIT).',
     links: [{ label: 'VIEW ON GITHUB', url: 'https://github.com/MadalinWolf/MadScope' }],
+    releaseVersion: 'v1.0.0',
+    releaseUrl: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.0.0',
+    actionUrl: 'https://github.com/MadalinWolf/madscope-action',
+    downloads: [
+      { os: 'Windows', arch: 'x64', label: 'MSI installer', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.0/MadScope-1.0.0-windows-x64.msi' },
+      { os: 'Windows', arch: 'x64', label: 'Setup wizard (EXE)', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.0/MadScope-1.0.0-windows-x64-setup.exe' },
+      { os: 'macOS', arch: 'Apple Silicon', label: 'DMG', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.0/MadScope-1.0.0-macos-arm64.dmg', note: 'Unsigned: right-click → Open on first launch.' },
+      { os: 'macOS', arch: 'Intel', label: 'DMG', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.0/MadScope-1.0.0-macos-x64.dmg', note: 'Unsigned: right-click → Open on first launch.' },
+      { os: 'Linux', arch: 'x64', label: 'AppImage', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.0/MadScope-1.0.0-linux-x64.AppImage', note: 'Portable: chmod +x, then run.' },
+      { os: 'Linux', arch: 'x64', label: 'DEB package', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.0/MadScope-1.0.0-linux-x64.deb', note: 'Debian / Ubuntu.' },
+    ],
     overview: [
       'MadScope renders any URL in real Chromium across multiple viewport sizes, captures screenshots, flags potential responsive issues, scores the page, and catches visual regressions — all locally, with no account and no telemetry.',
       'It was built to replace the manual routine of resizing the browser and eyeballing layouts: enter a URL (including localhost while you develop), pick viewports, and get real renders, screenshots, findings and a deterministic health score in seconds.',
