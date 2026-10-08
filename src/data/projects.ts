@@ -50,6 +50,8 @@ export interface Project {
   seoTitle?: string
   /** Optional meta description (1–2 plain sentences, factual only). */
   seoDescription?: string
+  /** Optional external links (e.g. GitHub) rendered as buttons in the header. */
+  links?: { label: string; url: string }[]
   overview: string[]
   /** Optional factual status paragraph — falls back to a generic one. */
   statusNote?: string
@@ -191,6 +193,147 @@ export const PROJECTS: Project[] = [
       'React Context',
     ],
     roadmap: [],
+  },
+  {
+    slug: 'madscope',
+    name: 'MadScope',
+    kind: 'software',
+    status: 'released',
+    featured: false,
+    tagline: 'Local-first responsive testing and visual regression for developers.',
+    seoTitle: 'MadScope — Responsive Website Testing & Visual Regression',
+    seoDescription:
+      'MadScope is a local-first responsive website testing and visual regression tool built with Playwright, Chromium, React, TypeScript and Tauri. Free and open source (MIT).',
+    links: [{ label: 'VIEW ON GITHUB', url: 'https://github.com/MadalinWolf/MadScope' }],
+    overview: [
+      'MadScope renders any URL in real Chromium across multiple viewport sizes, captures screenshots, flags potential responsive issues, scores the page, and catches visual regressions — all locally, with no account and no telemetry.',
+      'It was built to replace the manual routine of resizing the browser and eyeballing layouts: enter a URL (including localhost while you develop), pick viewports, and get real renders, screenshots, findings and a deterministic health score in seconds.',
+      'The same core engine powers three surfaces: a desktop UI, a command-line interface for terminals and CI, and a local render server. Baselines saved today can be re-tested tomorrow — or on every pull request — with pixel-level diffs and a pass/fail exit code.',
+    ],
+    statusNote:
+      'MadScope v0.1.0 is released as free open-source software (MIT) at github.com/MadalinWolf/MadScope. The core engine, desktop UI, CLI, visual regression and automated tests all work today. Next up: a GitHub Action with artifact upload, authenticated-session support, Firefox/WebKit engines and native Tauri installers.',
+    features: [
+      { name: 'Real Chromium rendering', state: 'implemented', note: 'Playwright + Chromium with a dedicated browser context per viewport (device scale, isMobile, touch)' },
+      { name: '8 viewport presets + custom sizes', state: 'implemented', note: 'Mobile Small 320×568 up to Large Desktop 1920×1080, plus any custom width/height' },
+      { name: 'Localhost testing', state: 'implemented', note: 'Test http://localhost and 127.0.0.1 dev servers directly' },
+      { name: 'Responsive issue detection', state: 'implemented', note: 'Horizontal overflow, element overflow, text clipping, image overflow, small touch targets, overlaps, off-screen elements — all reported as potential issues' },
+      { name: 'Deterministic health score', state: 'implemented', note: 'Transparent 0–100 formula documented in the repo — same page, same score' },
+      { name: 'Screenshot capture + history', state: 'implemented', note: 'PNG/JPEG, viewport or full-page, stored locally with metadata and history' },
+      { name: 'Visual comparison', state: 'implemented', note: 'Side-by-side, overlay with opacity, before/after slider, deterministic diff image' },
+      { name: 'Baselines + regression tests', state: 'implemented', note: 'Save baselines, re-test later or in CI with changed-pixel percentage and exit codes' },
+      { name: 'CLI for terminal + CI', state: 'implemented', note: 'madscope screenshot / baseline / test / config — same engine as the desktop app' },
+      { name: 'Type-safe configuration', state: 'implemented', note: 'madscope.config.ts with validation and human-readable errors' },
+      { name: 'Breakpoint ruler', state: 'implemented', note: 'Common breakpoints shown under every scan' },
+      { name: 'GitHub Action', state: 'planned', note: 'Consumer workflow template ships in the repo; marketplace action after validation' },
+      { name: 'Authenticated sessions', state: 'planned', note: 'Storage state / cookies with secret redaction' },
+      { name: 'Firefox + WebKit engines', state: 'planned' },
+      { name: 'Native installers', state: 'planned', note: 'Tauri bundles for Windows, macOS and Linux' },
+    ],
+    faq: [
+      {
+        question: 'What is MadScope?',
+        answer:
+          'MadScope is a local-first responsive website testing and visual regression tool. It renders a URL in real Chromium at multiple viewport sizes, captures screenshots, detects potential responsive issues, computes a deterministic health score, and compares renders against saved baselines.',
+      },
+      {
+        question: 'Is MadScope free and open source?',
+        answer:
+          'Yes — MadScope is MIT licensed and free for personal and commercial use. The source is published at github.com/MadalinWolf/MadScope.',
+      },
+      {
+        question: 'Does MadScope upload my websites or screenshots anywhere?',
+        answer:
+          'No. MadScope runs entirely on your machine: the render server binds to 127.0.0.1, screenshots are written to a local .madscope directory, and the codebase contains no telemetry, analytics, accounts or upload code.',
+      },
+    ],
+    screenshots: [
+      {
+        src: '/screenshots/madscope-overview.png',
+        alt: 'MadScope main interface — URL bar, viewport picker, responsive health 100/100 and three live viewport renders',
+        caption: 'MAIN INTERFACE',
+      },
+      {
+        src: '/screenshots/madscope-issues.png',
+        alt: 'MadScope issue detection — health 54/100 with overflow, clipping and touch-target findings per viewport',
+        caption: 'ISSUE DETECTION',
+      },
+      {
+        src: '/screenshots/madscope-compare.png',
+        alt: 'MadScope visual comparison — side-by-side, overlay opacity and before/after slider between viewport renders',
+        caption: 'VISUAL COMPARISON',
+      },
+    ],
+    hero: {
+      src: '/screenshots/madscope-overview.png',
+      alt: 'MadScope main interface — a responsive scan at mobile, tablet and desktop sizes with health score 100/100',
+      caption: 'MADSCOPE v0.1.0',
+    },
+    showcase: [
+      {
+        label: 'SCAN',
+        title: 'Enter URL, pick viewports, render',
+        text: 'Type any URL — production or localhost — select presets or add a custom size, and MadScope renders each viewport in real Chromium with screenshots, timings and per-viewport results. The breakpoint ruler underneath shows where layout behavior is expected to change.',
+        images: [
+          {
+            src: '/screenshots/madscope-overview.png',
+            alt: 'MadScope scan results — three viewport renders with OK badges and load times',
+            caption: 'SCAN — THREE VIEWPORTS',
+          },
+        ],
+      },
+      {
+        label: 'ANALYZE',
+        title: 'Potential issues and health score',
+        text: 'Every render is analyzed for horizontal overflow, element overflow, clipped text, oversized images, small touch targets, overlaps and off-screen elements. Findings are honestly labeled as potential issues, and the deterministic 0–100 health score makes regressions obvious at a glance.',
+        images: [
+          {
+            src: '/screenshots/madscope-issues.png',
+            alt: 'MadScope issue list — six potential findings on mobile with severity labels and selectors',
+            caption: 'ANALYZE — FINDINGS',
+          },
+        ],
+      },
+      {
+        label: 'COMPARE',
+        title: 'Diffs, baselines and regression',
+        text: 'Compare renders side-by-side, as an overlay, or with a before/after slider. Save a baseline, change the site, and run the visual test: MadScope reports the changed-pixel percentage per viewport and fails the run — with a CI-friendly exit code — when the threshold is exceeded.',
+        images: [
+          {
+            src: '/screenshots/madscope-compare.png',
+            alt: 'MadScope comparison dialog with overlay opacity and slider controls',
+            caption: 'COMPARE — OVERLAY + SLIDER',
+          },
+        ],
+      },
+    ],
+    technology: [
+      'TypeScript',
+      'React',
+      'Tailwind CSS',
+      'Tauri',
+      'Playwright',
+      'Chromium',
+      'Vite',
+      'Node.js',
+    ],
+    roadmap: [
+      {
+        title: 'Next',
+        items: [
+          'GitHub Action with screenshot and diff artifact upload',
+          'Authenticated sessions via storage state and cookies (secrets redacted from logs)',
+          'Parallel viewport rendering',
+        ],
+      },
+      {
+        title: 'Later',
+        items: [
+          'Firefox and WebKit engines',
+          'Device presets, network and CPU throttling',
+          'Native Tauri installers for Windows, macOS and Linux',
+        ],
+      },
+    ],
   },
 ]
 

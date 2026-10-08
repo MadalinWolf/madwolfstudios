@@ -67,7 +67,7 @@ const SECTION_META: RouteMeta[] = [
     path: '/projects',
     title: `Projects — ${NAME}`,
     description:
-      'Projects from Madwolf Studios: WOLFCANI, an OnFocus Workspace for students, and No Respawn in War, a game — both currently in development.',
+      'Projects from Madwolf Studios: WOLFCANI, an OnFocus Workspace for students, MadScope, a released open-source responsive testing tool, and No Respawn in War, a game in development.',
     robots: 'index',
   },
   {

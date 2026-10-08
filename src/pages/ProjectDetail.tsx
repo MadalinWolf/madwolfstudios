@@ -89,6 +89,19 @@ export function ProjectDetail({ project }: { project: Project }) {
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
           {project.tagline}
         </p>
+
+        {project.links && project.links.length > 0 && (
+          <div className="mt-5 flex flex-wrap items-center gap-4">
+            {project.links.map((link) => (
+              <ButtonLink key={link.url} to={link.url} external>
+                {link.label} ↗
+              </ButtonLink>
+            ))}
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">
+              OPEN SOURCE · MIT
+            </span>
+          </div>
+        )}
       </header>
 
       <div className="mt-12 space-y-12">
