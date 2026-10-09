@@ -1,5 +1,6 @@
 import { ButtonLink } from '../components/Button'
 import { DevLogEntryCard } from '../components/DevLogEntry'
+import { FeedTheCat } from '../components/FeedTheCat'
 import { GameCard } from '../components/GameCard'
 import { PlaceholderBox } from '../components/Placeholder'
 import { ProjectCard } from '../components/ProjectCard'
@@ -226,6 +227,9 @@ export function Home() {
           </div>
         </div>
       </section>
+
+      {/* ============ FEED THE CAT (donation, once, right above the footer) ============ */}
+      <FeedTheCat />
     </>
   )
 }

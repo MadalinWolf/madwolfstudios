@@ -454,6 +454,45 @@ body.lightbox-open {
   text-decoration-color: #00ff41;
 }
 
+/* ---------- Feed the Cat donation section ---------- */
+
+/* Full-width band: faint terminal grid + translucent surface, so the panel
+   below has a background layer to frost. Sits between CONTACT and footer. */
+.feed-cat-section {
+  border-top: 1px solid rgb(var(--c-border));
+  background-color: rgb(var(--c-surface) / 0.55);
+}
+
+/* Frosted-glass panel. backdrop-filter blurs only what is painted BEHIND
+   the panel (the section's grid/surface) — the cat photo, copy and button
+   are children and remain sharp. Restrained on purpose: no glow, no
+   gradients, theme-aware via the design tokens. */
+.feed-cat-panel {
+  border: 1px solid rgb(var(--c-border));
+  background-color: rgb(var(--c-panel) / 0.72);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+/* The cat photo itself is never filtered — only framed. Fixed box with a
+   face-forward crop (4:5), sized for small (112px) and sm+ (168px). */
+.feed-cat-photo {
+  width: 112px;
+  height: 140px;
+  flex: none;
+  object-fit: cover;
+  object-position: 50% 10%;
+  border: 1px solid rgba(204, 255, 0, 0.4);
+  background-color: rgb(var(--c-panel-2));
+}
+
+@media (min-width: 640px) {
+  .feed-cat-photo {
+    width: 168px;
+    height: 210px;
+  }
+}
+
 /* ---------- Scrollbar ---------- */
 
 ::-webkit-scrollbar { width: 9px; height: 9px; }
