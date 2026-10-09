@@ -23,7 +23,7 @@ export interface ExternalLink {
 
 export const LINKS = {
   github: { label: 'GITHUB', url: 'https://github.com/MadalinWolf' },
-  // Real GitHub Sponsors profile — used by the "Feed the Cat" section only
+  // Real GitHub Sponsors profile — used by the "Feed My Cat" section only
   // (deliberately not in CONTACT_LINK_IDS / FOOTER_LINK_IDS).
   sponsors: { label: 'SPONSORS', url: 'https://github.com/sponsors/MadalinWolf' },
   email: { label: 'EMAIL', url: null }, // ← put your real address here (mailto:...)

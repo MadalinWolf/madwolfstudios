@@ -454,43 +454,111 @@ body.lightbox-open {
   text-decoration-color: #00ff41;
 }
 
-/* ---------- Feed the Cat donation section ---------- */
+/* ---------- Feed My Cat (Leo) ---------- */
 
-/* Full-width band: faint terminal grid + translucent surface, so the panel
-   below has a background layer to frost. Sits between CONTACT and footer. */
-.feed-cat-section {
+/* Three-layer scene: blurred photo layer -> scrim/vignette (::before) ->
+   content. The blur exists ONLY on .feed-leo-bg (an enlarged decorative copy
+   of the photo); the foreground photo, copy and button are never filtered.
+   Sits between CONTACT and the footer. */
+.feed-leo-section {
+  position: relative;
+  overflow: hidden;
   border-top: 1px solid rgb(var(--c-border));
-  background-color: rgb(var(--c-surface) / 0.55);
+  /* This band stays a dark photo scene even in light theme — pin the text
+     and border tokens inside it to the night palette so the copy stays
+     readable in both themes (neon accents are static hex, unaffected). */
+  --c-text-1: 215 218 215;
+  --c-text-2: 180 185 180;
+  --c-text-3: 157 162 157;
+  --c-text-4: 142 147 142;
+  --c-border: 58 62 64;
+  --c-app: 26 28 30;
+  background-color: rgb(var(--c-app));
 }
 
-/* Frosted-glass panel. backdrop-filter blurs only what is painted BEHIND
-   the panel (the section's grid/surface) — the cat photo, copy and button
-   are children and remain sharp. Restrained on purpose: no glow, no
-   gradients, theme-aware via the design tokens. */
-.feed-cat-panel {
-  border: 1px solid rgb(var(--c-border));
-  background-color: rgb(var(--c-panel) / 0.72);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
+/* Layer 1 — same photo, enlarged + strongly blurred (decorative only).
+   transform scale grows the blurred result past its faded edges; the
+   section's overflow:hidden clips the fringe. */
+.feed-leo-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+  filter: blur(28px);
+  transform: scale(1.12);
+  z-index: 0;
+  pointer-events: none;
 }
 
-/* The cat photo itself is never filtered — only framed. Fixed box with a
-   face-forward crop (4:5), sized for small (112px) and sm+ (168px). */
-.feed-cat-photo {
-  width: 112px;
-  height: 140px;
+/* Layer 2 — dark readability scrim + subtle dark vignette on the
+   edges/corners. Never applied to the content (it sits at z-index 10). */
+.feed-leo-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(115% 85% at 50% 42%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.55) 100%),
+    linear-gradient(180deg, rgb(26 28 30 / 0.72), rgb(26 28 30 / 0.66));
+}
+
+/* Layer 3 — content above the scrim. */
+.feed-leo-content {
+  position: relative;
+  z-index: 10;
+}
+
+/* Foreground photo of Leo — sharp, face-forward 4:5 crop, soft shadow so it
+   separates from the blurred background. Small (160px), sm+ (208px), lg+ (256px). */
+.feed-leo-photo {
+  width: 160px;
+  height: 200px;
   flex: none;
   object-fit: cover;
   object-position: 50% 10%;
   border: 1px solid rgba(204, 255, 0, 0.4);
-  background-color: rgb(var(--c-panel-2));
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 @media (min-width: 640px) {
-  .feed-cat-photo {
-    width: 168px;
-    height: 210px;
+  .feed-leo-photo {
+    width: 208px;
+    height: 260px;
   }
+}
+
+@media (min-width: 1024px) {
+  .feed-leo-photo {
+    width: 256px;
+    height: 320px;
+  }
+}
+
+/* Final line — visually distinct (lemon rule, weight, quiet dark panel)
+   without turning the section into a banner. */
+.feed-leo-ask {
+  max-width: 40rem;
+  border-left: 3px solid #ccff00;
+  background-color: rgba(0, 0, 0, 0.35);
+  padding: 0.8rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.6;
+  color: rgb(var(--c-text-1));
+}
+
+/* The global light-mode readability rules (neon text -> dark grey, focus
+   outline -> dark) target LIGHT-grey backgrounds. This band is always dark,
+   so inside it the accents and the focus ring keep the night treatment. */
+[data-theme='light'] .feed-leo-section .text-neon-lemon {
+  color: #ccff00;
+}
+
+[data-theme='light'] .feed-leo-section :focus-visible {
+  outline-color: #00ff41;
 }
 
 /* ---------- Scrollbar ---------- */
