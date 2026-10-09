@@ -216,17 +216,17 @@ export const PROJECTS: Project[] = [
     seoDescription:
       'MadScope is a local-first responsive website testing and visual regression tool built with Playwright, Chromium, React, TypeScript and Tauri. Free and open source (MIT).',
     links: [{ label: 'VIEW ON GITHUB', url: 'https://github.com/MadalinWolf/MadScope' }],
-    releaseVersion: 'v1.0.1',
-    releaseUrl: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.0.1',
+    releaseVersion: 'v1.1.0',
+    releaseUrl: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.1.0',
     actionUrl: 'https://github.com/MadalinWolf/madscope-action',
     applicationCategory: 'DeveloperApplication',
     downloads: [
-      { os: 'Windows', arch: 'x64', label: 'MSI installer', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.1/MadScope-1.0.1-windows-x64.msi' },
-      { os: 'Windows', arch: 'x64', label: 'Setup wizard (EXE)', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.1/MadScope-1.0.1-windows-x64-setup.exe' },
-      { os: 'macOS', arch: 'Apple Silicon', label: 'DMG', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.1/MadScope-1.0.1-macos-arm64.dmg', note: 'Unsigned: right-click → Open on first launch.' },
-      { os: 'macOS', arch: 'Intel', label: 'DMG', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.1/MadScope-1.0.1-macos-x64.dmg', note: 'Unsigned: right-click → Open on first launch.' },
-      { os: 'Linux', arch: 'x64', label: 'AppImage', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.1/MadScope-1.0.1-linux-x64.AppImage', note: 'Portable: chmod +x, then run.' },
-      { os: 'Linux', arch: 'x64', label: 'DEB package', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.0.1/MadScope-1.0.1-linux-x64.deb', note: 'Debian / Ubuntu.' },
+      { os: 'Windows', arch: 'x64', label: 'MSI installer', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-windows-x64.msi' },
+      { os: 'Windows', arch: 'x64', label: 'Setup wizard (EXE)', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-windows-x64-setup.exe' },
+      { os: 'macOS', arch: 'Apple Silicon', label: 'DMG', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-macos-arm64.dmg', note: 'Unsigned: right-click → Open on first launch.' },
+      { os: 'macOS', arch: 'Intel', label: 'DMG', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-macos-x64.dmg', note: 'Unsigned: right-click → Open on first launch.' },
+      { os: 'Linux', arch: 'x64', label: 'AppImage', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-linux-x64.AppImage', note: 'Portable: chmod +x, then run.' },
+      { os: 'Linux', arch: 'x64', label: 'DEB package', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-linux-x64.deb', note: 'Debian / Ubuntu.' },
     ],
     overview: [
       'MadScope renders any URL in real Chromium across multiple viewport sizes, captures screenshots, flags potential responsive issues, scores the page, and catches visual regressions — all locally, with no account and no telemetry.',
@@ -234,7 +234,7 @@ export const PROJECTS: Project[] = [
       'The same core engine powers three surfaces: a desktop UI, a command-line interface for terminals and CI, and a local render server. Baselines saved today can be re-tested tomorrow — or on every pull request — with pixel-level diffs and a pass/fail exit code.',
     ],
     statusNote:
-      'MadScope v1.0.1 is released as free open-source software (MIT) at github.com/MadalinWolf/MadScope, with installers for Windows, macOS (ARM64 + Intel) and Linux. The core engine, desktop UI, CLI, visual regression and automated tests all work today. Next up: parallel viewport rendering, Firefox/WebKit engines and notarized macOS builds.',
+      'MadScope v1.1.0 is released as free open-source software (MIT) at github.com/MadalinWolf/MadScope, with installers for Windows, macOS (ARM64 + Intel) and Linux. New in this release: three selectable themes (Existing, Terminal, Light) with persistence, and diagnostics you can select and copy — including an AI-ready inspection report for handing findings to a coding agent. Next up: parallel viewport rendering, Firefox/WebKit engines and notarized macOS builds.',
     features: [
       { name: 'Real Chromium rendering', state: 'implemented', note: 'Playwright + Chromium with a dedicated browser context per viewport (device scale, isMobile, touch)' },
       { name: '8 viewport presets + custom sizes', state: 'implemented', note: 'Mobile Small 320×568 up to Large Desktop 1920×1080, plus any custom width/height' },
@@ -246,7 +246,9 @@ export const PROJECTS: Project[] = [
       { name: 'Baselines + regression tests', state: 'implemented', note: 'Save baselines, re-test later or in CI with changed-pixel percentage and exit codes' },
       { name: 'CLI for terminal + CI', state: 'implemented', note: 'madscope screenshot / baseline / test / config — same engine as the desktop app' },
       { name: 'GitHub Action', state: 'implemented', note: 'Docker action with screenshot/baseline/test modes and JSON outputs; self-tested in CI, Marketplace listing pending' },
-      { name: 'Native installers', state: 'implemented', note: 'v1.0.1: Windows MSI/EXE, macOS ARM64 + Intel DMG, Linux AppImage/DEB built on CI' },
+      { name: 'Native installers', state: 'implemented', note: 'v1.1.0: Windows MSI/EXE, macOS ARM64 + Intel DMG, Linux AppImage/DEB built on CI' },
+      { name: 'Three themes', state: 'implemented', note: 'Existing (default), Terminal and Light — instant switching, persisted across restarts, all colors driven by CSS custom properties' },
+      { name: 'Shareable diagnostics + AI-ready report', state: 'implemented', note: 'Selectable, copyable findings with copy-all/copy-selected, plus a structured plain-text inspection report for handing to an AI coding agent' },
       { name: 'Type-safe configuration', state: 'implemented', note: 'madscope.config.ts with validation and human-readable errors' },
       { name: 'Breakpoint ruler', state: 'implemented', note: 'Common breakpoints shown under every scan' },
       { name: 'Authenticated sessions', state: 'planned', note: 'Storage state / cookies with secret redaction' },
@@ -285,11 +287,21 @@ export const PROJECTS: Project[] = [
         alt: 'MadScope visual comparison — side-by-side, overlay opacity and before/after slider between viewport renders',
         caption: 'VISUAL COMPARISON',
       },
+      {
+        src: '/screenshots/madscope-mobile-diagnostics.png',
+        alt: 'MadScope mobile inspection — real diagnostics listed per viewport with copy controls and an AI-ready report button',
+        caption: 'DIAGNOSTICS + AI REPORT (v1.1.0)',
+      },
+      {
+        src: '/screenshots/madscope-existing-theme.png',
+        alt: 'MadScope Existing theme — the original dark design, now selectable as one of three themes',
+        caption: 'EXISTING THEME (v1.1.0)',
+      },
     ],
     hero: {
       src: '/screenshots/madscope-overview.png',
       alt: 'MadScope main interface — a responsive scan at mobile, tablet and desktop sizes with health score 100/100',
-      caption: 'MADSCOPE v1.0.1',
+      caption: 'MADSCOPE v1.1.0',
     },
     showcase: [
       {

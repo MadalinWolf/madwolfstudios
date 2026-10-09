@@ -65,6 +65,35 @@ export interface DevLogEntry {
 /** Published entries, newest first. Add yours here. */
 export const DEV_LOG: DevLogEntry[] = [
   {
+    id: 'madscope-v1-1-0-themes-diagnostics',
+    date: '2026-10-09',
+    project: 'MADSCOPE',
+    projectSlug: 'madscope',
+    version: 'v1.1.0',
+    title: 'Three themes and diagnostics you can hand to an AI agent',
+    summary:
+      'MadScope v1.1.0 adds three selectable themes and turns diagnostics into plain, copyable text — including a structured AI-ready inspection report.',
+    details: [
+      'Added a theme selector with exactly three themes: Existing (the original dark design, still the default), Terminal (near-black green-tinted, monospaced technical elements) and Light — instant switching, persisted across restarts, no flash of the default theme',
+      'Diagnostics are now plain selectable text listing every finding per viewport, with copy buttons on each row plus copy-all and copy-selected actions',
+      'Added an AI-ready inspection report: structured plain text with only fields the engine really knows (URL, viewport, device profile, timestamp, health score, diagnostics source, per-finding severity/selector/evidence) — paste it straight into a coding agent',
+      'Copy feedback reports success only after the clipboard write actually succeeded, with a fallback for browsers that block the async Clipboard API',
+      'Validated live against this project page in a real browser: all three themes, persistence across reload, a real mobile inspection, and every copy path; screenshots in the MadScope repo are genuine captures',
+      'CI now runs a production build in addition to typecheck, lint and the full test suite (57/57 passing)',
+    ],
+    images: [
+      {
+        src: '/screenshots/madscope-mobile-diagnostics.png',
+        alt: 'MadScope mobile inspection — real diagnostics with copy controls and the AI-ready report button',
+        caption: 'MADSCOPE v1.1.0 — DIAGNOSTICS',
+      },
+    ],
+    links: [
+      { label: 'GITHUB REPO', url: 'https://github.com/MadalinWolf/MadScope' },
+      { label: 'RELEASE v1.1.0', url: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.1.0' },
+    ],
+  },
+  {
     id: 'madscope-v1-0-1-launch',
     date: '2026-10-08',
     project: 'MADSCOPE',
