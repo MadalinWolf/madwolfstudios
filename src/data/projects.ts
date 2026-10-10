@@ -355,6 +355,45 @@ export const PROJECTS: Project[] = [
           },
         ],
       },
+      {
+        label: 'THEMES',
+        title: 'Three themes, yours to pick',
+        text: 'v1.1.0 adds a theme selector with exactly three choices: Existing (the original dark design, still the default), Terminal (near-black green-tinted charcoal, terminal-green accents, monospaced technical elements) and Light (bright surfaces, dark readable text, subtle borders). Switching is instant and the choice persists across restarts.',
+        images: [
+          {
+            src: '/screenshots/madscope-existing-theme.png',
+            alt: 'MadScope Existing theme — the original dark design, still the default in v1.1.0',
+            caption: 'EXISTING THEME',
+          },
+          {
+            src: '/screenshots/madscope-terminal-theme.png',
+            alt: 'MadScope Terminal theme — near-black green-tinted surfaces, terminal-green accents and monospaced technical elements',
+            caption: 'TERMINAL THEME',
+          },
+          {
+            src: '/screenshots/madscope-light-theme.png',
+            alt: 'MadScope Light theme — bright white surfaces with dark readable text and subtle borders',
+            caption: 'LIGHT THEME',
+          },
+        ],
+      },
+      {
+        label: 'SHARE',
+        title: 'Diagnostics you can hand to an AI agent',
+        text: 'Every finding in the results is plain, selectable text with copy controls — copy one, tick checkboxes to copy selected, or copy all. The Copy AI report button produces a structured plain-text inspection report with only fields the engine really knows: URL, viewport, device profile, timestamp, health score and per-finding severity, selector and evidence. Paste it straight into a coding agent and it has everything needed to fix the issues.',
+        images: [
+          {
+            src: '/screenshots/madscope-mobile-diagnostics.png',
+            alt: 'MadScope mobile inspection — real diagnostics listed per viewport with checkboxes, copy buttons and the AI-ready report button',
+            caption: 'SHARE — SELECTABLE DIAGNOSTICS',
+          },
+          {
+            src: '/screenshots/madscope-copy-report.png',
+            alt: 'MadScope copy report — status feedback after copying the structured AI-ready inspection report',
+            caption: 'SHARE — AI-READY REPORT',
+          },
+        ],
+      },
     ],
     technology: [
       'TypeScript',
