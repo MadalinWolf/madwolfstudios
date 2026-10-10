@@ -278,14 +278,24 @@ export const PROJECTS: Project[] = [
         caption: 'MAIN INTERFACE',
       },
       {
+        src: '/screenshots/madscope-existing-theme.png',
+        alt: 'MadScope Existing theme — the original dark design, still the default in v1.1.0',
+        caption: 'EXISTING THEME (v1.1.0)',
+      },
+      {
+        src: '/screenshots/madscope-terminal-theme.png',
+        alt: 'MadScope Terminal theme — near-black green-tinted surfaces, terminal-green accents and monospaced technical elements',
+        caption: 'TERMINAL THEME (v1.1.0)',
+      },
+      {
+        src: '/screenshots/madscope-light-theme.png',
+        alt: 'MadScope Light theme — bright white surfaces with dark readable text and subtle borders',
+        caption: 'LIGHT THEME (v1.1.0)',
+      },
+      {
         src: '/screenshots/madscope-issues.png',
         alt: 'MadScope issue detection — health 54/100 with overflow, clipping and touch-target findings per viewport',
         caption: 'ISSUE DETECTION',
-      },
-      {
-        src: '/screenshots/madscope-compare.png',
-        alt: 'MadScope visual comparison — side-by-side, overlay opacity and before/after slider between viewport renders',
-        caption: 'VISUAL COMPARISON',
       },
       {
         src: '/screenshots/madscope-mobile-diagnostics.png',
@@ -293,9 +303,14 @@ export const PROJECTS: Project[] = [
         caption: 'DIAGNOSTICS + AI REPORT (v1.1.0)',
       },
       {
-        src: '/screenshots/madscope-existing-theme.png',
-        alt: 'MadScope Existing theme — the original dark design, now selectable as one of three themes',
-        caption: 'EXISTING THEME (v1.1.0)',
+        src: '/screenshots/madscope-copy-report.png',
+        alt: 'MadScope copy report — status feedback after copying the structured AI-ready inspection report',
+        caption: 'AI-READY REPORT (v1.1.0)',
+      },
+      {
+        src: '/screenshots/madscope-compare.png',
+        alt: 'MadScope visual comparison — side-by-side, overlay opacity and before/after slider between viewport renders',
+        caption: 'VISUAL COMPARISON',
       },
     ],
     hero: {
