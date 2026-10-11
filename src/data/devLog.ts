@@ -65,6 +65,33 @@ export interface DevLogEntry {
 /** Published entries, newest first. Add yours here. */
 export const DEV_LOG: DevLogEntry[] = [
   {
+    id: 'madscope-screenshot-gallery',
+    date: '2026-10-11',
+    project: 'MADSCOPE',
+    projectSlug: 'madscope',
+    title: 'A screenshot gallery where every image names its build',
+    summary:
+      'The MadScope project page gained a “MadScope in action” gallery — a scrollable, swipeable carousel of genuine captures, grouped and labelled by the exact build each frame came from.',
+    details: [
+      'Added a “MadScope in action” section with two build-labelled groups: a preview build (commit 0141abc) captured from the real running application, and the published v1.1.0 release build',
+      'Every slide carries a visible version label and the group heading states the build, so a preview frame can never be mistaken for a released one — the two builds are never mixed in one group',
+      'The ten preview captures were taken from the actual app running at this commit (1440×900, real Chromium renders of this public page): main interface, diagnostics, mobile findings, copy-all and AI-report feedback, a genuine connection-refused error, all three themes and the About panel',
+      'Accessibility and behaviour are verified in a real browser: previous/next with correct disabled states, arrow-key and Home/End browsing on the focused track, a neon-green focus ring, a polite live counter, click-to-enlarge lightbox with keyboard navigation and focus return, honouring of prefers-reduced-motion, no autoplay, and touch swipe on a 390px viewport with no page overflow',
+      'Provenance is auditable: public/screenshots/preview-0141abc/MANIFEST.md records the source commit, capture environment and per-file captions, and scripts/verify-gallery.mjs fails the build if any filename, caption or version label drifts from that manifest',
+      'No new application version or release was cut — the preview frames represent an unreleased build and are labelled as such',
+    ],
+    images: [
+      {
+        src: '/screenshots/preview-0141abc/01-main-interface.png',
+        alt: 'MadScope main interface after a scan — health score 72/100 with three live viewport renders, labelled preview build',
+        caption: 'PREVIEW BUILD · COMMIT 0141ABC',
+      },
+    ],
+    links: [
+      { label: 'GITHUB REPO', url: 'https://github.com/MadalinWolf/MadScope' },
+    ],
+  },
+  {
     id: 'madscope-default-theme-about',
     date: '2026-10-11',
     project: 'MADSCOPE',

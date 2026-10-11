@@ -1,4 +1,5 @@
 import type { DevelopmentStatus, FeatureState } from './status'
+import { MADSCOPE_GALLERY } from './madscopeGallery'
 
 /* =========================================================
    PROJECTS  —  add a new software project by adding an
@@ -26,6 +27,27 @@ export interface ShowcaseBlock {
   title: string
   text: string
   images: MediaSlot[]
+}
+
+/** One screenshot in the browsable gallery — always tied to a version. */
+export interface GallerySlide {
+  src: string
+  alt: string
+  /** Short heading shown with the image. */
+  title: string
+  /** One-line explanation shown with the image. */
+  text: string
+}
+
+/** A set of screenshots captured from ONE build, shown as one carousel. */
+export interface GalleryGroup {
+  /** Stable id, e.g. 'preview-0141abc' or 'release-v1.1.0'. */
+  id: string
+  /** Exact version label shown with every image of this group. */
+  versionLabel: string
+  /** Optional provenance note displayed under the group heading. */
+  note?: string
+  slides: GallerySlide[]
 }
 
 export interface RoadmapBlock {
@@ -74,6 +96,12 @@ export interface Project {
   hero?: MediaSlot
   /** Themed screenshot groups rendered in the "Inside <project>" section. */
   showcase?: ShowcaseBlock[]
+  /** Optional browsable screenshot gallery, grouped by build/version. */
+  gallery?: {
+    title: string
+    intro?: string
+    groups: GalleryGroup[]
+  }
   technology: string[]
   /** Empty array → the roadmap section is hidden (no placeholder). */
   roadmap: RoadmapBlock[]
@@ -234,7 +262,7 @@ export const PROJECTS: Project[] = [
       'The same core engine powers three surfaces: a desktop UI, a command-line interface for terminals and CI, and a local render server. Baselines saved today can be re-tested tomorrow — or on every pull request — with pixel-level diffs and a pass/fail exit code.',
     ],
     statusNote:
-      'MadScope v1.1.0 is released as free open-source software (MIT) at github.com/MadalinWolf/MadScope, with installers for Windows, macOS (ARM64 + Intel) and Linux. New in this release: three selectable themes (Existing, Terminal, Light) with persistence, and diagnostics you can select and copy — including an AI-ready inspection report for handing findings to a coding agent. Next up: parallel viewport rendering, Firefox/WebKit engines and notarized macOS builds.',
+      'MadScope v1.1.0 is released as free open-source software (MIT) at github.com/MadalinWolf/MadScope, with installers for Windows, macOS (ARM64 + Intel) and Linux. New in this release: three selectable themes (Existing, Terminal, Light) with persistence, and diagnostics you can select and copy — including an AI-ready inspection report for handing findings to a coding agent. Next up: parallel viewport rendering, Firefox/WebKit engines and notarized macOS builds. Note: a Kaspersky false-positive report (PDM:Trojan.Win32.Generic) against the v1.1.0 Windows installer is open and under review with the vendor — the release remains available unchanged while that review is ongoing; see SECURITY_AUDIT.md in the repository for verified facts and next steps.',
     features: [
       { name: 'Real Chromium rendering', state: 'implemented', note: 'Playwright + Chromium with a dedicated browser context per viewport (device scale, isMobile, touch)' },
       { name: '8 viewport presets + custom sizes', state: 'implemented', note: 'Mobile Small 320×568 up to Large Desktop 1920×1080, plus any custom width/height' },
@@ -314,6 +342,11 @@ export const PROJECTS: Project[] = [
         caption: 'VISUAL COMPARISON',
       },
     ],
+    gallery: {
+      title: 'MadScope in action',
+      intro: 'Screenshots from the real running application, grouped by build. Every image carries the exact version it represents — browse with Previous/Next, arrow keys or swipe, and click any screenshot to enlarge it.',
+      groups: MADSCOPE_GALLERY,
+    },
     hero: {
       src: '/screenshots/madscope-overview.png',
       alt: 'MadScope main interface — a responsive scan at mobile, tablet and desktop sizes with health score 100/100',

@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { ButtonLink } from '../components/Button'
 import { Zoomable } from '../components/Lightbox'
 import { MediaSlotFrame, PlaceholderBox } from '../components/Placeholder'
+import { ScreenshotGallery } from '../components/ScreenshotGallery'
 import { Eyebrow } from '../components/SectionHeader'
 import { FeatureStateBadge, StatusBadge } from '../components/StatusBadge'
 import { assetUrl } from '../asset'
@@ -303,6 +304,23 @@ export function ProjectDetail({ project }: { project: Project }) {  /* Sections 
             </PlaceholderBox>
           )}
         </Section>
+
+        {/* SCREENSHOT GALLERY — browsable carousel grouped by build/version
+            (each slide carries its exact version label; see ScreenshotGallery) */}
+        {project.gallery && (
+          <Section id="gallery" eyebrow={eyebrow()} title={project.gallery.title}>
+            {project.gallery.intro && (
+              <p className="mb-5 max-w-3xl text-sm leading-relaxed text-text-secondary">
+                {project.gallery.intro}
+              </p>
+            )}
+            <div className="space-y-8">
+              {project.gallery.groups.map((group) => (
+                <ScreenshotGallery key={group.id} group={group} />
+              ))}
+            </div>
+          </Section>
+        )}
 
         {/* QUICK ANSWERS — plain Q&A for search engines and AI answer engines.
             Answers come from src/data/projects.ts and must stay factual. */}

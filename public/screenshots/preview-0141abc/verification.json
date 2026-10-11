@@ -1,0 +1,95 @@
+{
+  "images": {
+    "01-main-interface.png": {
+      "size": 144783,
+      "dims": "1440x900",
+      "dimsOk": true,
+      "stddev": 26.9,
+      "nonBlank": true,
+      "badge": true
+    },
+    "02-diagnostics-details.png": {
+      "size": 281050,
+      "dims": "1440x900",
+      "dimsOk": true,
+      "stddev": 29.4,
+      "nonBlank": true,
+      "badge": true
+    },
+    "03-mobile-diagnostics.png": {
+      "size": 311485,
+      "dims": "1440x900",
+      "dimsOk": true,
+      "stddev": 29.5,
+      "nonBlank": true,
+      "badge": true
+    },
+    "04-copy-all-errors.png": {
+      "size": 264339,
+      "dims": "1440x900",
+      "dimsOk": true,
+      "stddev": 29,
+      "nonBlank": true,
+      "badge": true
+    },
+    "05-copy-ai-report.png": {
+      "size": 264809,
+      "dims": "1440x900",
+      "dimsOk": true,
+      "stddev": 29.3,
+      "nonBlank": true,
+      "badge": true
+    },
+    "06-error-details.png": {
+      "size": 62389,
+      "dims": "1440x900",
+      "dimsOk": true,
+      "stddev": 24.6,
+      "nonBlank": true,
+      "badge": true
+    },
+    "07-theme-default.png": {
+      "size": 144813,
+      "dims": "1440x900",
+      "dimsOk": true,
+      "stddev": 26.8,
+      "nonBlank": true,
+      "badge": true
+    },
+    "08-theme-terminal.png": {
+      "size": 152367,
+      "dims": "1440x900",
+      "dimsOk": true,
+      "stddev": 28.9,
+      "nonBlank": true,
+      "badge": true
+    },
+    "09-theme-light.png": {
+      "size": 153712,
+      "dims": "1440x900",
+      "dimsOk": true,
+      "stddev": 92.4,
+      "nonBlank": true,
+      "badge": true
+    },
+    "10-about-panel.png": {
+      "size": 78240,
+      "dims": "1440x900",
+      "dimsOk": true,
+      "stddev": 22.5,
+      "nonBlank": true,
+      "badge": true
+    }
+  },
+  "copy": {
+    "copyAllStatus": "Copied 36 diagnostics.",
+    "copyAllCalls": 1,
+    "copyAllSample": "[1] Type: element-overflow\nSeverity: medium\nMessage: Potential issue: element may extend outside the viewport.\nViewport:",
+    "aiReportStatus": "Copied the AI-ready inspection report.",
+    "aiReportCopied": true,
+    "aiReportLength": 10619,
+    "aiReportEndsOk": true,
+    "totalCopies": 2
+  },
+  "problems": []
+}
