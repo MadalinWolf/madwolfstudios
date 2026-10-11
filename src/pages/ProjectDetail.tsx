@@ -86,6 +86,27 @@ function DownloadBlock({ project }: { project: Project }) {
           <span className="text-neon-lemon">{project.releaseVersion}</span>
         </p>
       )}
+      {project.downloadNotice && (
+        <div
+          role="note"
+          className="mb-6 border border-neon-lemon/40 bg-panel-2/40 p-4 text-xs leading-relaxed text-text-secondary"
+        >
+          <p className="mb-1.5 text-[10px] font-extrabold uppercase tracking-[0.16em] text-neon-lemon">
+            Preview build — testing
+          </p>
+          <p>
+            {project.downloadNotice.text}{' '}
+            <a
+              href={project.downloadNotice.linkUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="font-bold text-neon-lemon underline hover:text-neon-green"
+            >
+              {project.downloadNotice.linkLabel}
+            </a>
+          </p>
+        </div>
+      )}
       <div className="grid gap-6 md:grid-cols-3">
         {groups.map((group) => {
           const mine = visitorOs === group.os

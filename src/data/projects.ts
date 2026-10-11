@@ -85,6 +85,9 @@ export interface Project {
   applicationCategory?: string
   /** Optional downloadable artifacts, grouped by operating system. */
   downloads?: { os: 'Windows' | 'macOS' | 'Linux'; arch: string; label: string; url: string; note?: string }[]
+  /** Optional notice rendered directly under the download heading — e.g. a
+   *  preview-build warning with a link to a different release page. */
+  downloadNotice?: { text: string; linkLabel: string; linkUrl: string }
   overview: string[]
   /** Optional factual status paragraph — falls back to a generic one. */
   statusNote?: string
@@ -243,26 +246,34 @@ export const PROJECTS: Project[] = [
     seoTitle: 'MadScope — Responsive Website Testing & Visual Regression',
     seoDescription:
       'MadScope is a local-first responsive website testing and visual regression tool built with Playwright, Chromium, React, TypeScript and Tauri. Free and open source (MIT).',
-    links: [{ label: 'VIEW ON GITHUB', url: 'https://github.com/MadalinWolf/MadScope' }],
+    links: [
+      { label: 'VIEW ON GITHUB', url: 'https://github.com/MadalinWolf/MadScope' },
+      { label: 'PREVIEW RELEASE', url: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.1.1-preview.1' },
+    ],
     releaseVersion: 'v1.1.0',
     releaseUrl: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.1.0',
     actionUrl: 'https://github.com/MadalinWolf/madscope-action',
     applicationCategory: 'DeveloperApplication',
     downloads: [
-      { os: 'Windows', arch: 'x64', label: 'MSI installer', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-windows-x64.msi' },
-      { os: 'Windows', arch: 'x64', label: 'Setup wizard (EXE)', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-windows-x64-setup.exe' },
-      { os: 'macOS', arch: 'Apple Silicon', label: 'DMG', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-macos-arm64.dmg', note: 'Unsigned: right-click → Open on first launch.' },
-      { os: 'macOS', arch: 'Intel', label: 'DMG', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-macos-x64.dmg', note: 'Unsigned: right-click → Open on first launch.' },
-      { os: 'Linux', arch: 'x64', label: 'AppImage', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-linux-x64.AppImage', note: 'Portable: chmod +x, then run.' },
-      { os: 'Linux', arch: 'x64', label: 'DEB package', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.0/MadScope-1.1.0-linux-x64.deb', note: 'Debian / Ubuntu.' },
+      { os: 'Windows', arch: 'x64', label: 'MSI installer', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.1-preview.1/MadScope-1.1.1-preview.1-windows-x64.msi', note: 'Preview build v1.1.1-preview.1 — testing' },
+      { os: 'Windows', arch: 'x64', label: 'Setup wizard (EXE)', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.1-preview.1/MadScope-1.1.1-preview.1-windows-x64-setup.exe', note: 'Preview build v1.1.1-preview.1 — testing' },
+      { os: 'macOS', arch: 'Apple Silicon', label: 'DMG', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.1-preview.1/MadScope-1.1.1-preview.1-macos-arm64.dmg', note: 'Preview build v1.1.1-preview.1 — testing; unsigned: right-click → Open on first launch.' },
+      { os: 'macOS', arch: 'Intel', label: 'DMG', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.1-preview.1/MadScope-1.1.1-preview.1-macos-x64.dmg', note: 'Preview build v1.1.1-preview.1 — testing; unsigned: right-click → Open on first launch.' },
+      { os: 'Linux', arch: 'x64', label: 'AppImage', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.1-preview.1/MadScope-1.1.1-preview.1-linux-x64.AppImage', note: 'Preview build v1.1.1-preview.1 — testing; portable: chmod +x, then run.' },
+      { os: 'Linux', arch: 'x64', label: 'DEB package', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.1-preview.1/MadScope-1.1.1-preview.1-linux-x64.deb', note: 'Preview build v1.1.1-preview.1 — testing; Debian / Ubuntu.' },
     ],
+    downloadNotice: {
+      text: 'All downloads above serve the preview build v1.1.1-preview.1 (theme renamed Existing → Default, new About panel). It is a testing build: it has not been install-tested in an isolated VM and has not been confirmed free of behavioral antivirus detections — the Kaspersky report on the v1.1.0 installer is still under vendor review. Verify the file hash against the release page before installing, and keep your antivirus enabled.',
+      linkLabel: 'Stable v1.1.0 release →',
+      linkUrl: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.1.0',
+    },
     overview: [
       'MadScope renders any URL in real Chromium across multiple viewport sizes, captures screenshots, flags potential responsive issues, scores the page, and catches visual regressions — all locally, with no account and no telemetry.',
       'It was built to replace the manual routine of resizing the browser and eyeballing layouts: enter a URL (including localhost while you develop), pick viewports, and get real renders, screenshots, findings and a deterministic health score in seconds.',
       'The same core engine powers three surfaces: a desktop UI, a command-line interface for terminals and CI, and a local render server. Baselines saved today can be re-tested tomorrow — or on every pull request — with pixel-level diffs and a pass/fail exit code.',
     ],
     statusNote:
-      'MadScope v1.1.0 is released as free open-source software (MIT) at github.com/MadalinWolf/MadScope, with installers for Windows, macOS (ARM64 + Intel) and Linux. New in this release: three selectable themes (Existing, Terminal, Light) with persistence, and diagnostics you can select and copy — including an AI-ready inspection report for handing findings to a coding agent. Next up: parallel viewport rendering, Firefox/WebKit engines and notarized macOS builds. Note: a Kaspersky false-positive report (PDM:Trojan.Win32.Generic) against the v1.1.0 Windows installer is open and under review with the vendor — the release remains available unchanged while that review is ongoing; see SECURITY_AUDIT.md in the repository for verified facts and next steps.',
+      'MadScope v1.1.0 is released as free open-source software (MIT) at github.com/MadalinWolf/MadScope, with installers for Windows, macOS (ARM64 + Intel) and Linux. New in this release: three selectable themes (Existing, Terminal, Light) with persistence, and diagnostics you can select and copy — including an AI-ready inspection report for handing findings to a coding agent. Next up: parallel viewport rendering, Firefox/WebKit engines and notarized macOS builds. The website’s downloads currently serve the preview build v1.1.1-preview.1 for Windows, macOS and Linux (theme renamed Existing → Default, new About panel): an unreleased testing build — not install-tested in an isolated VM and not confirmed free of behavioral antivirus detections. The Kaspersky report (PDM:Trojan.Win32.Generic) against the v1.1.0 Windows installer remains under vendor review with no confirmed false positive; the stable v1.1.0 installers remain available on the release page. See SECURITY_AUDIT.md in the repository for verified facts and next steps.',
     features: [
       { name: 'Real Chromium rendering', state: 'implemented', note: 'Playwright + Chromium with a dedicated browser context per viewport (device scale, isMobile, touch)' },
       { name: '8 viewport presets + custom sizes', state: 'implemented', note: 'Mobile Small 320×568 up to Large Desktop 1920×1080, plus any custom width/height' },
