@@ -395,6 +395,18 @@ export const PROJECTS: Project[] = [
           },
         ],
       },
+      {
+        label: 'ABOUT',
+        title: 'About MadScope, inside the app',
+        text: 'A small About panel sits above the footer with everything a user needs to trust and find the project: a short description, the Madwolf Studios name linked to the official website, the source on GitHub, the actual app version, the MIT license linked to its text, and acknowledgments for the tools it is built on. Every value comes from the repository itself and is guarded by unit tests, and the panel renders correctly in all three themes.',
+        images: [
+          {
+            src: '/screenshots/madscope-about-panel.png',
+            alt: 'MadScope About panel — version, MIT license, Madwolf Studios website, GitHub repository and acknowledgments in the Default theme',
+            caption: 'ABOUT MADSCOPE',
+          },
+        ],
+      },
     ],
     technology: [
       'TypeScript',
