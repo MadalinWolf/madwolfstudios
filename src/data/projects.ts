@@ -247,7 +247,8 @@ export const PROJECTS: Project[] = [
       { name: 'CLI for terminal + CI', state: 'implemented', note: 'madscope screenshot / baseline / test / config — same engine as the desktop app' },
       { name: 'GitHub Action', state: 'implemented', note: 'Docker action with screenshot/baseline/test modes and JSON outputs; self-tested in CI, Marketplace listing pending' },
       { name: 'Native installers', state: 'implemented', note: 'v1.1.0: Windows MSI/EXE, macOS ARM64 + Intel DMG, Linux AppImage/DEB built on CI' },
-      { name: 'Three themes', state: 'implemented', note: 'Existing (default), Terminal and Light — instant switching, persisted across restarts, all colors driven by CSS custom properties' },
+      { name: 'Three themes', state: 'implemented', note: 'Default (the original design — its label was renamed from “Existing”, internal id and saved preferences unchanged), Terminal and Light — instant switching, persisted across restarts, all colors driven by CSS custom properties' },
+      { name: 'In-app About panel', state: 'implemented', note: 'App version, MIT license, Madwolf Studios website, GitHub repository and acknowledgments — verified in all three themes' },
       { name: 'Shareable diagnostics + AI-ready report', state: 'implemented', note: 'Selectable, copyable findings with copy-all/copy-selected, plus a structured plain-text inspection report for handing to an AI coding agent' },
       { name: 'Type-safe configuration', state: 'implemented', note: 'madscope.config.ts with validation and human-readable errors' },
       { name: 'Breakpoint ruler', state: 'implemented', note: 'Common breakpoints shown under every scan' },
@@ -358,12 +359,12 @@ export const PROJECTS: Project[] = [
       {
         label: 'THEMES',
         title: 'Three themes, yours to pick',
-        text: 'v1.1.0 adds a theme selector with exactly three choices: Existing (the original dark design, still the default), Terminal (near-black green-tinted charcoal, terminal-green accents, monospaced technical elements) and Light (bright surfaces, dark readable text, subtle borders). Switching is instant and the choice persists across restarts.',
+        text: 'A theme selector with exactly three choices: Default (the original dark design — its visible label was renamed from “Existing” in the post-v1.1.0 polish, while the internal id and saved preferences stay untouched), Terminal (near-black green-tinted charcoal, terminal-green accents, monospaced technical elements) and Light (bright surfaces, dark readable text, subtle borders). Switching is instant and the choice persists across restarts.',
         images: [
           {
             src: '/screenshots/madscope-existing-theme.png',
-            alt: 'MadScope Existing theme — the original dark design, still the default in v1.1.0',
-            caption: 'EXISTING THEME',
+            alt: 'MadScope Default theme — the original dark design (v1.1.0 capture, when the label still read “Existing”)',
+            caption: 'DEFAULT THEME (v1.1.0)',
           },
           {
             src: '/screenshots/madscope-terminal-theme.png',

@@ -65,6 +65,32 @@ export interface DevLogEntry {
 /** Published entries, newest first. Add yours here. */
 export const DEV_LOG: DevLogEntry[] = [
   {
+    id: 'madscope-default-theme-about',
+    date: '2026-10-11',
+    project: 'MADSCOPE',
+    projectSlug: 'madscope',
+    title: 'Default by name, About panel by design',
+    summary:
+      'The original theme is now called Default, and the app gained an About panel with the real version, license and project links.',
+    details: [
+      'Renamed the original theme’s visible label from Existing to Default — the internal id and the localStorage key are untouched, so preferences saved by earlier releases keep working',
+      'Added an About MadScope panel above the footer: short description, Madwolf Studios with a link to the official website, source on GitHub, the actual app version (1.1.0), the MIT license with a link to the license text, and acknowledgments for Playwright, Chromium, React, Vite, Tauri and Tailwind CSS',
+      'Every value in the panel is sourced from the repository itself and guarded by unit tests, so the version or license can never silently drift',
+      'Verified in a real browser: the selector shows exactly Default, Terminal and Light; the panel renders correctly in all three themes; the theme survives reloads; and legacy saved ids still apply — 19/19 live checks and 62/62 automated tests pass',
+      'Small polish only: no new version or release was cut for this change',
+    ],
+    images: [
+      {
+        src: '/screenshots/madscope-about-panel.png',
+        alt: 'MadScope About panel — version, MIT license, Madwolf Studios and GitHub links in the Default theme',
+        caption: 'ABOUT MADSCOPE',
+      },
+    ],
+    links: [
+      { label: 'GITHUB REPO', url: 'https://github.com/MadalinWolf/MadScope' },
+    ],
+  },
+  {
     id: 'madscope-v1-1-0-themes-diagnostics',
     date: '2026-10-09',
     project: 'MADSCOPE',
