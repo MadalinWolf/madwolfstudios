@@ -17,6 +17,22 @@ export const SITE = {
     name: 'Madalin Dinu',
     role: 'FOUNDER / DEVELOPER',
   },
+  /**
+   * Webmaster-tool verification codes — emitted as <meta> tags in the head of
+   * every prerendered page (src/seo.ts). A null slot emits nothing.
+   * Where to get each code:
+   *   google:  Search Console → Settings → Verification method → "HTML tag"
+   *   bing:    Bing Webmaster Tools → Settings → Site verification (msvalidate.01)
+   *   yandex:  Yandex Webmaster → Properties → Meta tag
+   *   brave:   Brave Search Webmasters → Settings → Site verification
+   * (DuckDuckGo and Yahoo have no separate tools — they follow Bing.)
+   */
+  verification: {
+    google: null as string | null,
+    bing: null as string | null,
+    yandex: null as string | null,
+    brave: null as string | null,
+  },
 } as const
 
 export interface NavItem {

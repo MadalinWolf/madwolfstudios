@@ -70,3 +70,23 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # --- Search engine notification (IndexNow) ---------------------------
+      # Runs only after the deployment is live. Sends every sitemap URL to
+      # api.indexnow.org, which notifies Bing (and with it Yahoo), Yandex,
+      # Seznam and Naver about the current state of the site. A failure here
+      # must not fail the workflow — the site is already published by now.
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Download built site
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          path: dist
+
+      - name: Notify search engines (IndexNow)
+        run: node scripts/notify-indexnow.mjs
+        continue-on-error: true

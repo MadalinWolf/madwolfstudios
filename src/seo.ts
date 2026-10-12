@@ -1,4 +1,4 @@
-import { DEV_LOG } from './data/devLog'
+import { DEV_LOG, getLatestEntries } from './data/devLog'
 import { GAMES, getGame } from './data/games'
 import { PROJECTS, getProject, type Project } from './data/projects'
 import { SITE } from './data/site'
@@ -29,12 +29,15 @@ export interface RouteMeta {
 const NAME = SITE.namePlain
 
 /**
- * TODO(madalin): social preview image.
- * When a real 1200×630 share image exists (studio card or artwork — no fake
- * screenshots), drop a PNG in /public and set OG_IMAGE = '/og-image.png'.
- * og:image + twitter:image are generated automatically from this value.
+ * Social share image (1200×630). Generated at build time by
+ * scripts/og-image.mjs — a real studio card built from the brand (monogram,
+ * name, tagline, domain), never a fake screenshot — and written to
+ * dist/og-image.png. og:image + twitter:image come from this value.
  */
-export const OG_IMAGE: string | null = null
+export const OG_IMAGE: string | null = '/og-image.png'
+
+/** Output size of OG_IMAGE — must match OG_IMAGE_SIZE in scripts/og-image.mjs. */
+const OG_IMAGE_SIZE = { width: 1200, height: 630 } as const
 
 /** Canonical site origin (no trailing slash). */
 export const SITE_URL = SITE.domain
@@ -217,6 +220,19 @@ function website(): Thing {
   }
 }
 
+/** WebPage node every indexable route carries — ties the page to the site. */
+function webPage(meta: RouteMeta, url: string): Thing {
+  return {
+    '@type': 'WebPage',
+    '@id': `${url}#webpage`,
+    url,
+    name: meta.title,
+    description: meta.description,
+    inLanguage: 'en',
+    isPartOf: { '@id': SITE_ID },
+  }
+}
+
 function breadcrumb(trail: { name: string; url: string }[]): Thing {
   return {
     '@type': 'BreadcrumbList',
@@ -259,6 +275,73 @@ function softwareApplication(project: Project): Thing | null {
 }
 
 /**
+ * FAQPage from the factual Q&A in src/data/projects.ts — mirrors the visible
+ * "Quick Answers" section on the project page. Emitted only when the project
+ * really has FAQ entries on the page.
+ */
+function faqPage(project: Project, url: string): Thing | null {
+  const faqs = project.faq ?? []
+  if (faqs.length === 0) return null
+  return {
+    '@type': 'FAQPage',
+    '@id': `${url}#faq`,
+    mainEntity: faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer },
+    })),
+  }
+}
+
+/**
+ * Blog + BlogPosting nodes for /dev-log (only when entries exist — the route
+ * is noindex otherwise, and structuredData returns nothing for noindex pages).
+ * Each entry anchors at /dev-log#<id>, which is the real on-page id.
+ */
+function blogNodes(): Thing[] {
+  if (DEV_LOG.length === 0) return []
+  const url = canonicalUrl('/dev-log')
+  const posts = getLatestEntries()
+  return [
+    {
+      '@type': 'Blog',
+      '@id': `${url}#blog`,
+      name: `Dev Log — ${NAME}`,
+      description:
+        "Development journal from Madwolf Studios — what changed, what was learned and what's next.",
+      url,
+      inLanguage: 'en',
+      publisher: { '@id': ORG_ID },
+      blogPost: posts.map((entry) => ({ '@id': `${url}#${entry.id}` })),
+    },
+    ...posts.map(
+      (entry): Thing => ({
+        '@type': 'BlogPosting',
+        '@id': `${url}#${entry.id}`,
+        url: `${url}#${entry.id}`,
+        headline: entry.title,
+        description: entry.summary,
+        datePublished: entry.date,
+        inLanguage: 'en',
+        author: { '@id': PERSON_ID },
+        publisher: { '@id': ORG_ID },
+        isPartOf: { '@id': `${url}#blog` },
+        mainEntityOfPage: { '@id': `${url}#${entry.id}` },
+      }),
+    ),
+  ]
+}
+
+/** Breadcrumb trail for the two-level section pages ('/projects', '/games', …). */
+const SECTION_NAMES: Record<string, string> = {
+  '/projects': 'Projects',
+  '/games': 'Games',
+  '/about': 'About',
+  '/dev-log': 'Dev Log',
+  '/contact': 'Contact',
+}
+
+/**
  * Structured data for a route — plain objects, serialised into
  * <script type="application/ld+json"> by buildHeadHtml (build time) and by
  * applyDocumentMeta (after client-side navigation). Every value comes from the
@@ -266,46 +349,56 @@ function softwareApplication(project: Project): Thing | null {
  * the visible page does not.
  */
 export function structuredData(path: string): Thing[] {
-  const project = path.startsWith('/projects/') ? getProject(path.slice('/projects/'.length)) : null
-  const game = path.startsWith('/games/') ? getGame(path.slice('/games/'.length)) : null
+  const meta = getRouteMeta(path)
+  // No schema for pages that should not appear in search at all.
+  if (meta.robots === 'noindex') return []
 
-  if (path === '/') {
-    return [{ '@context': 'https://schema.org', '@graph': [organization(), person(), website()] }]
-  }
+  const url = canonicalUrl(meta.path)
+  const project = meta.path.startsWith('/projects/')
+    ? getProject(meta.path.slice('/projects/'.length))
+    : null
+  const game = meta.path.startsWith('/games/') ? getGame(meta.path.slice('/games/'.length)) : null
 
+  const graph: Thing[] = [organization(), person()]
+  if (meta.path === '/') graph.push(website())
+  graph.push(webPage(meta, url))
+
+  // Breadcrumbs mirror the visible navigation on every indexable page.
   if (project) {
-    const graph: Thing[] = [
-      organization(),
-      person(),
+    graph.push(
       breadcrumb([
         { name: 'Home', url: `${SITE_URL}/` },
         { name: 'Projects', url: canonicalUrl('/projects') },
-        { name: project.name, url: canonicalUrl(path) },
+        { name: project.name, url },
       ]),
-    ]
+    )
+  } else if (game) {
+    graph.push(
+      breadcrumb([
+        { name: 'Home', url: `${SITE_URL}/` },
+        { name: 'Games', url: canonicalUrl('/games') },
+        { name: game.name, url },
+      ]),
+    )
+  } else if (SECTION_NAMES[meta.path]) {
+    graph.push(
+      breadcrumb([
+        { name: 'Home', url: `${SITE_URL}/` },
+        { name: SECTION_NAMES[meta.path], url },
+      ]),
+    )
+  }
+
+  if (project) {
     const software = softwareApplication(project)
     if (software) graph.push(software)
-    return [{ '@context': 'https://schema.org', '@graph': graph }]
+    const faq = faqPage(project, url)
+    if (faq) graph.push(faq)
   }
 
-  if (game) {
-    return [
-      {
-        '@context': 'https://schema.org',
-        '@graph': [
-          organization(),
-          person(),
-          breadcrumb([
-            { name: 'Home', url: `${SITE_URL}/` },
-            { name: 'Games', url: canonicalUrl('/games') },
-            { name: game.name, url: canonicalUrl(path) },
-          ]),
-        ],
-      },
-    ]
-  }
+  if (meta.path === '/dev-log') graph.push(...blogNodes())
 
-  return []
+  return [{ '@context': 'https://schema.org', '@graph': graph }]
 }
 
 /** One JSON-LD script tag per graph — '<' escaped so JSON cannot end the tag early. */
@@ -332,6 +425,25 @@ export function buildHeadHtml(path: string): string {
     tags.push(`<link rel="canonical" href="${escapeAttr(url)}" />`)
   }
 
+  // Webmaster-tool verification (Bing, Brave, Yandex, Google) — configured in
+  // src/data/site.ts; a null slot emits nothing.
+  const verification: [name: string, content: string | null][] = [
+    ['google-site-verification', SITE.verification.google],
+    ['msvalidate.01', SITE.verification.bing],
+    ['yandex-verification', SITE.verification.yandex],
+    ['brave-search-site-verification', SITE.verification.brave],
+  ]
+  for (const [name, content] of verification) {
+    if (content) tags.push(metaTag(name, content))
+  }
+
+  // Dev-log RSS feed — discovery path for aggregators and Bing.
+  tags.push(
+    `<link rel="alternate" type="application/rss+xml" title="${escapeAttr(
+      `${NAME} — Dev Log`,
+    )}" href="${escapeAttr(`${SITE_URL}/feed.xml`)}" />`,
+  )
+
   tags.push(
     ogTag('og:type', 'website'),
     ogTag('og:site_name', SITE.namePlain),
@@ -344,7 +456,14 @@ export function buildHeadHtml(path: string): string {
     metaTag('twitter:description', meta.description),
   )
   if (OG_IMAGE) {
-    tags.push(ogTag('og:image', `${SITE_URL}${OG_IMAGE}`), metaTag('twitter:image', `${SITE_URL}${OG_IMAGE}`))
+    const image = `${SITE_URL}${OG_IMAGE}`
+    tags.push(
+      ogTag('og:image', image),
+      ogTag('og:image:width', `${OG_IMAGE_SIZE.width}`),
+      ogTag('og:image:height', `${OG_IMAGE_SIZE.height}`),
+      ogTag('og:image:alt', `${NAME} — independent software & game studio`),
+      metaTag('twitter:image', image),
+    )
   }
 
   // JSON-LD for routes that have something concrete to describe (homepage
@@ -360,14 +479,104 @@ export function buildHeadHtml(path: string): string {
    Sitemap (build time)
    --------------------------------------------------------- */
 
+/**
+ * Newest dev-log date that genuinely reflects a route's content, or null when
+ * no reliable date exists. Only real entry dates are emitted — a <lastmod>
+ * that guesses is worse than no <lastmod> at all.
+ *   /                 → newest entry (the home page shows the latest updates)
+ *   /dev-log          → newest entry
+ *   /projects/<slug>  → newest entry tagged with that slug
+ *   /games/<slug>     → newest entry tagged with that slug
+ *   static sections   → no date (content changes without a dated signal)
+ */
+function lastModifiedFor(path: string): string | null {
+  if (DEV_LOG.length === 0) return null
+  const entries = getLatestEntries()
+  if (path === '/' || path === '/dev-log') return entries[0].date
+
+  const slug = path.startsWith('/projects/')
+    ? path.slice('/projects/'.length)
+    : path.startsWith('/games/')
+      ? path.slice('/games/'.length)
+      : null
+  if (slug === null) return null
+
+  const own = entries.find((entry) => entry.projectSlug === slug)
+  return own ? own.date : null
+}
+
 /** sitemap.xml covering every indexable prerendered route. */
 export function buildSitemapXml(): string {
   const urls = PRERENDER_PATHS.filter(
     (path) => getRouteMeta(path).robots === 'index',
   )
-    .map((path) => `  <url><loc>${escapeAttr(canonicalUrl(path))}</loc></url>`)
+    .map((path) => {
+      const lastmod = lastModifiedFor(path)
+      return `  <url><loc>${escapeAttr(canonicalUrl(path))}</loc>${
+        lastmod ? `<lastmod>${lastmod}</lastmod>` : ''
+      }</url>`
+    })
     .join('\n')
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
+}
+
+/* ---------------------------------------------------------
+   RSS feed (build time) — dist/feed.xml
+   --------------------------------------------------------- */
+
+function xmlEscape(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
+/**
+ * RSS 2.0 feed of the development journal, written to dist/feed.xml by
+ * scripts/prerender.mjs. Item links point at the real on-page anchors
+ * (/dev-log#<id>); the channel link is the /dev-log page itself.
+ */
+export function buildFeedXml(): string {
+  const channelUrl = canonicalUrl('/dev-log')
+  const feedUrl = `${SITE_URL}/feed.xml`
+  const entries = getLatestEntries()
+  const toUtc = (date: string) => new Date(`${date}T00:00:00Z`).toUTCString()
+  const channelDescription = SECTION_META.find((r) => r.path === '/dev-log')?.description ?? SITE.description
+
+  const items = entries
+    .map((entry) => {
+      const url = `${channelUrl}#${entry.id}`
+      const description = [entry.summary, ...entry.details].join('\n• ')
+      return [
+        '    <item>',
+        `      <title>${xmlEscape(entry.title)}</title>`,
+        `      <link>${xmlEscape(url)}</link>`,
+        `      <guid isPermaLink="true">${xmlEscape(url)}</guid>`,
+        `      <pubDate>${toUtc(entry.date)}</pubDate>`,
+        `      <dc:creator>${xmlEscape(SITE.founder.name)}</dc:creator>`,
+        `      <description>${xmlEscape(description)}</description>`,
+        '    </item>',
+      ].join('\n')
+    })
+    .join('\n')
+
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">',
+    '  <channel>',
+    `    <title>${xmlEscape(`${NAME} — Dev Log`)}</title>`,
+    `    <link>${xmlEscape(channelUrl)}</link>`,
+    `    <description>${xmlEscape(channelDescription)}</description>`,
+    '    <language>en-us</language>',
+    `    <lastBuildDate>${entries[0] ? toUtc(entries[0].date) : new Date(0).toUTCString()}</lastBuildDate>`,
+    `    <atom:link href="${xmlEscape(feedUrl)}" rel="self" type="application/rss+xml" />`,
+    items,
+    '  </channel>',
+    '</rss>',
+    '',
+  ].join('\n')
 }
 
 /* ---------------------------------------------------------

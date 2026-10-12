@@ -22,8 +22,9 @@ npm run preview:netlify  # Netlify-like server on http://localhost:4180
 
 `npm run build` finishes with `scripts/prerender.mjs`, which writes a real HTML
 file for every route (with per-page `<title>`, meta description, canonical URL,
-Open Graph tags and — on the homepage — Organization/Person JSON-LD), plus a
-real `dist/404.html` and `dist/sitemap.xml`. Crawlers and link previews get
+Open Graph tags and JSON-LD), plus a real `dist/404.html`, `dist/sitemap.xml`
+(with real `lastmod` dates), the dev-log RSS feed at `dist/feed.xml` and the
+brand images (`og-image.png`, `favicon.png`). Crawlers and link previews get
 full content without running JavaScript.
 
 ## Pages
@@ -51,7 +52,9 @@ Everything editable lives in **`src/data/`** — you should never need to touch 
 | **Add / edit a project (e.g. WOLFCANI)** | `src/data/projects.ts`            |
 | **Add / edit a game**                   | `src/data/games.ts`               |
 | **Change titles, meta descriptions, social tags** | `src/seo.ts` — the single source for per-route `<title>`/description/canonical/OG tags. Detail pages read the optional `seoTitle` / `seoDescription` fields on their data entry. |
-| **Add the social preview image**        | Drop a 1200×630 PNG in `public/` and set `OG_IMAGE` in `src/seo.ts` (currently a documented `null` TODO). |
+| **Change the social preview image**    | It is generated at build time by `scripts/og-image.mjs` (brand card, 1200×630) and wired via `OG_IMAGE` in `src/seo.ts`. Edit the SVG layout/colors in the script — no manual PNG to maintain. |
+| **Verify the site with Bing / Brave / Yandex / Google** | `src/data/site.ts` → `SITE.verification` — paste the code from each webmaster tool; the `<meta>` tags are emitted automatically. (Bing covers Bing, Yahoo and DuckDuckGo.) |
+| **Notify Bing/Yandex/etc. on every deploy** | Built in — `scripts/notify-indexnow.mjs` submits all sitemap URLs via IndexNow from `.github/workflows/deploy-pages.yml`. The public key lives in `public/indexnow-key.txt` (regenerate it and the engines must be re-notified once). |
 | **Change studio name, tagline, nav, founder** | `src/data/site.ts`           |
 | **Add a nav item / page**               | `src/data/site.ts` (nav) + `src/App.tsx` (route) + `src/seo.ts` (metadata) + `PRERENDER_PATHS` if it should be prerendered |
 

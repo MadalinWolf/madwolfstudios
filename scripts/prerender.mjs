@@ -9,12 +9,13 @@
  *   dist/projects/wolfcani/index.html  → /projects/wolfcani
  *   ...
  *   dist/404.html                      → unknown paths (Netlify serves it with HTTP 404)
- *   dist/sitemap.xml                   → indexable routes only
+ *   dist/sitemap.xml                   → indexable routes only (+ real lastmod dates)
+ *   dist/feed.xml                      → dev-log RSS feed
+ *   dist/og-image.png, dist/favicon.png → brand images (scripts/og-image.mjs)
  *
  * Each file carries its own <title>, meta description, canonical, Open Graph
- * tags and (on the homepage) Organization + Person JSON-LD — all generated
- * from the single source in src/seo.ts. Crawlers and social scrapers get
- * meaningful HTML without running JavaScript.
+ * tags and JSON-LD — all generated from the single source in src/seo.ts.
+ * Crawlers and social scrapers get meaningful HTML without running JavaScript.
  *
  * The React code is executed through Vite's SSR module loader — no extra
  * dependencies, no framework migration.
@@ -23,6 +24,7 @@ import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { createServer } from 'vite'
+import { writeBrandImages } from './og-image.mjs'
 
 const ROOT = process.cwd()
 const DIST = path.join(ROOT, 'dist')
@@ -106,17 +108,27 @@ try {
   await writeFile(path.join(DIST, 'sitemap.xml'), buildSitemapXml(), 'utf8')
   console.log('prerender: sitemap.xml')
 
+  const { buildFeedXml } = await vite.ssrLoadModule('/src/seo.ts')
+  await writeFile(path.join(DIST, 'feed.xml'), buildFeedXml(), 'utf8')
+  console.log('prerender: feed.xml')
+
+  await writeBrandImages(DIST)
+  console.log('prerender: og-image.png, favicon.png')
+
   // --- Legacy redirects ----------------------------------------------------
   // netlify.toml answers these with HTTP 301; GitHub Pages has no redirect
   // configuration, so they ship as tiny static pages that bounce the browser
   // (meta refresh covers crawlers/no-JS, location.replace covers everyone
   // else). Keep the list in sync with netlify.toml [[redirects]].
-  const { canonicalUrl } = await vite.ssrLoadModule('/src/seo.ts')
+  //
+  // The stub is deliberately noindex WITHOUT a canonical tag: GitHub Pages
+  // serves the file with HTTP 200, and a canonical pointing at the target is
+  // exactly what Google reports as "Alternate page with proper canonical tag".
+  // noindex alone drops the legacy URL cleanly instead.
   const REDIRECTS = [{ from: '/projects/stusys', to: '/projects/wolfcani' }]
 
   for (const { from, to } of REDIRECTS) {
     const target = `${BASE}${to.replace(/^\/+/, '')}/`
-    const canonical = canonicalUrl(to)
     const outPath = path.join(DIST, ...from.slice(1).split('/'), 'index.html')
     const stub = [
       '<!DOCTYPE html>',
@@ -126,11 +138,10 @@ try {
       '    <meta name="viewport" content="width=device-width, initial-scale=1.0" />',
       '    <title>Redirecting…</title>',
       '    <meta name="robots" content="noindex" />',
-      `    <link rel="canonical" href="${canonical}" />`,
       `    <meta http-equiv="refresh" content="0; url=${target}" />`,
       '  </head>',
       '  <body>',
-      `    <p>This page has moved to <a href="${target}">${canonical}</a>.</p>`,
+      `    <p>This page has moved to <a href="${target}">${to}</a>.</p>`,
       `    <script>location.replace(${JSON.stringify(target)})</script>`,
       '  </body>',
       '</html>',

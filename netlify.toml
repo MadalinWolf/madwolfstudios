@@ -1,6 +1,11 @@
 # Netlify configuration for the MADWOLF STUDIOS website.
 # Static SPA-with-prerender: no backend, no env vars, no build-time secrets.
 #
+# NOTE: production currently serves from GitHub Pages
+# (.github/workflows/deploy-pages.yml) — GitHub Pages cannot execute these
+# redirects or headers. This file is kept ready for a future Netlify move and
+# is also what `npm run preview:netlify` approximates locally.
+#
 # Routing: scripts/prerender.mjs writes a real HTML file for every route
 # (dist/<route>/index.html) plus a real dist/404.html. Netlify serves 404.html
 # with HTTP 404 for unknown paths automatically — no catch-all rewrite, so no
@@ -55,5 +60,21 @@
 [[redirects]]
   from = "/projects/stusys/"
   to = "/projects/wolfcani/"
+  status = 301
+  force = true
+
+# Explicit /index.html requests → the clean URL. Without these, a crawler that
+# requests /projects/index.html gets HTTP 200 + a canonical pointing elsewhere
+# ("alternate page with proper canonical tag"). GitHub Pages cannot redirect,
+# so on the current host these stay informational only.
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/*/index.html"
+  to = "/:splat/"
   status = 301
   force = true
