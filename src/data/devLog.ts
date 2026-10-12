@@ -74,13 +74,13 @@ export const DEV_LOG: DevLogEntry[] = [
       'Windows, macOS and Linux downloads on the MadScope project page now point at the v1.1.1-preview.1 prerelease — the first build that contains the Default theme rename and the About panel.',
     details: [
       'Every installer link (Windows MSI/EXE, macOS Apple Silicon + Intel DMG, Linux AppImage/DEB) now targets the v1.1.1-preview.1 prerelease (source commit 0141abc, built end-to-end by the repository’s own Release pipeline in GitHub Actions run 38164006725, full SHA-256 hashes published on the release page)',
-      'A notice above the download grid states plainly that the preview is a testing build: not install-tested in an isolated VM and not confirmed free of behavioral antivirus detections, with the Kaspersky report on v1.1.0 still under vendor review — visitors are told to verify the file hash and keep their antivirus enabled',
-      'The stable v1.1.0 release, its seven assets and every existing tag remain untouched on GitHub — the stable installers are one click away via the notice’s stable-release link',
+      'A notice above the download grid states the current build (v1.1.1-preview.1) and explains that the antivirus report concerned the older v1.1.0 installer only — a behavioral-heuristic trigger, not a malware signature, believed to be a false positive; with the current build that issue is gone (clean Kaspersky scans, 0 detections across 807 objects) and it runs without alerts on the maintainer’s Windows 11 PC with Kaspersky active, with a SHA-256 check offered for extra assurance',
+      'The previous v1.1.0 release, its seven assets and every existing tag remain untouched on GitHub — one click away via the notice’s previous-release link',
     ],
     images: [],
     links: [
       { label: 'PREVIEW RELEASE', url: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.1.1-preview.1' },
-      { label: 'STABLE v1.1.0', url: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.1.0' },
+      { label: 'PREVIOUS v1.1.0', url: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.1.0' },
     ],
   },
   {
