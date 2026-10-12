@@ -88,6 +88,9 @@ export interface Project {
   /** Optional notice rendered directly under the download heading — e.g. a
    *  preview-build warning with a link to a different release page. */
   downloadNotice?: { text: string; linkLabel: string; linkUrl: string }
+  /** Label shown instead of "Latest release: {releaseVersion}" when the
+   *  download table serves a newer build than the latest stable release. */
+  downloadVersionLabel?: string
   overview: string[]
   /** Optional factual status paragraph — falls back to a generic one. */
   statusNote?: string
@@ -263,17 +266,18 @@ export const PROJECTS: Project[] = [
       { os: 'Linux', arch: 'x64', label: 'DEB package', url: 'https://github.com/MadalinWolf/MadScope/releases/download/v1.1.1-preview.1/MadScope-1.1.1-preview.1-linux-x64.deb', note: 'Preview build v1.1.1-preview.1 — testing; Debian / Ubuntu.' },
     ],
     downloadNotice: {
-      text: 'Preview builds. The downloads above are pre-release builds; the stable release remains v1.1.0. About the antivirus report on the v1.1.0 Windows installer: it was triggered by Kaspersky’s behavioral heuristics — not a malware signature — and we believe it is a false positive. The vendor review is still open, so we mention it plainly. The current preview installers scan clean with Kaspersky (0 detections across 807 objects), and our maintainer runs the installed preview on Windows 11 with Kaspersky active with no alerts. For extra assurance, compare each file’s SHA-256 against SHA256SUMS.txt on the release page. macOS builds are unsigned: on first launch, right-click → Open.',
-      linkLabel: 'Stable v1.1.0 release →',
+      text: 'Current build: v1.1.1-preview.1 — the downloads above serve it. The antivirus report concerned the older v1.1.0 Windows installer: it was triggered by Kaspersky’s behavioral heuristics — not a malware signature — and we believe it is a false positive. The issue ended with the update: v1.1.1 is installed and tested on our Windows 11 PC with Kaspersky active, with no detections, warnings or alerts, and the installers scan clean with Kaspersky (0 detections across 807 objects). For extra assurance, compare each file’s SHA-256 against SHA256SUMS.txt on the release page. macOS builds are unsigned: on first launch, right-click → Open.',
+      linkLabel: 'Previous release: v1.1.0 →',
       linkUrl: 'https://github.com/MadalinWolf/MadScope/releases/tag/v1.1.0',
     },
+    downloadVersionLabel: 'v1.1.1-preview.1',
     overview: [
       'MadScope renders any URL in real Chromium across multiple viewport sizes, captures screenshots, flags potential responsive issues, scores the page, and catches visual regressions — all locally, with no account and no telemetry.',
       'It was built to replace the manual routine of resizing the browser and eyeballing layouts: enter a URL (including localhost while you develop), pick viewports, and get real renders, screenshots, findings and a deterministic health score in seconds.',
       'The same core engine powers three surfaces: a desktop UI, a command-line interface for terminals and CI, and a local render server. Baselines saved today can be re-tested tomorrow — or on every pull request — with pixel-level diffs and a pass/fail exit code.',
     ],
     statusNote:
-      'MadScope v1.1.0 is released as free open-source software (MIT) at github.com/MadalinWolf/MadScope, with installers for Windows, macOS (ARM64 + Intel) and Linux. New in this release: three selectable themes (Default, Terminal, Light) with persistence, and diagnostics you can select and copy — including an AI-ready inspection report for handing findings to a coding agent. Next up: parallel viewport rendering, Firefox/WebKit engines and notarized macOS builds. The website’s downloads currently serve the preview build v1.1.1-preview.1 for Windows, macOS and Linux (theme renamed Existing → Default, new About panel). About the antivirus report on the v1.1.0 Windows installer: it was triggered by Kaspersky’s behavioral heuristics — not a malware signature — and we believe it is a false positive; the vendor review is still open. The preview installers scan clean with Kaspersky (0 detections across 807 objects) and run without alerts on the maintainer’s Windows 11 machine with Kaspersky active. The stable v1.1.0 installers remain available on the release page. See SECURITY_AUDIT.md in the repository for verified facts and next steps.',
+      'MadScope v1.1.0 is released as free open-source software (MIT) at github.com/MadalinWolf/MadScope, with installers for Windows, macOS (ARM64 + Intel) and Linux. New in this release: three selectable themes (Default, Terminal, Light) with persistence, and diagnostics you can select and copy — including an AI-ready inspection report for handing findings to a coding agent. Next up: parallel viewport rendering, Firefox/WebKit engines and notarized macOS builds. The website’s downloads serve the build v1.1.1-preview.1 for Windows, macOS and Linux (theme renamed Existing → Default, new About panel). About the antivirus report: it concerned the older v1.1.0 Windows installer and was triggered by Kaspersky’s behavioral heuristics — not a malware signature — and we believe it is a false positive; the issue ended with the update. v1.1.1 is installed and tested on the maintainer’s Windows 11 PC with Kaspersky active with no alerts, and the installers scan clean (0 detections across 807 objects). The previous v1.1.0 release remains available on its release page. See SECURITY_AUDIT.md in the repository for verified facts and next steps.',
     features: [
       { name: 'Real Chromium rendering', state: 'implemented', note: 'Playwright + Chromium with a dedicated browser context per viewport (device scale, isMobile, touch)' },
       { name: '8 viewport presets + custom sizes', state: 'implemented', note: 'Mobile Small 320×568 up to Large Desktop 1920×1080, plus any custom width/height' },

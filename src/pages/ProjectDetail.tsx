@@ -82,8 +82,10 @@ function DownloadBlock({ project }: { project: Project }) {
     <div>
       {project.releaseVersion && (
         <p className="mb-6 text-[11px] font-bold uppercase tracking-[0.18em] text-text-muted">
-          Latest release:{' '}
-          <span className="text-neon-lemon">{project.releaseVersion}</span>
+          {project.downloadVersionLabel ? 'Current build:' : 'Latest release:'}{' '}
+          <span className="text-neon-lemon">
+            {project.downloadVersionLabel ?? project.releaseVersion}
+          </span>
         </p>
       )}
       {project.downloadNotice && (
