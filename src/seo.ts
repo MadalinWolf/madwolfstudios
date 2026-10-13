@@ -44,8 +44,9 @@ export const SITE_URL = SITE.domain
 
 /**
  * Canonical URL for a route.
- * Netlify (Pretty URLs, on by default) serves folder routes as /path/,
- * so canonical URLs carry the trailing slash. The router tolerates both.
+ * GitHub Pages serves folder routes as /path/ (a request without the trailing
+ * slash is 301'd), so canonical URLs carry the trailing slash.
+ * The router tolerates both.
  */
 export function canonicalUrl(path: string): string {
   return path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}/`

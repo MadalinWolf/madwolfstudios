@@ -26,8 +26,9 @@ export default defineConfig({
   base,
   build: {
     // Never inline assets as data: URIs — the strict Content-Security-Policy
-    // (netlify.toml) allows fonts from 'self' only, and every font should be
-    // a real file under /assets/ (unicode-range keeps unused subsets lazy).
+    // used by the production-like preview (scripts/serve-dist.mjs) allows
+    // fonts from 'self' only, and every font should be a real file under
+    // /assets/ (unicode-range keeps unused subsets lazy).
     assetsInlineLimit: 0,
   },
 })

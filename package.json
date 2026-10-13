@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build && node scripts/prerender.mjs",
     "preview": "vite preview",
-    "preview:netlify": "node scripts/serve-dist.mjs"
+    "preview:dist": "node scripts/serve-dist.mjs"
   },
   "dependencies": {
     "@fontsource-variable/jetbrains-mono": "^5.3.0",

@@ -15,9 +15,9 @@ Requirements: Node.js + npm.
 npm install              # install dependencies
 npm run dev              # dev server → http://localhost:5173
 npm run build            # type-check + production build + prerender → dist/
-npm run preview          # plain Vite preview (SPA fallback — not representative of Netlify)
-npm run preview:netlify  # Netlify-like server on http://localhost:4180
-                         #   (real 404s, trailing-slash 301s, production headers)
+npm run preview          # plain Vite preview (SPA fallback — not representative of production)
+npm run preview:dist     # production-like static server on http://localhost:4180
+                         #   (real 404s, trailing-slash 301s)
 ```
 
 `npm run build` finishes with `scripts/prerender.mjs`, which writes a real HTML
@@ -97,24 +97,29 @@ Everything else is **dark grey shades** — no white, no pure black, no blue/pur
 
 ## Hosting
 
+**GitHub Pages** — free for this public repository. Every push to `main` runs
+`.github/workflows/deploy-pages.yml`: type-check, build and prerender, then the
+site goes live at https://madwolfstudios.com (the domain is attached to the
+Pages deployment). No build credits and no external service — the same workflow
+also notifies search engines (Bing, Yahoo, Yandex…) via IndexNow after each
+deploy.
+
 Every route is a **real static HTML file** after `npm run build` — there is no
 catch-all rewrite, so unknown URLs return a genuine **HTTP 404** (served from
-`dist/404.html`, which Netlify picks up automatically) instead of a soft-404.
+`dist/404.html`, which GitHub Pages picks up automatically) instead of a soft-404.
 
-**Netlify** — configured in `netlify.toml`:
+Notes for this host:
 
-- build: `npm run build`, publish: `dist/`, Node 22
-- security headers: CSP (first-party only), HSTS, `X-Frame-Options: DENY`,
-  `nosniff`, `Referrer-Policy`, `Permissions-Policy`
-- long-lived caching for content-hashed `/assets/*`
-- a 301 redirect from the old `/projects/stusys` URL to `/projects/wolfcani`
-  (product renamed to WOLFCANI)
-- canonical URLs use a trailing slash (`/projects/`) because Netlify's Pretty
-  URLs (on by default) redirects `/projects` → `/projects/` — see `src/seo.ts`
+- canonical URLs use a trailing slash (`/projects/`) because GitHub Pages
+  redirects `/projects` → `/projects/` — see `src/seo.ts`
+- the legacy `/projects/stusys` URL is handled by a tiny prerendered redirect
+  page (GitHub Pages cannot issue server-side 301s)
+- GitHub Pages does not support custom response headers (CSP, HSTS, …);
+  `npm run preview:dist` applies a conservative header set locally so the site
+  can still be exercised against a strict browser environment
 
-Other static hosts work the same way as long as they serve `directory/index.html`
-and `404.html`. `npm run preview:netlify` reproduces the Netlify behavior locally
-so routing can be checked before deploying.
+`npm run preview:dist` reproduces the production routing locally (real 404s,
+trailing-slash 301s) so routing can be checked before pushing.
 
 ## Content rules
 

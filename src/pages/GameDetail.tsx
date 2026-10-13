@@ -147,7 +147,8 @@ export function GameDetail({ game }: { game: Game }) {
           {game.trailer?.url ? (
             <div className="card p-3">
               {/* Only trusted https embed URLs (YouTube/Vimeo) belong in games.ts.
-                  Keep the allow list minimal; frame-src hosts are listed in netlify.toml. */}
+                  Keep the allow list minimal; frame-src hosts are listed in
+                  scripts/serve-dist.mjs (local preview CSP). */}
               <iframe
                 src={game.trailer.url}
                 title={`${game.name} trailer`}

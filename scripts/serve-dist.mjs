@@ -1,16 +1,17 @@
 /**
- * Local preview that mimics how Netlify serves `dist/` in production.
+ * Local preview that mimics how the site is served in production (GitHub Pages).
  *
  * `vite preview` falls back to index.html for unknown paths (SPA mode), which
- * would hide soft-404s. This server replicates the real Netlify rules instead:
+ * would hide soft-404s. This server replicates the production rules instead:
  *
  *   - exact file                        → 200
- *   - /dir (no slash, dir/index.html)   → 301 → /dir/      (Pretty URLs default)
+ *   - /dir (no slash, dir/index.html)   → 301 → /dir/
  *   - /dir/                             → 200 dir/index.html
  *   - anything else                     → 404.html with HTTP 404
- *   - same security/cache headers as netlify.toml (keep in sync manually)
+ *   - conservative security headers locally (GitHub Pages itself cannot set
+ *     custom headers — this keeps the markup exercisable under a strict CSP)
  *
- * Usage: npm run build && npm run preview:netlify   → http://localhost:4180
+ * Usage: npm run build && npm run preview:dist   → http://localhost:4180
  */
 import { createReadStream } from 'node:fs'
 import { stat } from 'node:fs/promises'
@@ -21,7 +22,7 @@ import process from 'node:process'
 const DIST = path.resolve(process.cwd(), 'dist')
 const PORT = Number(process.env.PORT || 4180)
 
-// Keep in sync with netlify.toml.
+// Local-only hardening — production (GitHub Pages) serves no custom headers.
 const SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
@@ -98,7 +99,7 @@ const server = http.createServer(async (req, res) => {
     if (found?.type === 'dir') {
       const indexFile = path.join(target, 'index.html')
       if ((await fileInfo(indexFile))?.type === 'file') {
-        // Netlify Pretty URLs: /dir → 301 → /dir/
+        // Trailing-slash normalization: /dir → 301 → /dir/
         if (!pathname.endsWith('/')) return redirect(res, pathname + '/')
         return send(res, 200, indexFile)
       }
@@ -118,6 +119,6 @@ const server = http.createServer(async (req, res) => {
 })
 
 server.listen(PORT, () => {
-  console.log(`Netlify-like preview: http://localhost:${PORT}`)
+  console.log(`Production-like preview: http://localhost:${PORT}`)
   console.log(`Serving ${DIST}`)
 })

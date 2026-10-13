@@ -8,7 +8,7 @@
  *   dist/projects/index.html           → /projects
  *   dist/projects/wolfcani/index.html  → /projects/wolfcani
  *   ...
- *   dist/404.html                      → unknown paths (Netlify serves it with HTTP 404)
+ *   dist/404.html                      → unknown paths (served with HTTP 404)
  *   dist/sitemap.xml                   → indexable routes only (+ real lastmod dates)
  *   dist/feed.xml                      → dev-log RSS feed
  *   dist/og-image.png, dist/favicon.png → brand images (scripts/og-image.mjs)
@@ -101,7 +101,7 @@ try {
     console.log(`prerender: ${url}`)
   }
 
-  // Real 404 page — Netlify serves dist/404.html with HTTP 404 automatically.
+  // Real 404 page — GitHub Pages serves dist/404.html with HTTP 404 automatically.
   await writeFile(path.join(DIST, '404.html'), buildPage('/404-page-not-found', { notFound: true }), 'utf8')
   console.log('prerender: /404.html')
 
@@ -116,10 +116,9 @@ try {
   console.log('prerender: og-image.png, favicon.png')
 
   // --- Legacy redirects ----------------------------------------------------
-  // netlify.toml answers these with HTTP 301; GitHub Pages has no redirect
-  // configuration, so they ship as tiny static pages that bounce the browser
-  // (meta refresh covers crawlers/no-JS, location.replace covers everyone
-  // else). Keep the list in sync with netlify.toml [[redirects]].
+  // GitHub Pages cannot answer redirects from configuration, so moved URLs
+  // ship as tiny static pages that bounce the browser (meta refresh covers
+  // crawlers/no-JS, location.replace covers everyone else).
   //
   // The stub is deliberately noindex WITHOUT a canonical tag: GitHub Pages
   // serves the file with HTTP 200, and a canonical pointing at the target is
