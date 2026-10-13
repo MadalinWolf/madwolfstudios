@@ -19,13 +19,14 @@ export function LinkList({ ids }: { ids: LinkId[] }) {
             {url ? (
               (() => {
                 const external = /^https?:\/\//.test(url)
+                const email = url.startsWith('mailto:')
                 return (
                   <a
-                    className="link text-xs font-bold uppercase tracking-[0.14em] sm:text-sm"
+                    className="link break-all text-xs font-bold uppercase tracking-[0.14em] sm:text-sm"
                     href={url}
                     {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   >
-                    OPEN ↗
+                    {email ? url.replace(/^mailto:/, '') : 'OPEN ↗'}
                   </a>
                 )
               })()

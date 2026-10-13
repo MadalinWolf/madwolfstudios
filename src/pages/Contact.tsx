@@ -1,10 +1,12 @@
 import { ButtonLink } from '../components/Button'
 import { LinkList } from '../components/LinkList'
-import { PlaceholderBox } from '../components/Placeholder'
 import { PageHeader } from '../components/SectionHeader'
 import { CONTACT_LINK_IDS, LINKS } from '../data/links'
 
 export function Contact() {
+  const emailUrl = LINKS.email.url!
+  const emailAddress = emailUrl.replace(/^mailto:/, '')
+
   return (
     <>
       <PageHeader
@@ -25,15 +27,27 @@ export function Contact() {
           <LinkList ids={CONTACT_LINK_IDS} />
         </section>
 
-        {/* Email placeholder + quick actions */}
+        {/* Direct contact + quick actions */}
         <aside className="space-y-6">
           <div>
             <h2 className="mb-5 border-b border-line pb-3 text-xl font-extrabold uppercase tracking-wide text-neon-lemon">
               Direct Contact
             </h2>
-            <PlaceholderBox label="EMAIL ADDRESS — TO BE ADDED">
-              A direct contact address will be published here as soon as it is set up.
-            </PlaceholderBox>
+            <div className="card p-6">
+              <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-neon-lemon">
+                EMAIL
+              </span>
+              <p className="mt-4 text-xs leading-relaxed text-text-secondary">
+                For software development, open-source projects, collaboration or
+                bug reports, write to:
+              </p>
+              <a
+                href={emailUrl}
+                className="link mt-3 inline-block break-all text-sm font-bold"
+              >
+                {emailAddress}
+              </a>
+            </div>
           </div>
 
           <div className="card p-6">

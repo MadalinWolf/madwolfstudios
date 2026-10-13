@@ -26,11 +26,13 @@ export const LINKS = {
   // Real GitHub Sponsors profile — used by the "Feed My Cat" section only
   // (deliberately not in CONTACT_LINK_IDS / FOOTER_LINK_IDS).
   sponsors: { label: 'SPONSORS', url: 'https://github.com/sponsors/MadalinWolf' },
-  email: { label: 'EMAIL', url: null }, // ← put your real address here (mailto:...)
+  // Professional contact — software development, open-source projects,
+  // collaboration, bug reports and other IT-related inquiries.
+  email: { label: 'EMAIL', url: 'mailto:madalindinu@protonmail.com' },
   steam: { label: 'STEAM', url: null }, // ← SOON
   discord: { label: 'DISCORD', url: null }, // ← SOON
   itch: { label: 'ITCH.IO', url: null }, // ← SOON
-  x: { label: 'X / TWITTER', url: null }, // ← SOON
+  reddit: { label: 'REDDIT', url: null }, // ← SOON (set the real profile URL when ready)
   youtube: { label: 'YOUTUBE', url: null }, // ← SOON
 } satisfies Record<string, ExternalLink>
 
@@ -43,7 +45,7 @@ export const CONTACT_LINK_IDS: LinkId[] = [
   'discord',
   'steam',
   'itch',
-  'x',
+  'reddit',
   'youtube',
 ]
 
