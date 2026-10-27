@@ -88,6 +88,9 @@ export interface Project {
   /** Optional notice rendered directly under the download heading — e.g. a
    *  preview-build warning with a link to a different release page. */
   downloadNotice?: { text: string; linkLabel: string; linkUrl: string }
+  /** Optional small-caps heading above the download notice text. Defaults to
+   *  "Preview build — testing" (the MadScope preview wording). */
+  downloadNoticeHeading?: string
   /** Label shown instead of "Latest release: {releaseVersion}" when the
    *  download table serves a newer build than the latest stable release. */
   downloadVersionLabel?: string
@@ -114,6 +117,336 @@ export interface Project {
 }
 
 export const PROJECTS: Project[] = [
+  {
+    slug: 'cofretabs',
+    name: 'CofreTabs',
+    kind: 'software',
+    status: 'released',
+    featured: true,
+    tagline: 'Your tabs. Your vault. Your device. A retro terminal vault for the tabs you want to keep.',
+    seoTitle: 'CofreTabs — Local-Only Browser Tab Vault Extension',
+    seoDescription:
+      'CofreTabs is a privacy-first Manifest V3 browser extension that saves, organizes, searches and restores your tabs in a local IndexedDB vault. No accounts, no cloud, no tracking. MIT licensed, free download.',
+    links: [
+      { label: 'VIEW ON GITHUB', url: 'https://github.com/MadalinWolf/CofreTabs' },
+      { label: 'DOWNLOAD v1.1.0', url: 'https://github.com/MadalinWolf/CofreTabs/releases/download/v1.1.0/CofreTabs-v1.1.0.zip' },
+    ],
+    releaseVersion: 'v1.1.0',
+    releaseUrl: 'https://github.com/MadalinWolf/CofreTabs/releases/tag/v1.1.0',
+    applicationCategory: 'BrowserApplication',
+    downloads: [
+      { os: 'Windows', arch: 'Chrome / Edge / Brave / Vivaldi / Opera', label: 'Extension ZIP', url: 'https://github.com/MadalinWolf/CofreTabs/releases/download/v1.1.0/CofreTabs-v1.1.0.zip', note: 'Unzip, then “Load unpacked” in chrome://extensions (developer mode).' },
+      { os: 'macOS', arch: 'Chrome / Edge / Brave / Vivaldi / Opera', label: 'Extension ZIP', url: 'https://github.com/MadalinWolf/CofreTabs/releases/download/v1.1.0/CofreTabs-v1.1.0.zip', note: 'Unzip, then “Load unpacked” in chrome://extensions (developer mode).' },
+      { os: 'Linux', arch: 'Chrome / Edge / Brave / Vivaldi / Opera', label: 'Extension ZIP', url: 'https://github.com/MadalinWolf/CofreTabs/releases/download/v1.1.0/CofreTabs-v1.1.0.zip', note: 'Unzip, then “Load unpacked” in chrome://extensions (developer mode).' },
+    ],
+    downloadNoticeHeading: 'Official release — not in any browser store yet',
+    downloadNotice: {
+      text: 'CofreTabs is not distributed through a browser store yet — it is installed from this official GitHub release. Extract the ZIP and load the extracted folder as an unpacked extension (one-time developer mode). The release page shows the ZIP’s SHA-256 digest, and existing installs check the same GitHub releases feed for updates.',
+      linkLabel: 'All CofreTabs releases →',
+      linkUrl: 'https://github.com/MadalinWolf/CofreTabs/releases',
+    },
+    overview: [
+      'CofreTabs is a Manifest V3 browser extension that turns the tab you are reading into a permanent, searchable entry in a private local vault. It is built for people who hoard “read later” tabs, research sessions and rabbit holes — without handing their browsing history to a bookmark service.',
+      'Everything lives in IndexedDB inside your browser profile. There is no backend, no account, no sync, no analytics and no remote code. CofreTabs never saves a page automatically: the slide-over panel shows exactly what will be saved, and nothing is written until you press SAVE THIS TAB.',
+      'Version 1.1.0 completes the original roadmap — Favorites, custom folders, a compact folder grid, light and dark themes and in-app update notifications — all verified by a 98-test automated suite that runs against the real storage and UI code.',
+    ],
+    statusNote:
+      'CofreTabs v1.1.0 was released on 25 October 2026 and is available as a checksummed ZIP from the official GitHub repository — the download links on this page serve that exact release. The source, tests (98/98 passing at release), build pipeline and release packaging are complete. The Chrome Web Store is a planned distribution channel — store listing copy is prepared in the repository, but the extension has not been submitted or published to any browser store yet. Until then, installation is from the GitHub release via “Load unpacked”. Development is documented on the dev log.',
+    features: [
+      { name: 'Explicit save panel', state: 'implemented', note: 'A right-side slide-over shows the page title, host, automatic folder and duplicate status before you commit — nothing is written until you press SAVE THIS TAB' },
+      { name: 'Truthful save states', state: 'implemented', note: 'Progress is tied to the real database write: double-clicks are rejected, and success is shown only after IndexedDB confirms the write — failures are shown as failures' },
+      { name: 'Automatic website folders', state: 'implemented', note: 'A bundled ICANN Public Suffix List (6,949 rules) files pages by registrable domain — news.bbc.co.uk goes under BBC, not co.uk — with www, subdomains, IP literals and malformed URLs handled' },
+      { name: 'Full-page library', state: 'implemented', note: 'Search across title, URL, hostname, folder and notes; sort by newest, oldest, title, domain or folder; filter by folder' },
+      { name: 'Favorites', state: 'implemented', note: 'Heart any saved tab to collect it in the built-in Favorites view, in both the library and the panel — favoriting is a non-destructive tag, the tab stays in its folder' },
+      { name: 'Custom folders', state: 'implemented', note: 'Create, rename and delete your own folders from the library sidebar — deleting a folder moves its tabs to Trash instead of destroying them' },
+      { name: 'Move tabs between folders', state: 'implemented', note: 'An inline MOVE selector on every row re-files a saved tab immediately, preserving title, URL, favicon and notes' },
+      { name: 'Compact folder grid', state: 'implemented', note: 'The panel shows up to nine folders in a 3×3 grid with icons, names and counts; accessible up/down controls step one row at a time when you have more' },
+      { name: 'Trash with a way back', state: 'implemented', note: 'Move entries to Trash, restore them, or permanently delete them from Trash with confirmation — restored tabs return to their original folder when it still exists, otherwise they are re-filed by domain' },
+      { name: 'Editable titles and notes', state: 'implemented', note: 'Add context to a tab, fix a noisy page title, or add a URL manually when a page cannot be injected' },
+      { name: 'Portable JSON backups', state: 'implemented', note: 'Export active and trashed entries with a versioned schema; import supports merge and replace, validates the entire file before writing, and reports duplicate/invalid counts' },
+      { name: 'Light and dark themes', state: 'implemented', note: 'A theme switch in the library sidebar, applied to the library and the injected panel, persisted across launches, defaulting to your system preference' },
+      { name: 'Update notifications', state: 'implemented', note: 'The library checks the official GitHub releases feed at most once every 12 hours and shows a dismissible banner when a newer version exists — nothing is downloaded or installed without you' },
+      { name: 'Restricted pages handled honestly', state: 'implemented', note: 'On browser-internal pages (chrome://, the Web Store, PDF viewers) Chromium blocks injection — CofreTabs opens the library with an explanation and a manual-add option instead' },
+      { name: 'Keyboard and screen-reader friendly', state: 'implemented', note: 'Escape closes the panel or dialogs, focus is moved in and restored on close, status uses polite live regions, and animations respect prefers-reduced-motion' },
+      { name: 'Minimal permissions', state: 'implemented', note: 'Only activeTab and scripting — no tabs, history, bookmarks, host permissions or background network access' },
+      { name: 'Sync between devices', state: 'planned', note: 'Deliberately absent today — JSON export/import is the supported way to move a vault manually' },
+    ],
+    faq: [
+      {
+        question: 'What is CofreTabs?',
+        answer:
+          'CofreTabs is a Manifest V3 browser extension that saves the current tab into a private, searchable vault with one explicit click. Saved tabs, folders and notes live in IndexedDB inside your browser profile — no account, no server, no sync.',
+      },
+      {
+        question: 'Does CofreTabs save my browsing automatically?',
+        answer:
+          'No. CofreTabs never saves a page automatically — not on install, not on toolbar click, not on navigation. The panel shows what would be saved, and only the explicit SAVE THIS TAB button writes a record to the local vault.',
+      },
+      {
+        question: 'Does my data leave my device?',
+        answer:
+          'The extension uploads nothing: no analytics, no telemetry, no accounts, no cloud. Saved tabs never leave your browser profile. The single network request CofreTabs can make is an optional update check against the public GitHub releases feed (at most once every 12 hours) that contains no vault data; the check only powers a dismissible "update available" banner.',
+      },
+      {
+        question: 'Is CofreTabs on the Chrome Web Store?',
+        answer:
+          'Not yet — it has not been submitted to the Chrome Web Store or any other browser store. It is installed today from the official GitHub release: download the ZIP, extract it and load the folder as an unpacked extension with developer mode enabled. Store listing copy is prepared in the repository for a future submission.',
+      },
+      {
+        question: 'Which browsers does CofreTabs support?',
+        answer:
+          'Chromium-based browsers with Manifest V3 support: Chrome 102+, Edge, Brave, Vivaldi and Opera. Firefox is not currently supported — the extension uses the Chromium extension APIs.',
+      },
+      {
+        question: 'Can it save chrome:// pages or the Web Store?',
+        answer:
+          'No — Chromium blocks extension injection on browser-internal pages, the Web Store and PDF viewers. On those pages CofreTabs opens the library with an explanation and lets you add a valid http(s) URL manually.',
+      },
+      {
+        question: 'Where is my data and what happens when I delete it?',
+        answer:
+          'Your data lives in IndexedDB inside your browser profile, stored unencrypted — anyone with access to your unlocked profile could read it, so export a backup before clearing browser data. Trash hides entries without deleting them; Delete Forever and Empty Trash remove them from the database; uninstalling the extension removes the vault. There is no server-side copy because none is ever created.',
+      },
+    ],
+    screenshots: [
+      {
+        src: '/screenshots/cofretabs-panel-v110.png',
+        alt: 'CofreTabs slide-over save panel on a web page — detected page card, SAVE THIS TAB button, 3×3 folder grid with Favorites, custom folders and recent saved tabs',
+        caption: 'SAVE PANEL',
+      },
+      {
+        src: '/screenshots/cofretabs-library-v110.png',
+        alt: 'CofreTabs library in the dark theme — sidebar with Favorites and custom folders, saved tabs with notes, heart toggles, MOVE controls and the theme switch',
+        caption: 'LIBRARY — DARK',
+      },
+      {
+        src: '/screenshots/cofretabs-library-light.png',
+        alt: 'CofreTabs library in the light theme with the same saved tabs, folders and controls on bright surfaces',
+        caption: 'LIBRARY — LIGHT',
+      },
+    ],
+    gallery: {
+      title: 'CofreTabs in action',
+      intro:
+        'Real captures of the extension, grouped by build — every slide carries the exact version it represents. Browse with Previous/Next, arrow keys or swipe; click any screenshot to enlarge it. Provenance for each file is recorded in public/screenshots/cofretabs-MANIFEST.md.',
+      groups: [
+        {
+          id: 'release-v1.1.0',
+          versionLabel: 'v1.1.0 — released 25 October 2026',
+          note:
+            'Captured 2026-10-26 from the packaged v1.1.0 build (tag v1.1.0, commit 729c500): the real library page with real IndexedDB (three chrome.* APIs stubbed) and the real, unmodified panel script saving through the real vault write path — the same documented method the repository uses for its own screenshots. Demo fixture data only.',
+          slides: [
+            {
+              src: '/screenshots/cofretabs-panel-v110.png',
+              title: 'Save panel',
+              text: 'Slide-over panel over an article: detected page, SAVE THIS TAB, and the 3×3 folder grid with Favorites and recent saved tabs.',
+              alt: 'CofreTabs v1.1.0 save panel — detected page, SAVE THIS TAB button and the 3×3 folder grid',
+            },
+            {
+              src: '/screenshots/cofretabs-panel-saved-v110.png',
+              title: 'Write acknowledged',
+              text: 'After a real save: the success state appears only once IndexedDB confirms the write, with the duplicate notice and updated vault count.',
+              alt: 'CofreTabs v1.1.0 panel after saving — write acknowledged, save complete and updated vault',
+            },
+            {
+              src: '/screenshots/cofretabs-panel-light.png',
+              title: 'Panel in light theme',
+              text: 'The same panel in the light theme — an already-saved page is flagged as a duplicate before you commit.',
+              alt: 'CofreTabs v1.1.0 panel in the light theme showing duplicate detection on an already-saved page',
+            },
+            {
+              src: '/screenshots/cofretabs-library-v110.png',
+              title: 'Library — dark theme',
+              text: 'Favorites, custom folders, MOVE controls, notes, the theme switch and the Trash count in the dark theme.',
+              alt: 'CofreTabs v1.1.0 library in the dark theme with folders, saved tabs, notes and MOVE controls',
+            },
+            {
+              src: '/screenshots/cofretabs-library-light.png',
+              title: 'Library — light theme',
+              text: 'The identical vault in the light theme — the switch persists across launches and defaults to your system preference.',
+              alt: 'CofreTabs v1.1.0 library in the light theme with the same saved tabs and folders',
+            },
+            {
+              src: '/screenshots/cofretabs-favorites.png',
+              title: 'Favorites view',
+              text: 'Heart any saved tab to collect it here — favoriting is a tag, so the tab stays in its original folder and is never duplicated.',
+              alt: 'CofreTabs v1.1.0 Favorites collection showing three favorited saved tabs',
+            },
+            {
+              src: '/screenshots/cofretabs-search.png',
+              title: 'Search across the vault',
+              text: 'Search matches title, URL, hostname, folder and notes — three hits for “vault” across different fields.',
+              alt: 'CofreTabs v1.1.0 library search results for “vault” matching title, URL and notes',
+            },
+            {
+              src: '/screenshots/cofretabs-trash.png',
+              title: 'Trash with a way back',
+              text: 'Restore a trashed tab to its folder, delete it forever, or empty the Trash — nothing disappears by accident.',
+              alt: 'CofreTabs v1.1.0 Trash view with RESTORE, DELETE and EMPTY TRASH actions',
+            },
+            {
+              src: '/screenshots/cofretabs-import.png',
+              title: 'Import a backup',
+              text: 'The import dialog validates the whole file first and previews it before you choose merge or replace mode.',
+              alt: 'CofreTabs v1.1.0 import backup dialog with validation preview and MERGE and REPLACE modes',
+            },
+          ],
+        },
+        {
+          id: 'release-v1.0.0',
+          versionLabel: 'v1.0.0 — original repository screenshots',
+          note:
+            'Copied unchanged from the CofreTabs repository (docs/screenshots/): captured in headless Chrome via CDP Extensions.loadUnpacked against the v1.0.0 build.',
+          slides: [
+            {
+              src: '/screenshots/cofretabs-panel.png',
+              title: 'v1.0.0 save panel',
+              text: 'The original review-before-save state — title, host and automatic folder shown before anything is written.',
+              alt: 'CofreTabs v1.0.0 save panel in the review-before-save state',
+            },
+            {
+              src: '/screenshots/cofretabs-panel-saved.png',
+              title: 'v1.0.0 save acknowledged',
+              text: 'The panel after a save acknowledgement, with the updated vault beneath it.',
+              alt: 'CofreTabs v1.0.0 panel after a save acknowledgement',
+            },
+            {
+              src: '/screenshots/cofretabs-library.png',
+              title: 'v1.0.0 library',
+              text: 'The original full-page library with demo tabs grouped by folder.',
+              alt: 'CofreTabs v1.0.0 library with demo tabs grouped by folder',
+            },
+          ],
+        },
+      ],
+    },
+    hero: {
+      src: '/screenshots/cofretabs-panel-v110.png',
+      alt: 'CofreTabs v1.1.0 slide-over panel over an article — page ready to save, 3×3 folder grid with Favorites and custom folders, recent saved tabs with heart toggles',
+      caption: 'COFRETABS v1.1.0 — SAVE PANEL',
+    },
+    showcase: [
+      {
+        label: 'SAVE',
+        title: 'Review first, then press save',
+        text: 'Click the toolbar icon and a slide-over panel shows the page title, host, the automatic folder it will be filed under, and a warning if the exact URL is already in your vault. The progress animation is tied to the real database write — a failed save is reported as a failure, never as success.',
+        images: [
+          {
+            src: '/screenshots/cofretabs-panel-v110.png',
+            alt: 'CofreTabs panel showing the detected page and the SAVE THIS TAB button above the folder grid',
+            caption: 'REVIEW BEFORE SAVE',
+          },
+          {
+            src: '/screenshots/cofretabs-panel-saved-v110.png',
+            alt: 'CofreTabs panel after saving — write acknowledged, save complete into the folder, duplicate notice and the updated vault',
+            caption: 'WRITE ACKNOWLEDGED',
+          },
+        ],
+      },
+      {
+        label: 'ORGANIZE',
+        title: 'A library that stays usable at scale',
+        text: 'The full-page library is your vault: every saved tab with its folder, note and time. Website folders are created automatically from the real domain using a bundled ICANN Public Suffix List, and you can create your own folders, rename them, and move tabs between them with the inline MOVE selector.',
+        images: [
+          {
+            src: '/screenshots/cofretabs-library-v110.png',
+            alt: 'CofreTabs library listing saved tabs with domain folders, custom folders, notes and per-row EDIT, MOVE and TRASH controls',
+            caption: 'LIBRARY — FOLDERS + MOVE',
+          },
+        ],
+      },
+      {
+        label: 'FAVORITES',
+        title: 'Keep the best within one click',
+        text: 'Heart any saved tab to collect it in the built-in Favorites view, in both the library and the panel. Favoriting never moves or duplicates the tab — it stays in its folder and is only tagged, and the Favorites collection itself can’t be deleted.',
+        images: [
+          {
+            src: '/screenshots/cofretabs-favorites.png',
+            alt: 'CofreTabs Favorites view listing three favorited tabs with filled heart toggles',
+            caption: 'FAVORITES VIEW',
+          },
+        ],
+      },
+      {
+        label: 'SEARCH',
+        title: 'Find any saved tab instantly',
+        text: 'Search across title, URL, hostname, folder and notes; sort by newest, oldest, title, domain or folder; and filter by any folder or the Trash. Results update as you type, so a vault with hundreds of entries stays navigable.',
+        images: [
+          {
+            src: '/screenshots/cofretabs-search.png',
+            alt: 'CofreTabs search results for the query “vault” — three matches across titles and notes',
+            caption: 'SEARCH RESULTS',
+          },
+        ],
+      },
+      {
+        label: 'TRASH',
+        title: 'Nothing is lost by accident',
+        text: 'Moving a tab to Trash hides it without destroying it. From the Trash you can restore entries — they return to their original folder when it still exists, otherwise they are re-filed by domain — or delete them permanently with confirmation. Deleting a folder also moves its tabs to Trash instead of wiping them.',
+        images: [
+          {
+            src: '/screenshots/cofretabs-trash.png',
+            alt: 'CofreTabs Trash view with a trashed tab offering RESTORE and DELETE actions and an EMPTY TRASH button',
+            caption: 'TRASH — RESTORE OR DELETE',
+          },
+        ],
+      },
+      {
+        label: 'BACKUPS',
+        title: 'Your vault, as a file you control',
+        text: 'Export the whole vault — active and trashed entries, folders, notes and favorites — as plain JSON. Import validates the entire file before anything is written, then merges into your current vault or replaces it, reporting duplicate and invalid counts. Backups never leave your machine unless you move the file yourself.',
+        images: [
+          {
+            src: '/screenshots/cofretabs-import.png',
+            alt: 'CofreTabs import backup dialog — local file selected, validation preview with tab and folder counts, MERGE and REPLACE import modes',
+            caption: 'IMPORT — MERGE OR REPLACE',
+          },
+        ],
+      },
+      {
+        label: 'THEMES',
+        title: 'Retro terminal, day or night',
+        text: 'The whole interface — panel and library — comes in dark and light themes. The default follows your system preference until you choose, and the choice persists across launches. Both themes keep the phosphor-green terminal identity the vault was designed around.',
+        images: [
+          {
+            src: '/screenshots/cofretabs-library-light.png',
+            alt: 'CofreTabs library in the light theme — bright surfaces, dark readable terminal text',
+            caption: 'LIGHT THEME — LIBRARY',
+          },
+          {
+            src: '/screenshots/cofretabs-panel-light.png',
+            alt: 'CofreTabs panel in the light theme over a page, with the folder grid and an already-saved notice',
+            caption: 'LIGHT THEME — PANEL',
+          },
+        ],
+      },
+    ],
+    technology: [
+      'Manifest V3',
+      'JavaScript (ES modules)',
+      'IndexedDB',
+      'Shadow DOM',
+      'ICANN Public Suffix List',
+      'Node.js test runner',
+      'GitHub Actions',
+    ],
+    roadmap: [
+      {
+        title: 'Next',
+        items: [
+          'Chrome Web Store submission — listing copy is prepared in the repository, the extension is not submitted yet',
+          'Evaluate other browser stores and Firefox support',
+        ],
+      },
+      {
+        title: 'By design (not planned)',
+        items: [
+          'No accounts, servers or cloud sync — vaults stay on the device; JSON backups are the supported way to move one',
+          'No automatic saving — every vault entry is an explicit user action',
+        ],
+      },
+    ],
+  },
   {
     slug: 'wolfcani',
     name: 'WOLFCANI',

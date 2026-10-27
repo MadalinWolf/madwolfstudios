@@ -65,6 +65,89 @@ export interface DevLogEntry {
 /** Published entries, newest first. Add yours here. */
 export const DEV_LOG: DevLogEntry[] = [
   {
+    id: 'cofretabs-website-launch',
+    date: '2026-10-26',
+    project: 'COFRETABS',
+    projectSlug: 'cofretabs',
+    version: 'v1.1.0',
+    title: 'CofreTabs lands on madwolfstudios.com',
+    summary:
+      'The studio’s tab-saving browser extension now has a full product page, a homepage launch section and a verified download that points straight at the v1.1.0 release.',
+    details: [
+      'Added a dedicated CofreTabs product page at /projects/cofretabs — overview, 17 features, gallery, FAQs, technology and roadmap, all driven by the site’s shared PROJECTS data like every other project',
+      'The homepage opens with a “New Release — CofreTabs v1.1.0” section: what the extension does, where your data lives, and links to the product page and the GitHub release',
+      'The download block offers Windows, macOS and Linux groups that all serve the same verified asset — one ZIP packaged as CofreTabs-v1.1.0.zip (SHA-256 2599b341…10a365, matching the local build byte for byte) — because a single archive installs in any Chromium browser',
+      'Store status is stated honestly: CofreTabs is not on the Chrome Web Store yet — the listing in the repository’s store docs is a draft, not a published one — so the GitHub release is currently the only official download',
+      'Every gallery frame is a genuine capture: three v1.0.0 screenshots from the repository plus nine v1.1.0 captures taken through the project’s own documented harness (real panel/library code over a demo vault), recorded in public/screenshots/cofretabs-MANIFEST.md',
+      'This dev log gains three evidence-based CofreTabs entries dated from the actual git history (2026-10-23 → 2026-10-26) — the repository’s public history begins with the v1.0.0 release candidate',
+    ],
+    images: [
+      {
+        src: '/screenshots/cofretabs-panel-v110.png',
+        alt: 'CofreTabs save panel on the v1.1.0 build — tab ready to save with the 3×3 folder grid beneath it',
+        caption: 'COFRETABS v1.1.0 — SAVE PANEL',
+      },
+    ],
+    links: [
+      { label: 'GITHUB REPO', url: 'https://github.com/MadalinWolf/CofreTabs' },
+      { label: 'RELEASE v1.1.0', url: 'https://github.com/MadalinWolf/CofreTabs/releases/tag/v1.1.0' },
+    ],
+  },
+  {
+    id: 'cofretabs-v1-1-0-favorites-folders-themes',
+    date: '2026-10-25',
+    project: 'COFRETABS',
+    projectSlug: 'cofretabs',
+    version: 'v1.1.0',
+    title: 'Favorites, custom folders, a folder grid and themes',
+    summary:
+      'CofreTabs v1.1.0 turns the library into a real organiser — favorites, custom folders, light and dark themes, an update notice and 98 passing tests.',
+    details: [
+      'Shipped favorites (heart any saved tab in the library or the panel without moving it), custom folders you can create, rename and move tabs into, and a 3×3 folder grid in the panel',
+      'Added light and dark themes with a switch in the library sidebar, persisted across launches and defaulting to the system preference',
+      'Deleting a folder now moves its saved tabs to Trash instead of destroying them; Favorites can’t be deleted',
+      'Added an update notice that checks the GitHub releases feed at most once every 12 hours — no vault data ever leaves the browser',
+      'Full suite: 98/98 tests pass under node:test; tagged v1.1.0 and published as a GitHub Release with the packaged extension ZIP',
+    ],
+    images: [
+      {
+        src: '/screenshots/cofretabs-library-v110.png',
+        alt: 'CofreTabs library on the v1.1.0 build — saved tabs, folders and the sidebar with favorites and trash',
+        caption: 'COFRETABS v1.1.0 — LIBRARY',
+      },
+    ],
+    links: [
+      { label: 'RELEASE v1.1.0', url: 'https://github.com/MadalinWolf/CofreTabs/releases/tag/v1.1.0' },
+      { label: 'GITHUB REPO', url: 'https://github.com/MadalinWolf/CofreTabs' },
+    ],
+  },
+  {
+    id: 'cofretabs-v1-0-0-first-public-build',
+    date: '2026-10-23',
+    project: 'COFRETABS',
+    projectSlug: 'cofretabs',
+    version: 'v1.0.0',
+    title: 'First public build of the tab-saving extension',
+    summary:
+      'CofreTabs’ public history starts here: the initial v1.0.0 release candidate — explicit, review-first saving into a local IndexedDB vault, with search, trash and backups.',
+    details: [
+      'Initial CofreTabs v1.0.0 release candidate — Manifest V3 extension with the sliding save panel, the library, automatic folders from the real domain (bundled Public Suffix List) and JSON backups (commit c8c9d1b)',
+      'Added the CI workflow and final README notes the same day (commit ff59fcf)',
+      'Everything is local-first by design: saved tabs, folders and notes live in IndexedDB in the browser profile — no backend, no account, no sync, no analytics',
+      'Note: the repository’s public git history begins with this commit — there is no earlier published history to cite',
+    ],
+    images: [
+      {
+        src: '/screenshots/cofretabs-library.png',
+        alt: 'CofreTabs library from the original v1.0.0 repository screenshot — saved tabs grouped by folder',
+        caption: 'COFRETABS v1.0.0 — LIBRARY',
+      },
+    ],
+    links: [
+      { label: 'GITHUB REPO', url: 'https://github.com/MadalinWolf/CofreTabs' },
+    ],
+  },
+  {
     id: 'madscope-preview-download',
     date: '2026-10-11',
     project: 'MADSCOPE',

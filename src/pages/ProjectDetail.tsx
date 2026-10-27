@@ -94,7 +94,7 @@ function DownloadBlock({ project }: { project: Project }) {
           className="mb-6 border border-neon-lemon/40 bg-panel-2/40 p-4 text-xs leading-relaxed text-text-secondary"
         >
           <p className="mb-1.5 text-[10px] font-extrabold uppercase tracking-[0.16em] text-neon-lemon">
-            Preview build — testing
+            {project.downloadNoticeHeading ?? 'Preview build — testing'}
           </p>
           <p>
             {project.downloadNotice.text}{' '}
@@ -130,7 +130,7 @@ function DownloadBlock({ project }: { project: Project }) {
               <ul className="space-y-4">
                 {group.items.map((item) => (
                   <li key={item.url}>
-                    <ButtonLink to={item.url} external aria-label={`Download MadScope for ${item.os} ${item.arch} — ${item.label}`}>
+                    <ButtonLink to={item.url} external aria-label={`Download ${project.name} for ${item.os} ${item.arch} — ${item.label}`}>
                       {item.label} ↓
                     </ButtonLink>
                     <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-text-muted">
