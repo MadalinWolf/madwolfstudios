@@ -161,6 +161,19 @@ export function Home() {
                   </ButtonLink>
                 )}
               </div>
+              {cofretabs.supportUrl && (
+                <p className="mt-4 text-[11px] uppercase tracking-[0.14em] text-text-muted">
+                  Free &amp; open source — the download costs nothing. If you love it,{' '}
+                  <a
+                    href={cofretabs.supportUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link font-bold"
+                  >
+                    ♥ support the studio (pay what you want)
+                  </a>
+                </p>
+              )}
             </div>
 
             <a

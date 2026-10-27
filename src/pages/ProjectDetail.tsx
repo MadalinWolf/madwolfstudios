@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { ButtonLink } from '../components/Button'
 import { Zoomable } from '../components/Lightbox'
 import { MediaSlotFrame, PlaceholderBox } from '../components/Placeholder'
@@ -58,13 +58,99 @@ function HeroShot({ slot }: { slot: MediaSlot }) {
 }
 
 /*
+ * Pay-what-you-want download prompt (itch.io-style). Shown when a project has
+ * a `supportUrl` and the visitor clicks a download button: it offers the
+ * donation first, but the free download is always one click away inside the
+ * dialog — nothing is ever locked behind payment.
+ */
+function DownloadPrompt({
+  projectName,
+  url,
+  supportUrl,
+  onClose,
+}: {
+  projectName: string
+  url: string
+  supportUrl: string
+  onClose: () => void
+}) {
+  const dialogRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    /* Focus the primary support action inside the dialog (the free download
+       is one Tab away — never hidden). */
+    dialogRef.current
+      ?.querySelector<HTMLAnchorElement>('a.btn.btn-primary')
+      ?.focus()
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-5"
+      onClick={onClose}
+    >
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="download-prompt-title"
+        className="card w-full max-w-md border border-neon-lemon/40 bg-surface p-6 sm:p-7"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <span className="text-[10px] font-bold uppercase tracking-[0.24em] text-neon-green">
+          [ FREE &amp; OPEN SOURCE · MIT ]
+        </span>
+        <h3
+          id="download-prompt-title"
+          className="mt-3 text-lg font-extrabold uppercase tracking-wide text-neon-lemon"
+        >
+          Like {projectName}? Support the studio
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+          The download below is completely free — take it, no strings attached. If it&apos;s
+          worth something to you, you can support Madwolf Studios with a pay-what-you-want
+          donation — 1, 2.99, 5 or 10. Donors get nothing extra: everyone gets the same app.
+        </p>
+        <div className="mt-6 flex flex-col gap-3">
+          <ButtonLink to={supportUrl} external>
+            ♥ SUPPORT — PAY WHAT YOU WANT
+          </ButtonLink>
+          <a href={url} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+            DOWNLOAD FREE ↓
+          </a>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-[11px] font-bold uppercase tracking-[0.16em] text-text-muted hover:text-text-secondary"
+          >
+            Maybe later — back to the downloads
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/*
  * Download — platform-grouped links to the real GitHub Release assets.
  * The visitor's OS group is highlighted (never hidden: every platform stays
  * visible under "Other downloads" semantics). UA sniffing is best-effort:
  * Apple Silicon vs Intel cannot be told apart from the UA, so both macOS
  * builds are shown highlighted to Mac visitors.
  */
-function DownloadBlock({ project }: { project: Project }) {
+function DownloadBlock({
+  project,
+  onRequestDownload,
+}: {
+  project: Project
+  /** Routes a download URL through the page-level pay-what-you-want prompt. */
+  onRequestDownload: (url: string) => void
+}) {
   const [visitorOs, setVisitorOs] = useState<string | null>(null)
   useEffect(() => {
     const ua = navigator.userAgent
@@ -81,12 +167,19 @@ function DownloadBlock({ project }: { project: Project }) {
   return (
     <div>
       {project.releaseVersion && (
-        <p className="mb-6 text-[11px] font-bold uppercase tracking-[0.18em] text-text-muted">
-          {project.downloadVersionLabel ? 'Current build:' : 'Latest release:'}{' '}
-          <span className="text-neon-lemon">
-            {project.downloadVersionLabel ?? project.releaseVersion}
-          </span>
-        </p>
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-text-muted">
+            {project.downloadVersionLabel ? 'Current build:' : 'Latest release:'}{' '}
+            <span className="text-neon-lemon">
+              {project.downloadVersionLabel ?? project.releaseVersion}
+            </span>
+          </p>
+          {project.supportUrl && (
+            <ButtonLink to={project.supportUrl} external variant="ghost">
+              ♥ SUPPORT — PAY WHAT YOU WANT
+            </ButtonLink>
+          )}
+        </div>
       )}
       {project.downloadNotice && (
         <div
@@ -130,7 +223,12 @@ function DownloadBlock({ project }: { project: Project }) {
               <ul className="space-y-4">
                 {group.items.map((item) => (
                   <li key={item.url}>
-                    <ButtonLink to={item.url} external aria-label={`Download ${project.name} for ${item.os} ${item.arch} — ${item.label}`}>
+                    <ButtonLink
+                      to={item.url}
+                      external
+                      aria-label={`Download ${project.name} for ${item.os} ${item.arch} — ${item.label}`}
+                      onClick={() => onRequestDownload(item.url)}
+                    >
                       {item.label} ↓
                     </ButtonLink>
                     <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-text-muted">
@@ -160,10 +258,27 @@ function DownloadBlock({ project }: { project: Project }) {
   )
 }
 
-export function ProjectDetail({ project }: { project: Project }) {  /* Sections are numbered in render order so optional sections (FAQ,
+export function ProjectDetail({ project }: { project: Project }) {
+  /* Sections are numbered in render order so optional sections (FAQ,
      roadmap, …) never leave a gap in the // 0N eyebrows. */
   let sectionNo = 0
   const eyebrow = () => `// 0${(sectionNo += 1)}`
+
+  /* Pay-what-you-want prompt — page-level state so the header download CTA and
+     the Download section share one dialog. Projects with a `supportUrl` open
+     the prompt first (free download stays one click away inside it); projects
+     without one (MadScope, games) keep the direct-link behaviour. */
+  const [promptUrl, setPromptUrl] = useState<string | null>(null)
+  const restoreFocusRef = useRef<HTMLElement | null>(null)
+  const requestDownload = (url: string) => {
+    if (!project.supportUrl) return
+    restoreFocusRef.current = (document.activeElement as HTMLElement) ?? null
+    setPromptUrl(url)
+  }
+  const closePrompt = () => {
+    setPromptUrl(null)
+    restoreFocusRef.current?.focus?.()
+  }
 
   return (
     <div className="mx-auto max-w-site px-5 py-12 sm:py-16">
@@ -196,11 +311,21 @@ export function ProjectDetail({ project }: { project: Project }) {  /* Sections 
 
         {project.links && project.links.length > 0 && (
           <div className="mt-5 flex flex-wrap items-center gap-4">
-            {project.links.map((link) => (
-              <ButtonLink key={link.url} to={link.url} external>
-                {link.label} ↗
-              </ButtonLink>
-            ))}
+            {project.links.map((link) => {
+              /* Only real asset downloads route through the support prompt —
+                 "View on GitHub" and similar outbound links stay direct. */
+              const isDownload = link.url.includes('/releases/download/')
+              return (
+                <ButtonLink
+                  key={link.url}
+                  to={link.url}
+                  external
+                  onClick={isDownload ? () => requestDownload(link.url) : undefined}
+                >
+                  {link.label} ↗
+                </ButtonLink>
+              )
+            })}
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted">
               OPEN SOURCE · MIT
             </span>
@@ -224,7 +349,54 @@ export function ProjectDetail({ project }: { project: Project }) {  /* Sections 
         {/* DOWNLOAD — real release assets, only when the project ships them */}
         {project.downloads && project.downloads.length > 0 && (
           <Section id="download" eyebrow={eyebrow()} title="Download">
-            <DownloadBlock project={project} />
+            <DownloadBlock project={project} onRequestDownload={requestDownload} />
+          </Section>
+        )}
+
+        {/* SUPPORT & PRICING — only when the project defines its support model */}
+        {project.support && (
+          <Section id="support" eyebrow={eyebrow()} title="Support & Pricing">
+            <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+              <div className="card p-5 sm:p-6">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-neon-green">
+                  [ THE MODEL ]
+                </span>
+                <p className="mt-3 text-sm leading-relaxed text-text-secondary">
+                  {project.support.statement}
+                </p>
+              </div>
+              <div className="card p-5 sm:p-6">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-neon-lemon">
+                  [ SUPPORT CHANNELS ]
+                </span>
+                <ul className="mt-4 space-y-3">
+                  {project.support.channels.map((channel) => (
+                    <li
+                      key={channel.label}
+                      className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1"
+                    >
+                      {channel.url ? (
+                        <a
+                          href={channel.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="link text-xs font-bold uppercase tracking-[0.14em]"
+                        >
+                          {channel.label} ↗
+                        </a>
+                      ) : (
+                        <span className="text-xs font-bold uppercase tracking-[0.14em] text-text-muted">
+                          {channel.label}
+                        </span>
+                      )}
+                      <span className="text-[10px] uppercase tracking-[0.12em] text-text-muted">
+                        {channel.url ? channel.note : 'COMING SOON'}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </Section>
         )}
 
@@ -436,6 +608,16 @@ export function ProjectDetail({ project }: { project: Project }) {  /* Sections 
           </div>
         </Section>
       </div>
+
+      {/* Pay-what-you-want prompt (fixed overlay, shared by every download CTA) */}
+      {promptUrl && project.supportUrl && (
+        <DownloadPrompt
+          projectName={project.name}
+          url={promptUrl}
+          supportUrl={project.supportUrl}
+          onClose={closePrompt}
+        />
+      )}
     </div>
   )
 }

@@ -10,6 +10,7 @@ import { GameDetail } from './pages/GameDetail'
 import { Games } from './pages/Games'
 import { Home } from './pages/Home'
 import { NotFound } from './pages/NotFound'
+import { Privacy } from './pages/Privacy'
 import { ProjectDetail } from './pages/ProjectDetail'
 import { Projects } from './pages/Projects'
 import { RouterProvider, useRoute } from './router'
@@ -39,6 +40,8 @@ function resolve(path: string): ReactElement {
       return <DevLog />
     case path === '/contact':
       return <Contact />
+    case path === '/privacy':
+      return <Privacy />
     default:
       return <NotFound />
   }

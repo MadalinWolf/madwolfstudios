@@ -91,6 +91,17 @@ export interface Project {
   /** Optional small-caps heading above the download notice text. Defaults to
    *  "Preview build — testing" (the MadScope preview wording). */
   downloadNoticeHeading?: string
+  /** Optional donation destination. When set, the download area shows a
+   *  support button and download clicks open a pay-what-you-want prompt first
+   *  (the free download stays one click away inside it). */
+  supportUrl?: string
+  /** Optional "Support & Pricing" block rendered under the download section. */
+  support?: {
+    /** The pricing model in one or two plain sentences. */
+    statement: string
+    /** Channels — `url: null` renders a clearly marked "SOON" chip. */
+    channels: { label: string; url: string | null; note?: string }[]
+  }
   /** Label shown instead of "Latest release: {releaseVersion}" when the
    *  download table serves a newer build than the latest stable release. */
   downloadVersionLabel?: string
@@ -145,13 +156,26 @@ export const PROJECTS: Project[] = [
       linkLabel: 'All CofreTabs releases →',
       linkUrl: 'https://github.com/MadalinWolf/CofreTabs/releases',
     },
+    supportUrl: 'https://github.com/sponsors/MadalinWolf',
+    support: {
+      statement:
+        'CofreTabs is free — every download, every store listing, forever, for everyone. Nothing is behind a paywall and paying unlocks no extra features: if the extension saves you time, you can support the studio with a pay-what-you-want donation — 1, 2.99, 5 or 10 — or simply keep it free and star the repository instead.',
+      channels: [
+        { label: 'GITHUB SPONSORS', url: 'https://github.com/sponsors/MadalinWolf', note: 'Pay what you want' },
+        { label: 'STAR THE PROJECT', url: 'https://github.com/MadalinWolf/CofreTabs', note: 'Free, takes one click' },
+        { label: 'FOLLOW THE STUDIO', url: 'https://github.com/MadalinWolf', note: 'News and releases' },
+        { label: 'KO-FI', url: null, note: 'Pay what you want' },
+        { label: 'ITCH.IO', url: null, note: 'Pay what you want' },
+        { label: 'GUMROAD', url: null, note: 'Pay what you want' },
+      ],
+    },
     overview: [
       'CofreTabs is a Manifest V3 browser extension that turns the tab you are reading into a permanent, searchable entry in a private local vault. It is built for people who hoard “read later” tabs, research sessions and rabbit holes — without handing their browsing history to a bookmark service.',
       'Everything lives in IndexedDB inside your browser profile. There is no backend, no account, no sync, no analytics and no remote code. CofreTabs never saves a page automatically: the slide-over panel shows exactly what will be saved, and nothing is written until you press SAVE THIS TAB.',
       'Version 1.1.0 completes the original roadmap — Favorites, custom folders, a compact folder grid, light and dark themes and in-app update notifications — all verified by a 98-test automated suite that runs against the real storage and UI code.',
     ],
     statusNote:
-      'CofreTabs v1.1.0 was released on 25 October 2026 and is available as a checksummed ZIP from the official GitHub repository — the download links on this page serve that exact release. The source, tests (98/98 passing at release), build pipeline and release packaging are complete. The Chrome Web Store is a planned distribution channel — store listing copy is prepared in the repository, but the extension has not been submitted or published to any browser store yet. Until then, installation is from the GitHub release via “Load unpacked”. Development is documented on the dev log.',
+      'CofreTabs v1.1.0 was released on 25 October 2026 and is free everywhere — the download links on this page serve that exact release, and future store listings will be free too. The source, tests (98/98 passing at release), build pipeline and release packaging are complete. The Chrome Web Store is a planned distribution channel — store listing copy is prepared in the repository, but the extension has not been submitted or published to any browser store yet. Until then, installation is from the GitHub release via “Load unpacked”. Development is documented on the dev log; donations are optional and never unlock features.',
     features: [
       { name: 'Explicit save panel', state: 'implemented', note: 'A right-side slide-over shows the page title, host, automatic folder and duplicate status before you commit — nothing is written until you press SAVE THIS TAB' },
       { name: 'Truthful save states', state: 'implemented', note: 'Progress is tied to the real database write: double-clicks are rejected, and success is shown only after IndexedDB confirms the write — failures are shown as failures' },

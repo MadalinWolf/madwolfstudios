@@ -29,6 +29,8 @@ export const LINKS = {
   // Professional contact — software development, open-source projects,
   // collaboration, bug reports and other IT-related inquiries.
   email: { label: 'EMAIL', url: 'mailto:madalindinu@protonmail.com' },
+  kofi: { label: 'KO-FI', url: null }, // ← SOON (pay-what-you-want donations)
+  gumroad: { label: 'GUMROAD', url: null }, // ← SOON
   steam: { label: 'STEAM', url: null }, // ← SOON
   discord: { label: 'DISCORD', url: null }, // ← SOON
   itch: { label: 'ITCH.IO', url: null }, // ← SOON

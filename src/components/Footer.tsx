@@ -72,7 +72,15 @@ export function Footer() {
           <span suppressHydrationWarning>
             © {year} {SITE.name}
           </span>
-          <span className="text-text-muted">{SITE.domain.replace('https://', '')}</span>
+          <span className="flex items-center gap-4">
+            <Link
+              to="/privacy"
+              className="font-bold uppercase tracking-[0.16em] hover:text-text-secondary"
+            >
+              Privacy
+            </Link>
+            <span>{SITE.domain.replace('https://', '')}</span>
+          </span>
         </div>
       </div>
     </footer>

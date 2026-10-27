@@ -8,6 +8,8 @@ interface ButtonLinkProps {
   className?: string
   /** true → opens in a new tab (use for external URLs). */
   external?: boolean
+  /** Optional click handler (e.g. to open a support prompt first). */
+  onClick?: () => void
   'aria-label'?: string
 }
 

@@ -105,6 +105,13 @@ const SECTION_META: RouteMeta[] = [
       'Ways to reach Madwolf Studios. More channels open as the studio grows.',
     robots: 'index',
   },
+  {
+    path: '/privacy',
+    title: `Privacy — ${NAME}`,
+    description:
+      'Privacy policy for madwolfstudios.com: no cookies, no analytics, no tracking scripts — plus the data policies of CofreTabs and MadScope.',
+    robots: 'index',
+  },
 ]
 
 /**
@@ -120,6 +127,7 @@ export const PRERENDER_PATHS: string[] = [
   '/about',
   '/dev-log',
   '/contact',
+  '/privacy',
 ]
 
 interface DetailEntry {
