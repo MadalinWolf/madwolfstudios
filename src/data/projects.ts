@@ -114,6 +114,8 @@ export interface Project {
   screenshots: MediaSlot[]
   /** Large product screenshot shown right after the overview. Requires a real `src`. */
   hero?: MediaSlot
+  /** Optional product trailer video rendered as a player above the hero shot. */
+  trailer?: { src: string; poster: string; caption?: string }
   /** Themed screenshot groups rendered in the "Inside <project>" section. */
   showcase?: ShowcaseBlock[]
   /** Optional browsable screenshot gallery, grouped by build/version. */
@@ -343,6 +345,11 @@ export const PROJECTS: Project[] = [
           ],
         },
       ],
+    },
+    trailer: {
+      src: '/cofretabs-trailer.mp4',
+      poster: '/cofretabs-trailer-poster.jpg',
+      caption: 'COFRETABS — 30S TRAILER',
     },
     hero: {
       src: '/screenshots/cofretabs-panel-v110.png',

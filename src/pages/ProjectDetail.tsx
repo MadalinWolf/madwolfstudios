@@ -58,6 +58,34 @@ function HeroShot({ slot }: { slot: MediaSlot }) {
 }
 
 /*
+ * Product trailer — a real MP4 with sound, shown above the hero screenshot as
+ * the first media on the page. Native controls only: nothing ever autoplays
+ * audio; the click-to-play action starts the video with its soundtrack.
+ */
+function TrailerBlock({ trailer }: { trailer: { src: string; poster: string; caption?: string } }) {
+  return (
+    <figure className="card p-3 sm:p-4">
+      <video
+        src={assetUrl(trailer.src)}
+        poster={assetUrl(trailer.poster)}
+        controls
+        preload="metadata"
+        playsInline
+        className="w-full h-auto border border-line"
+      />
+      <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-neon-lemon">
+          [ {trailer.caption || 'TRAILER'} ]
+        </span>
+        <span className="text-[10px] uppercase tracking-[0.14em] text-text-muted">
+          30-second product trailer — click to play with sound
+        </span>
+      </figcaption>
+    </figure>
+  )
+}
+
+/*
  * Pay-what-you-want download prompt (itch.io-style). Shown when a project has
  * a `supportUrl` and the visitor clicks a download button: it offers the
  * donation first, but the free download is always one click away inside the
@@ -342,6 +370,9 @@ export function ProjectDetail({ project }: { project: Project }) {
             ))}
           </div>
         </Section>
+
+        {/* TRAILER — real product video with sound, first media on the page */}
+        {project.trailer && <TrailerBlock trailer={project.trailer} />}
 
         {/* HERO SCREENSHOT — real UI immediately after the introduction */}
         {project.hero?.src && <HeroShot slot={project.hero} />}
