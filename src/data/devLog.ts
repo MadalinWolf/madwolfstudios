@@ -317,7 +317,7 @@ export const DEV_LOG: DevLogEntry[] = [
       'The typeface loads from our own domain — one less third-party request on every page',
       'Production configuration strengthened: security headers and long-lived caching for static assets',
       'Project pages gained a quick-answers section with factual summaries (starting with WOLFCANI)',
-      'Launched this development log — future WOLFCANI and No Respawn in War updates land here',
+      'Launched this development log — future WOLFCANI and Peaceletto updates land here',
     ],
   },
   // …next real update goes here (sorted by date automatically).

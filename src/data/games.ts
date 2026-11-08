@@ -42,14 +42,14 @@ export interface Game {
 
 export const GAMES: Game[] = [
   {
-    slug: 'no-respawn-in-war',
-    name: 'No Respawn in War',
+    slug: 'peaceletto',
+    name: 'Peaceletto',
     status: 'in-development',
     featured: true,
     tagline: 'Game currently in development.',
-    seoTitle: 'No Respawn in War — Game in Development',
+    seoTitle: 'Peaceletto — Game in Development',
     seoDescription:
-      'No Respawn in War is a game currently in development at Madwolf Studios. Concept, gameplay, platforms, screenshots and release details will be published here as they are announced.',
+      'Peaceletto is a game currently in development at Madwolf Studios. Concept, gameplay, platforms, screenshots and release details will be published here as they are announced.',
     concept: null,
     gameplay: null,
     info: [
@@ -60,10 +60,10 @@ export const GAMES: Game[] = [
       { label: 'STAGE', value: null }, // current development stage
     ],
     screenshots: [
-      { alt: 'No Respawn in War screenshot — to be provided', caption: 'SCREENSHOT' },
-      { alt: 'No Respawn in War screenshot — to be provided', caption: 'SCREENSHOT' },
+      { alt: 'Peaceletto screenshot — to be provided', caption: 'SCREENSHOT' },
+      { alt: 'Peaceletto screenshot — to be provided', caption: 'SCREENSHOT' },
     ],
-    artwork: { alt: 'No Respawn in War key artwork — to be provided', caption: 'KEY ARTWORK' },
+    artwork: { alt: 'Peaceletto key artwork — to be provided', caption: 'KEY ARTWORK' },
     trailer: { url: null },
     links: ['steam', 'itch', 'discord'],
   },

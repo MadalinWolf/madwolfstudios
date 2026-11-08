@@ -124,7 +124,10 @@ try {
   // serves the file with HTTP 200, and a canonical pointing at the target is
   // exactly what Google reports as "Alternate page with proper canonical tag".
   // noindex alone drops the legacy URL cleanly instead.
-  const REDIRECTS = [{ from: '/projects/stusys', to: '/projects/wolfcani' }]
+  const REDIRECTS = [
+    { from: '/projects/stusys', to: '/projects/wolfcani' },
+    { from: '/games/no-respawn-in-war', to: '/games/peaceletto' },
+  ]
 
   for (const { from, to } of REDIRECTS) {
     const target = `${BASE}${to.replace(/^\/+/, '')}/`

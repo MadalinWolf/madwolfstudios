@@ -4,7 +4,7 @@
    this machine's installed tooling:
    - Web stack .... this website + WOLFCANI (package.json,
                     git history, source code, deploy workflow)
-   - Godot ........ D:\MY GAMES\No Respawn in War (project.godot
+   - Godot ........ D:\MY GAMES\Peaceletto\Peaceletto (project.godot
                     + 27 GDScript files, Godot 4.4)
    - Python/Java .. Python 3.11, JDK 23, IntelliJ IDEA installed
    - Creative ..... Audacity, LibreSprite, Photopea, GIMP installed
@@ -206,7 +206,7 @@ export const TECHNOLOGIES: Technology[] = [
   {
     name: "Godot",
     status: "used",
-    note: "No Respawn in War — Godot 4.4 with GDScript.",
+    note: "Peaceletto — Godot 4.4 with GDScript.",
     glyph: {
       viewBox: "0 0 128 128",
       paths: [

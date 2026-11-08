@@ -207,7 +207,7 @@ export function About() {
               <strong className="text-text-primary">CofreTabs</strong>, a privacy-first tab-saving
               browser extension, <strong className="text-text-primary">WOLFCANI</strong>, an
               OnFocus Workspace for students, and{' '}
-              <strong className="text-text-primary">No Respawn in War</strong>, a game currently
+              <strong className="text-text-primary">Peaceletto</strong>, a game currently
               in development.
             </p>
           </div>
@@ -256,7 +256,7 @@ export function About() {
               taken furthest so far, and the one I&apos;ve learned the most from.
             </p>
             <p>
-              <strong className="text-text-primary">No Respawn in War</strong> is an independent
+              <strong className="text-text-primary">Peaceletto</strong> is an independent
               game currently in development, created as a tribute to those affected by wars and
               conflicts around the world. More information about the project will be shared soon.
             </p>
@@ -371,7 +371,7 @@ export function About() {
             </p>
             <p>
               I know what I can do, and I know there is a lot left to learn. Right now that means
-              heads down on CofreTabs, WOLFCANI and No Respawn in War.
+              heads down on CofreTabs, WOLFCANI and Peaceletto.
             </p>
           </div>
         </StorySection>

@@ -247,7 +247,7 @@ export function Home() {
                 <strong className="text-text-primary">CofreTabs</strong>, a privacy-first
                 tab-saving browser extension, <strong className="text-text-primary">WOLFCANI</strong>,
                 an OnFocus Workspace for students, and{' '}
-                <strong className="text-text-primary">No Respawn in War</strong>, a game in early
+                <strong className="text-text-primary">Peaceletto</strong>, a game in early
                 development.
               </p>
               <p>

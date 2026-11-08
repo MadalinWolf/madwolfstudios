@@ -35,7 +35,7 @@ full content without running JavaScript.
 | `/projects`          | Projects index                              |
 | `/projects/wolfcani` | WOLFCANI project page                       |
 | `/games`             | Games index                                 |
-| `/games/no-respawn-in-war` | No Respawn in War game page          |
+| `/games/peaceletto` | Peaceletto game page                 |
 | `/about`             | About the founder / studio                  |
 | `/dev-log`           | Development journal                         |
 | `/contact`           | Contact                                     |
