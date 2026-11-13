@@ -64,7 +64,7 @@ export function GameDetail({ game }: { game: Game }) {
           {game.name}
         </h1>
 
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-text-secondary sm:text-base">
+        <p className="mt-3 max-w-2xl whitespace-pre-line text-sm leading-relaxed text-text-secondary sm:text-base">
           {game.tagline}
         </p>
 

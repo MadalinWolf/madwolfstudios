@@ -46,7 +46,8 @@ export const GAMES: Game[] = [
     name: 'Peaceletto',
     status: 'in-development',
     featured: true,
-    tagline: 'Game currently in development.',
+    tagline:
+      'A color-matching balloon shooter about letters, family and coming home — clear a level, unlock a letter.\nIn development by Madalin Dinu at Madwolf Studios.',
     seoTitle: 'Peaceletto — Game in Development',
     seoDescription:
       'Peaceletto is a game currently in development at Madwolf Studios. Concept, gameplay, platforms, screenshots and release details will be published here as they are announced.',
@@ -63,7 +64,11 @@ export const GAMES: Game[] = [
       { alt: 'Peaceletto screenshot — to be provided', caption: 'SCREENSHOT' },
       { alt: 'Peaceletto screenshot — to be provided', caption: 'SCREENSHOT' },
     ],
-    artwork: { alt: 'Peaceletto key artwork — to be provided', caption: 'KEY ARTWORK' },
+    artwork: {
+      src: '/games/peaceletto/logo.gif',
+      alt: 'Peaceletto logo — the word PEACELETTO stamped in paper letters with a small sealed letter flying across it',
+      caption: 'LOGO',
+    },
     trailer: { url: null },
     links: ['steam', 'itch', 'discord'],
   },
